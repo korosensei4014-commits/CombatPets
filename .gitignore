@@ -1,0 +1,7 @@
+.vscode/
+**/.gradle/
+**/target/
+!src/**/target/
+**/build/
+!src/**/build/
+bin/
