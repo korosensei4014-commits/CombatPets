@@ -1,0 +1,69 @@
+package su.nightexpress.combatpets.nms.paper26p3.pets.monster;
+
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.level.ServerLevelAccessor;
+import su.nightexpress.combatpets.api.pet.PetEntity;
+import su.nightexpress.combatpets.nms.paper26p3.ai.AIUtils;
+import su.nightexpress.combatpets.nms.paper26p3.goals.combat.PetAutoTargetGoal;
+import su.nightexpress.combatpets.nms.paper26p3.goals.combat.PetRangedAttackGoal;
+import su.nightexpress.combatpets.nms.paper26p3.goals.follow.PetFollowOwnerGoal;
+import su.nightexpress.nightcore.util.Reflex;
+
+@NullMarked
+public class WitherPet extends WitherBoss implements PetEntity {
+
+    public WitherPet(ServerLevel world) {
+        super(EntityTypes.WITHER, world);
+        this.bossEvent.setVisible(false);
+    }
+
+    @Override
+    public void setGoals() {
+        this.targetSelector.addGoal(1, new PetAutoTargetGoal(this));
+        this.goalSelector.addGoal(2, new PetFollowOwnerGoal(this));
+        this.goalSelector.addGoal(2, new PetRangedAttackGoal(this, 1.0D, 20.0F));
+    }
+
+    @Override
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor accessor,
+                                                  DifficultyInstance difficulty,
+                                                  EntitySpawnReason reason,
+                                                  @Nullable SpawnGroupData groupData) {
+        return groupData;
+    }
+
+    @Override
+    protected void hurtArmor(DamageSource source, float amount) {
+        this.doHurtEquipment(source, amount, AIUtils.ARMOR_SLOTS);
+    }
+
+    @Override
+    protected void customServerAiStep(ServerLevel worldserver) {
+        Reflex.setFieldValue(this, "nextHeadUpdate", new int[]{Integer.MAX_VALUE, Integer.MAX_VALUE});
+        super.customServerAiStep(worldserver);
+    }
+
+    @Override
+    public void makeInvulnerable() {
+
+    }
+
+    @Override
+    public int getAlternativeTarget(int i) {
+        return this.getTarget() == null ? 0 : this.getTarget().getId();
+    }
+
+    @Override
+    public void setAlternativeTarget(int i, int j) {
+
+    }
+}

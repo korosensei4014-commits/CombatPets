@@ -19,6 +19,7 @@ import su.nightexpress.combatpets.level.LevelingManager;
 import su.nightexpress.combatpets.level.command.LevelingCommands;
 import su.nightexpress.combatpets.nms.paper26p12.NMS26p12;
 import su.nightexpress.combatpets.nms.paper26p2.NMS26p2;
+import su.nightexpress.combatpets.nms.paper26p3.NMS26p3;
 import su.nightexpress.combatpets.pet.PetManager;
 import su.nightexpress.combatpets.shop.ShopManager;
 import su.nightexpress.combatpets.shop.command.ShopCommands;
@@ -160,6 +161,7 @@ public class PetsPlugin extends NightPlugin {
         switch (Version.getCurrent()) {
             case MC_26_1_2 -> this.petNMS = new NMS26p12();
             case MC_26_2 -> this.petNMS = new NMS26p2();
+            case MC_26_3 -> this.petNMS = new NMS26p3();
             default -> {
             }
         }

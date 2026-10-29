@@ -5,3 +5,4 @@ rootProject.name = "CombatPets"
 include("API")
 include("nms-paper")
 include("nms-26-2")
+include("nms-26-3")

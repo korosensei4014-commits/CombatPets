@@ -24,7 +24,7 @@ allprojects {
     }
 
     dependencies {
-        compileOnly("su.nightexpress.nightcore:main:2.16.4")
+        compileOnly("su.nightexpress.nightcore:main:2.16.7")
         compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
     }
 
@@ -72,6 +72,7 @@ dependencies {
     implementation(project(":API"))
     implementation(project(":nms-paper"))
     implementation(project(":nms-26-2"))
+    implementation(project(":nms-26-3"))
 }
 
 // Root module tasks
