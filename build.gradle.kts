@@ -8,7 +8,7 @@ plugins {
 // Shared configuration for all modules
 allprojects {
     group = "su.nightexpress.combatpets" 
-    version = "2.8.3"
+    version = "2.8.4"
 
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
