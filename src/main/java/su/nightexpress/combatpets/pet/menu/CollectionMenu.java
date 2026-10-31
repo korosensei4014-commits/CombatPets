@@ -11,6 +11,7 @@ import su.nightexpress.combatpets.api.pet.ActivePet;
 import su.nightexpress.combatpets.api.pet.Tier;
 import su.nightexpress.combatpets.api.pet.PetEntityBridge;
 import su.nightexpress.combatpets.config.Config;
+import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.data.impl.PetData;
 import su.nightexpress.combatpets.pet.AttributeRegistry;
 import su.nightexpress.combatpets.util.PetUtils;
@@ -141,7 +142,11 @@ public class CollectionMenu extends ConfigMenu<PetsPlugin> implements AutoFilled
                 return;
             }
 
-            if (event.getClick() == ClickType.DROP && this.plugin.getPetManager().canOpenRelease(player, petData)) {
+            if (event.getClick() == ClickType.DROP && this.plugin.getPetManager().isReleaseAllowed(player)) {
+                if (this.plugin.getPetManager().isSummoned(player, petData)) {
+                    Lang.PET_RELEASE_ERROR_ACTIVE.message().send(player, replacer -> replacer.replace(petData.replacePlaceholders()));
+                    return;
+                }
                 this.runNextTick(() -> plugin.getPetManager().openReleaseMenu(player, petData));
             }
         });

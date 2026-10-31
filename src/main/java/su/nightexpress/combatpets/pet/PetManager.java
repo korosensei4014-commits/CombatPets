@@ -727,14 +727,15 @@ public class PetManager extends AbstractManager<PetsPlugin> {
             return true;
         }
 
-        boolean nametagRequired = isRenameNametagRequired();
-        if (nametagRequired && !this.takeRenameNametag(player)) {
+        // Only check for the Name Tag here. It is taken when the name is entered, so nothing is lost
+        // if the player leaves the prompt or it times out.
+        if (isRenameNametagRequired() && !this.hasRenameNametag(player)) {
             return false;
         }
 
         Lang.PET_RENAME_PROMPT.message().send(player);
         Dialog.create(player, (dialog, input) -> {
-            this.plugin.runTask(task -> this.completeRename(player, input.getText(), nametagRequired));
+            this.plugin.runTask(task -> this.submitRename(player, input.getText()));
             return true;
         });
 
@@ -769,6 +770,25 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
         Players.takeItem(player, Material.NAME_TAG, 1);
         return true;
+    }
+
+    /**
+     * Handles a name entered in a menu rename (Java chat prompt or Bedrock form): takes the Name Tag if
+     * required, then renames. The Name Tag is refunded if the rename fails.
+     * Must be called on the main thread.
+     */
+    public boolean submitRename(@NonNull Player player, @NonNull String name) {
+        if (!this.hasActivePet(player)) {
+            Lang.PET_ERROR_NO_ACTIVE_PET.message().send(player);
+            return false;
+        }
+
+        boolean required = isRenameNametagRequired();
+        if (required && !this.takeRenameNametag(player)) {
+            return false;
+        }
+
+        return this.completeRename(player, name, required);
     }
 
     /**
@@ -852,8 +872,10 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
         ActivePet holder = this.getPlayerPet(player);
         if (holder != null) {
+            // Compare template AND tier: the same mob type can be owned in several tiers.
+            boolean sameEntry = holder.getTemplate() == petData.getTemplate() && holder.getTier() == petData.getTier();
             this.despawnPet(player);
-            if (holder.getTemplate() == petData.getTemplate()) {
+            if (sameEntry) {
                 return CollectionSelectResult.DESPAWNED;
             }
         }
@@ -875,9 +897,17 @@ public class PetManager extends AbstractManager<PetsPlugin> {
      * Final checks (permissions, worlds, events) are done in {@link #releasePet(Player, PetData)}.
      */
     public boolean canOpenRelease(@NonNull Player player, @NonNull PetData petData) {
-        if (!Config.PET_RELEASE_ALLOWED.get()) return false;
+        if (!this.isReleaseAllowed(player)) return false;
 
         return !this.isSummoned(player, petData);
+    }
+
+    /**
+     * @return Whether the player may release pets at all: enabled in config, or bypassed by permission.
+     * Same rule as {@link #releasePet(Player, PetData)}.
+     */
+    public boolean isReleaseAllowed(@NonNull Player player) {
+        return Config.PET_RELEASE_ALLOWED.get() || player.hasPermission(Perms.BYPASS_RELEASE_DISABLED);
     }
 
     public boolean hasInventoryAccess(@NonNull ActivePet pet) {

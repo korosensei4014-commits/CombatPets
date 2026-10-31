@@ -89,7 +89,7 @@ When a menu opens (from a command, by interacting with your pet, or from a back 
 - **Input validation.** Empty rename input is rejected and the form reopens. Length, blocked-words and Name Tag rules are applied by the same code the chat rename uses. Invalid form data reopens the form.
 - **Double submissions.** Each form gets a per-player id. Responses for an old or already-answered form are ignored, and `Bedrock.Submit_Cooldown_Millis` adds a short cooldown between submissions. Every action re-checks state when it runs; for example, a pet released in the meantime gives "That pet is no longer available".
 - **Disconnects.** Form state is cleared on quit, and late responses from offline players are ignored.
-- **Name Tag cost (rename).** Java takes the Name Tag before the chat prompt. On Bedrock it is taken **when the name is submitted**, so closing the form costs nothing. It is refunded if the rename fails, as on Java.
+- **Name Tag cost (rename).** On both editions the Name Tag is taken **when the name is submitted** and refunded if the name is rejected. Closing the form or prompt costs nothing.
 
 ---
 
@@ -143,16 +143,16 @@ Unchanged. `/pets collection`, `/pets menu` and `/pets shop`, and right-clicking
 - **The proxy needs Floodgate on the backend** (see the network setups table).
 - **Icons depend on Bedrock texture paths.** The defaults are vanilla item textures; a resource pack that renames them shows blank icons.
 
-## Upstream issues found (not changed in this fork)
+## Upstream bugs fixed in this fork
 
-These were found while reading the code. They are left as-is to avoid unrelated changes:
+These bugs exist in upstream CombatPets v2.8.4 and are fixed here:
 
-1. `Lang.HORSE_STYLE` uses the lang path `PetVariant.FoxType`, the same as `FOX_TYPE`, so the two entries overwrite each other.
-2. `EggConfirmMenu` "cancel" handler: `buyInfo` can be `null` (e.g. after a reload), which causes a NullPointerException.
-3. `CollectionMenu`: left-clicking an idle pet whose **template** matches the summoned pet but whose **tier** differs only despawns the current pet and doesn't summon the clicked one, because the comparison checks the template only. The Bedrock **Summon** button always summons the selected pet.
-4. `CollectionMenu`: pressing Q on the summoned pet silently does nothing (the error message is commented out). The Bedrock form hides **Release** for a summoned pet and explains why.
-5. The Q/Drop release in the GUI checks only `Pets.Release.Allowed` and ignores the `combatpets.bypass.release.disallow` permission, which `PetManager#releasePet` honours. For parity, the Bedrock **Release** button uses the same GUI rule.
-6. Java rename takes the Name Tag before the chat prompt, so if the prompt is abandoned the tag may be lost, depending on nightcore's dialog cancel behaviour.
+1. **Horse style names overwrote fox type names.** `Lang.HORSE_STYLE` used the lang path `PetVariant.FoxType`. It now uses `PetVariant.HorseStyle`.
+2. **Egg shop Cancel could crash after `/pets reload`.** If the purchase data is gone, Cancel now opens the shop tier list instead of throwing a NullPointerException.
+3. **Wrong pet when summoning the same mob type from another tier (Java).** Left-clicking an idle pet whose mob type matches the summoned pet but whose tier differs used to only despawn the current pet. It now summons the clicked pet; only clicking the summoned pet itself returns it.
+4. **No feedback when pressing Q on the summoned pet (Java).** It now shows the new message `Pet.Release.Error.Active`: "Return the pet to your collection before releasing it!".
+5. **Release ignored the bypass permission in menus.** With `Pets.Release.Allowed: false`, players with `combatpets.bypass.release.disallow` can now release from the menus (Q on Java, the Release button on Bedrock), as `PetManager#releasePet` already allowed.
+6. **Name Tag lost when the rename prompt was abandoned (Java).** The Name Tag is now only checked when the prompt opens and taken when the name is entered (refunded if the name is rejected), the same as on Bedrock. Leaving the prompt or letting it time out costs nothing.
 
 ## Testing
 

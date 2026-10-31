@@ -70,6 +70,11 @@ public class EggConfirmMenu extends ConfigMenu<PetsPlugin> implements Linked<Egg
         this.addHandler(this.declineHandler = new ItemHandler("cancel", (viewer, event) -> {
             Player player = viewer.getPlayer();
             BuyInfo buyInfo = this.getLink(player);
+            if (buyInfo == null) {
+                // Link data can be gone after a reload: fall back to the tier list.
+                this.runNextTick(() -> this.shopManager.openTiersMenu(player));
+                return;
+            }
 
             this.runNextTick(() -> this.shopManager.openEggsMenu(player, buyInfo.tier));
         }));

@@ -171,7 +171,7 @@ public class PetForms extends FormSupport {
             buttons.add(this.button(this.text(player, BedrockLang.PET_BUTTON_RELEASE), Config.BEDROCK_ICON_RELEASE,
                 () -> this.openReleaseConfirm(player, petData, () -> this.openCollection(player, tier, page), backToPet)));
         }
-        else if (Config.PET_RELEASE_ALLOWED.get() && summoned) {
+        else if (petManager.isReleaseAllowed(player) && summoned) {
             releaseHint = true;
         }
 
@@ -418,20 +418,12 @@ public class PetForms extends FormSupport {
             }
 
             String name = input.trim();
-            this.withActivePet(player, current -> {
-                boolean required = PetManager.isRenameNametagRequired();
-                if (required && !petManager.takeRenameNametag(player)) {
-                    this.openPetMenu(player);
-                    return;
-                }
-
-                if (petManager.completeRename(player, name, required)) {
-                    this.openPetMenu(player);
-                }
-                else {
-                    this.openRename(player); // Error message sent by the rename logic.
-                }
-            });
+            if (petManager.submitRename(player, name)) {
+                this.openPetMenu(player);
+            }
+            else if (petManager.hasActivePet(player)) {
+                this.openRename(player); // Error message sent by the rename logic.
+            }
         }, () -> this.openPetMenu(player));
     }
 

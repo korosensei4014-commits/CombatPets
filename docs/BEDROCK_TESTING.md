@@ -22,15 +22,16 @@ Mark each line ✅ / ❌ and note anything unexpected.
 | J1 | `/pets collection` → tier | Collection chest GUI opens |
 | J2 | Left-click idle pet | Pet summoned, GUI closes |
 | J3 | Left-click summoned pet | Pet despawned, GUI refreshes |
+| J3b | Left-click idle pet of the same mob type but another tier while one is summoned | Current pet returned, clicked pet summoned |
 | J4 | Left-click dead pet | Revive GUI; accept → paid & revived; decline → back to collection |
 | J5 | **Q** on idle pet | Release GUI; accept → released; decline → back |
-| J6 | **Q** on summoned pet | Nothing happens (upstream behaviour) |
+| J6 | **Q** on summoned pet | Message: return the pet to your collection before releasing it |
 | J7 | Sneak/right-click own pet | Pet Menu GUI |
 | J8 | Equipment **left-click** | Lock toggles, lore updates |
 | J9 | Equipment **right-click** | All pet armour/items go to your inventory |
 | J10 | Combat Mode click | Cycles Passive → Protective → Supportive → Protective & Supportive |
 | J11 | Silent click | Toggles |
-| J12 | Rename | Chat prompt; Name Tag taken; valid name applied; invalid name → tag refunded |
+| J12 | Rename | Chat prompt; Name Tag taken only when a name is entered; invalid name → refunded; leaving the prompt → nothing taken |
 | J13 | Inventory | Pet storage opens |
 | J14 | Aspects → click aspect | 1 point spent, value +1 (blocked at max / 0 points) |
 | J15 | Aspects → Reallocate (if enabled) | Points refunded |

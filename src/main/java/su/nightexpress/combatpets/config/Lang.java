@@ -26,7 +26,7 @@ public class Lang implements LangContainer {
     public static final EnumLocale<DyeColor>                        DYE_COLOR   = LangEntry.builder("PetVariant.DyeColor").enumeration(DyeColor.class);
     public static final EnumLocale<Fox.Type>                        FOX_TYPE    = LangEntry.builder("PetVariant.FoxType").enumeration(Fox.Type.class);
     public static final EnumLocale<Horse.Color>                     HORSE_COLOR = LangEntry.builder("PetVariant.HorseColor").enumeration(Horse.Color.class);
-    public static final EnumLocale<Horse.Style>                     HORSE_STYLE = LangEntry.builder("PetVariant.FoxType").enumeration(Horse.Style.class);
+    public static final EnumLocale<Horse.Style>                     HORSE_STYLE = LangEntry.builder("PetVariant.HorseStyle").enumeration(Horse.Style.class);
     public static final EnumLocale<Llama.Color>                     LLAMA_COLOR = LangEntry.builder("PetVariant.LlamaColor").enumeration(Llama.Color.class);
     public static final EnumLocale<SheepShearVariantHandler.Type>   SHEEP_SHEAR = LangEntry.builder("PetVariant.SheepShear").enumeration(SheepShearVariantHandler.Type.class);
     public static final EnumLocale<Rabbit.Type> RABBIT_TYPE = LangEntry.builder("PetVariant.RabbitType").enumeration(Rabbit.Type.class);
@@ -358,6 +358,10 @@ public class Lang implements LangContainer {
 
     public static final MessageLocale PET_RELEASE_ERROR_BAD_WORLD = LangEntry.builder("Pet.Release.Error.BadWorld").chatMessage(
         SOFT_RED.wrap("You can not release pets in this world!")
+    );
+
+    public static final MessageLocale PET_RELEASE_ERROR_ACTIVE = LangEntry.builder("Pet.Release.Error.Active").chatMessage(
+        SOFT_RED.wrap("Return " + SOFT_YELLOW.wrap(PET_NAME) + " to your collection before releasing it!")
     );
 
     public static final MessageLocale PET_RELEASE_ERROR_PROTECTED_AREA = LangEntry.builder("Pet.Release.Error.ProtectedArea").chatMessage(
