@@ -6,6 +6,7 @@ import org.jspecify.annotations.Nullable;
 import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.Template;
 import su.nightexpress.combatpets.api.pet.Tier;
+import su.nightexpress.combatpets.bedrock.form.ShopForms;
 import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.shop.data.EggPrice;
 import su.nightexpress.combatpets.shop.menu.EggConfirmMenu;
@@ -239,15 +240,29 @@ public class ShopManager extends AbstractManager<PetsPlugin> {
         return true;
     }
 
+    /**
+     * Only call after {@link PetsPlugin#useBedrockForms(Player)} returned true.
+     */
+    @NonNull
+    private ShopForms bedrockForms() {
+        return java.util.Objects.requireNonNull(this.plugin.getBedrockManager()).getShopForms();
+    }
+
     public void openTiersMenu(@NonNull Player player) {
+        if (this.plugin.useBedrockForms(player) && this.bedrockForms().openTiers(player)) return;
+
         this.tiersMenu.open(player);
     }
 
     public void openEggsMenu(@NonNull Player player, @NonNull Tier tier) {
+        if (this.plugin.useBedrockForms(player) && this.bedrockForms().openEggs(player, tier, 0)) return;
+
         this.eggsMenu.open(player, tier);
     }
 
     public void openEggPurchaseConfirm(@NonNull Player player, @NonNull Template petConfig, @NonNull Tier tier) {
+        if (this.plugin.useBedrockForms(player) && this.bedrockForms().openConfirm(player, petConfig, tier, 0)) return;
+
         this.eggConfirmMenu.open(player, new EggConfirmMenu.BuyInfo(petConfig, tier));
     }
 }

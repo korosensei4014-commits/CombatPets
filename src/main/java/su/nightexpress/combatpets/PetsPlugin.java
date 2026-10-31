@@ -1,8 +1,14 @@
 package su.nightexpress.combatpets;
 
+import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import su.nightexpress.combatpets.api.pet.PetNMS;
+import su.nightexpress.combatpets.bedrock.BedrockLang;
+import su.nightexpress.combatpets.bedrock.BedrockManager;
+import su.nightexpress.combatpets.bedrock.bridge.BedrockBridge;
+import su.nightexpress.combatpets.bedrock.bridge.BedrockBridges;
 import su.nightexpress.combatpets.capture.CaptureManager;
 import su.nightexpress.combatpets.capture.command.CaptureCommands;
 import su.nightexpress.combatpets.command.impl.AspectPointsCommands;
@@ -42,6 +48,7 @@ public class PetsPlugin extends NightPlugin {
     private CaptureManager  captureManager;
     private WardrobeManager wardrobeManager;
     private ShopManager     shopManager;
+    private BedrockManager  bedrockManager;
 
     private PetNMS petNMS;
 
@@ -58,6 +65,7 @@ public class PetsPlugin extends NightPlugin {
         super.addRegistries();
 
         this.registerLang(Lang.class);
+        this.registerLang(BedrockLang.class);
     }
 
     @Override
@@ -109,8 +117,32 @@ public class PetsPlugin extends NightPlugin {
             this.shopManager.setup();
         }
 
+        this.loadBedrock();
         this.loadHooks();
         this.loadCommands();
+    }
+
+    /**
+     * Enables native Bedrock forms when Floodgate or Geyser is installed.
+     * Nothing from the Geyser / Floodgate / Cumulus APIs is loaded when neither is present.
+     */
+    private void loadBedrock() {
+        if (!Config.BEDROCK_ENABLED.get()) return;
+
+        if (!Plugins.isInstalled(BedrockBridges.FLOODGATE) && !Plugins.isInstalled(BedrockBridges.GEYSER)) {
+            this.info("Bedrock support: Floodgate/Geyser not found. All players will use the chest GUIs.");
+            return;
+        }
+
+        BedrockBridge bridge = BedrockBridges.detect(this, Config.BEDROCK_PROVIDER.get());
+        if (bridge == null) {
+            this.warn("Bedrock support: no usable Floodgate/Geyser API found. All players will use the chest GUIs.");
+            return;
+        }
+
+        this.bedrockManager = new BedrockManager(this, bridge);
+        this.bedrockManager.setup();
+        this.info("Bedrock support enabled using the " + bridge.getName() + " API. Bedrock players will get native forms.");
     }
 
     private void loadHooks() {
@@ -126,6 +158,10 @@ public class PetsPlugin extends NightPlugin {
         }
 
         if (this.levelingManager != null) this.levelingManager.shutdown();
+        if (this.bedrockManager != null) {
+            this.bedrockManager.shutdown();
+            this.bedrockManager = null;
+        }
         if (this.shopManager != null) this.shopManager.shutdown();
         if (this.captureManager != null) this.captureManager.shutdown();
         if (this.petManager != null) this.petManager.shutdown();
@@ -204,6 +240,21 @@ public class PetsPlugin extends NightPlugin {
 
     public WardrobeManager getWardrobeManager() {
         return this.wardrobeManager;
+    }
+
+    /**
+     * @return Bedrock form manager, or null if Bedrock support is disabled or unavailable.
+     */
+    @Nullable
+    public BedrockManager getBedrockManager() {
+        return this.bedrockManager;
+    }
+
+    /**
+     * @return true if the player should get Bedrock forms instead of chest GUIs.
+     */
+    public boolean useBedrockForms(@NonNull Player player) {
+        return this.bedrockManager != null && this.bedrockManager.isBedrock(player);
     }
 
     public ShopManager getShopManager() {

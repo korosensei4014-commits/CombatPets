@@ -43,6 +43,7 @@ import su.nightexpress.combatpets.api.pet.Template;
 import su.nightexpress.combatpets.api.pet.Tier;
 import su.nightexpress.combatpets.api.pet.event.generic.PetReleaseEvent;
 import su.nightexpress.combatpets.api.pet.type.CombatMode;
+import su.nightexpress.combatpets.bedrock.form.PetForms;
 import su.nightexpress.combatpets.config.Config;
 import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.config.Perms;
@@ -394,31 +395,55 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     }
 
 
+    /**
+     * Only call after {@link PetsPlugin#useBedrockForms(Player)} returned true.
+     */
+    @NonNull
+    private PetForms bedrockForms() {
+        return Objects.requireNonNull(this.plugin.getBedrockManager()).getPetForms();
+    }
+
     public void openTierCollection(@NonNull Player player) {
         if (!plugin.getUserManager().getOrFetch(player).isLoaded()) return;
+        if (this.plugin.useBedrockForms(player) && this.bedrockForms().openTiers(player)) return;
 
         this.tiersMenu.open(player);
     }
 
     public void openPetsCollection(@NonNull Player player, @NonNull Tier tier) {
         if (!plugin.getUserManager().getOrFetch(player).isLoaded()) return;
+        if (this.plugin.useBedrockForms(player) && this.bedrockForms().openCollection(player, tier, 0)) return;
 
         this.collectionMenu.open(player, tier);
     }
 
     public void openOverviewMenu(@NonNull Player player) {
+        if (this.plugin.useBedrockForms(player) && this.bedrockForms().openPetMenu(player)) return;
+
         this.petMenu.open(player);
     }
 
     public void openAspectsMenu(@NonNull Player player) {
+        if (this.plugin.useBedrockForms(player) && this.bedrockForms().openAspects(player)) return;
+
         this.aspectsMenu.open(player);
     }
 
     public void openReleaseMenu(@NonNull Player player, @NonNull PetData data) {
+        if (this.plugin.useBedrockForms(player)) {
+            Runnable toCollection = () -> this.openPetsCollection(player, data.getTier());
+            if (this.bedrockForms().openReleaseConfirm(player, data, toCollection, toCollection)) return;
+        }
+
         this.releaseMenu.open(player, data);
     }
 
     public void openReviveMenu(@NonNull Player player, @NonNull PetData data) {
+        if (this.plugin.useBedrockForms(player)) {
+            Runnable toCollection = () -> this.openPetsCollection(player, data.getTier());
+            if (this.bedrockForms().openReviveConfirm(player, data, toCollection, toCollection)) return;
+        }
+
         this.reviveMenu.open(player, data);
     }
 
@@ -697,6 +722,9 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         if (!this.hasActivePet(player)) {
             Lang.PET_ERROR_NO_ACTIVE_PET.message().send(player);
             return false;
+        }
+        if (this.plugin.useBedrockForms(player) && this.bedrockForms().openRename(player)) {
+            return true;
         }
 
         boolean nametagRequired = isRenameNametagRequired();
