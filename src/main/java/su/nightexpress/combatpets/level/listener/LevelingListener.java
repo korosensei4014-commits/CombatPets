@@ -3,6 +3,7 @@ package su.nightexpress.combatpets.level.listener;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -69,14 +70,25 @@ public class LevelingListener extends AbstractListener<PetsPlugin> {
         this.addDealtDamage(victim, damager, damage);
     }
 
+    /**
+     * Forget the damage dealt to an entity once it leaves the world (death, despawn, chunk unload),
+     * so the damage records don't pile up in memory.
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onEntityRemove(EntityRemoveFromWorldEvent event) {
+        this.damageMap.remove(event.getEntity().getUniqueId());
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onExpGainKill(EntityDeathEvent event) {
         LivingEntity victim = event.getEntity();
+
+        // Take (and remove) the damage record of this mob: it's no longer needed after its death.
+        Map<UUID, Double> damagers = this.damageMap.remove(victim.getUniqueId());
+        if (damagers == null || damagers.isEmpty()) return;
+
         if (!this.manager.shouldDropXP(victim)) return;
         if (this.manager.isDisabledWorld(victim.getWorld())) return;
-
-        Map<UUID, Double> damagers = this.getDealtDamageMap(victim);
-        if (damagers.isEmpty()) return;
 
         double totalHealth = EntityUtil.getAttribute(victim, Attribute.MAX_HEALTH);
 
