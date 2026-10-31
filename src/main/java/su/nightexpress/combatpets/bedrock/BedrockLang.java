@@ -216,14 +216,14 @@ public class BedrockLang implements LangContainer {
         "",
         GRAY.wrap("Tap an aspect to see its bonuses and upgrade it.")
     );
-    public static final TextLocale ASPECTS_BUTTON  = LangEntry.builder("Bedrock.Aspects.Button").text(
+    public static final TextLocale ASPECTS_BUTTON  = LangEntry.builder("Bedrock.Aspects.Aspect_Button").text(
         ASPECT_NAME + DARK_GRAY.wrap(" (" + GENERIC_VALUE + "/" + GENERIC_MAX + ")"),
         GENERIC_TYPE
     );
     public static final TextLocale ASPECTS_STATE_UPGRADE   = LangEntry.builder("Bedrock.Aspects.State.Upgrade").text(DARK_GREEN.wrap("Can be upgraded"));
     public static final TextLocale ASPECTS_STATE_MAX       = LangEntry.builder("Bedrock.Aspects.State.Max").text(DARK_GRAY.wrap("Max level"));
     public static final TextLocale ASPECTS_STATE_NO_POINTS = LangEntry.builder("Bedrock.Aspects.State.NoPoints").text(DARK_GRAY.wrap("No points available"));
-    public static final TextLocale ASPECTS_BUTTON_REALLOCATE = LangEntry.builder("Bedrock.Aspects.Button.Reallocate").text(
+    public static final TextLocale ASPECTS_BUTTON_REALLOCATE = LangEntry.builder("Bedrock.Aspects.Reallocate_Button").text(
         DARK_RED.wrap("Reallocate Points"),
         DARK_GRAY.wrap("Reset all aspects & refund points")
     );
