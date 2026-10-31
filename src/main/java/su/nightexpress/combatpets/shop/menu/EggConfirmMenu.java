@@ -8,11 +8,9 @@ import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.Template;
 import su.nightexpress.combatpets.api.pet.Tier;
 import su.nightexpress.combatpets.config.Config;
-import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.util.PetUtils;
 import su.nightexpress.combatpets.shop.ShopManager;
 import su.nightexpress.combatpets.shop.data.EggPrice;
-import su.nightexpress.nightcore.bridge.currency.Currency;
 import su.nightexpress.nightcore.config.ConfigValue;
 import su.nightexpress.nightcore.config.FileConfig;
 import su.nightexpress.nightcore.menu.MenuOptions;
@@ -27,7 +25,6 @@ import su.nightexpress.nightcore.menu.link.ViewLink;
 import su.nightexpress.nightcore.util.ItemReplacer;
 import su.nightexpress.nightcore.util.ItemUtil;
 import su.nightexpress.nightcore.util.Lists;
-import su.nightexpress.nightcore.util.Players;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,33 +60,9 @@ public class EggConfirmMenu extends ConfigMenu<PetsPlugin> implements Linked<Egg
             BuyInfo buyInfo = this.getLink(player);
             if (buyInfo == null) return;
 
-            Template template = buyInfo.template;
-            Tier tier = buyInfo.tier;
+            if (this.shopManager.getEggPrice(buyInfo.tier, buyInfo.template) == null) return;
 
-            EggPrice price = this.shopManager.getEggPrice(tier, template);
-            if (price == null) return;
-
-            Currency currency = price.getCurrency();
-            double cost = price.getPrice();
-
-            double balance = currency.getBalance(player);
-            if (balance < cost) {
-                Lang.SHOP_PURCHASE_ERROR_NOT_ENOUGH_FUNDS.message().send(player, replacer -> replacer
-                    .replace(GENERIC_PRICE, currency.format(cost))
-                    .replace(template.replacePlaceholders())
-                    .replace(tier.replacePlaceholders())
-                );
-            }
-            else {
-                currency.take(player, cost);
-                Players.addItem(player, template.createEgg(tier));
-
-                Lang.SHOP_PURCHASE_SUCCESS.message().send(player, replacer -> replacer
-                    .replace(GENERIC_PRICE, currency.format(cost))
-                    .replace(template.replacePlaceholders())
-                    .replace(tier.replacePlaceholders())
-                );
-            }
+            this.shopManager.purchaseEgg(player, buyInfo.template, buyInfo.tier);
 
             this.runNextTick(player::closeInventory);
         }));

@@ -11,7 +11,6 @@ import su.nightexpress.combatpets.api.pet.ActivePet;
 import su.nightexpress.combatpets.api.pet.Tier;
 import su.nightexpress.combatpets.api.pet.PetEntityBridge;
 import su.nightexpress.combatpets.config.Config;
-import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.data.impl.PetData;
 import su.nightexpress.combatpets.pet.AttributeRegistry;
 import su.nightexpress.combatpets.util.PetUtils;
@@ -133,33 +132,16 @@ public class CollectionMenu extends ConfigMenu<PetsPlugin> implements AutoFilled
             return item;
         });
         autoFill.setClickAction(petData -> (viewer1, event) -> {
-            ActivePet holder = PetEntityBridge.getByPlayer(player);
-
             if (event.isLeftClick()) {
-                if (petData.isDead()) {
-                    this.runNextTick(() -> plugin.getPetManager().openReviveMenu(player, petData));
-                    return;
+                switch (this.plugin.getPetManager().selectCollectionPet(player, petData)) {
+                    case OPEN_REVIVE -> this.runNextTick(() -> plugin.getPetManager().openReviveMenu(player, petData));
+                    case DESPAWNED -> this.runNextTick(() -> this.flush(viewer));
+                    case SPAWN_ATTEMPTED -> this.runNextTick(player::closeInventory);
                 }
-
-                if (holder != null) {
-                    this.plugin.getPetManager().despawnPet(player);
-                    if (holder.getTemplate() == petData.getTemplate()) {
-                        this.runNextTick(() -> this.flush(viewer));
-                        return;
-                    }
-                }
-                this.plugin.getPetManager().spawnPet(player, petData);
-                this.runNextTick(player::closeInventory);
                 return;
             }
 
-            if (event.getClick() == ClickType.DROP && Config.PET_RELEASE_ALLOWED.get()) {
-                if (holder != null) {
-                    if (holder.getTemplate() == petData.getTemplate() && holder.getTier() == petData.getTier()) {
-                        //plugin.getMessage(Lang.PET_RELEASE_ERROR_ACTIVE).send(player);
-                        return;
-                    }
-                }
+            if (event.getClick() == ClickType.DROP && this.plugin.getPetManager().canOpenRelease(player, petData)) {
                 this.runNextTick(() -> plugin.getPetManager().openReleaseMenu(player, petData));
             }
         });

@@ -10,7 +10,6 @@ import su.nightexpress.combatpets.api.pet.Stat;
 import su.nightexpress.combatpets.api.pet.ActivePet;
 import su.nightexpress.combatpets.api.pet.PetEntityBridge;
 import su.nightexpress.combatpets.config.Config;
-import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.pet.AttributeRegistry;
 import su.nightexpress.combatpets.util.PetUtils;
 import su.nightexpress.nightcore.config.ConfigValue;
@@ -64,8 +63,7 @@ public class AspectsMenu extends ConfigMenu<PetsPlugin> implements AutoFilled<As
             ActivePet petHolder = PetEntityBridge.getByPlayer(player);
             if (petHolder == null) return;
 
-            petHolder.reallocateAspects();
-            petHolder.update();
+            plugin.getPetManager().reallocateAspects(petHolder);
 
             this.runNextTick(() -> this.flush(viewer));
         }));
@@ -159,15 +157,8 @@ public class AspectsMenu extends ConfigMenu<PetsPlugin> implements AutoFilled<As
             ActivePet holder = PetEntityBridge.getByPlayer(viewer.getPlayer());
             if (holder == null) return;
 
-            int aspectValue = holder.getAspectValue(aspect);
+            if (!this.plugin.getPetManager().upgradeAspect(holder, aspect)) return;
 
-            int aspectPoints = holder.getAspectPoints();
-            if (aspectPoints <= 0 || aspectValue >= holder.getTier().getAspectMax(aspect)) return;
-
-            holder.setAspectValue(aspect, aspectValue + 1);
-            holder.setAspectPoints(holder.getAspectPoints() - 1);
-
-            holder.update();
             this.runNextTick(() -> this.flush(viewer));
         });
     }

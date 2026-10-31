@@ -1,9 +1,6 @@
 package su.nightexpress.combatpets.pet.menu;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
@@ -11,7 +8,6 @@ import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.ActivePet;
 import su.nightexpress.combatpets.api.pet.PetEntityBridge;
 import su.nightexpress.combatpets.config.Config;
-import su.nightexpress.combatpets.data.impl.PetUser;
 import su.nightexpress.combatpets.pet.AttributeRegistry;
 import su.nightexpress.combatpets.util.PetUtils;
 import su.nightexpress.nightcore.config.FileConfig;
@@ -24,7 +20,6 @@ import su.nightexpress.nightcore.menu.item.MenuItem;
 import su.nightexpress.nightcore.util.ItemReplacer;
 import su.nightexpress.nightcore.util.ItemUtil;
 import su.nightexpress.nightcore.util.Lists;
-import su.nightexpress.nightcore.util.Players;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,25 +69,11 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
             if (!petHolder.getTier().hasEquipment()) return;
 
             if (event.isLeftClick()) {
-                petHolder.setEquipmentUnlocked(!petHolder.isEquipmentUnlocked());
+                plugin.getPetManager().toggleEquipmentLock(petHolder);
                 this.runNextTick(() -> this.flush(viewer));
             }
             else if (event.isRightClick()) {
-                LivingEntity entity = petHolder.getEntity();
-                EntityEquipment equipment = entity.getEquipment();
-                if (equipment == null) return;
-
-                for (EquipmentSlot slot : EquipmentSlot.values()) {
-                    ItemStack wear = equipment.getItem(slot);
-                    if (wear.getType().isAir()) continue;
-
-                    Players.addItem(viewer.getPlayer(), wear);
-                    equipment.setItem(slot, null);
-                }
-
-                petHolder.saveData();
-                PetUser user = plugin.getUserManager().getOrFetch(viewer.getPlayer());
-                this.plugin.getUserManager().save(user);
+                plugin.getPetManager().unequipAll(viewer.getPlayer(), petHolder);
             }
         }));
 
@@ -106,7 +87,7 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
             ActivePet petHolder = PetEntityBridge.getByPlayer(viewer.getPlayer());
             if (petHolder == null) return;
 
-            petHolder.toggleCombatMode();
+            plugin.getPetManager().toggleCombatMode(petHolder);
             this.runNextTick(() -> this.flush(viewer));
         }));
 
@@ -115,7 +96,7 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
             ActivePet petHolder = PetEntityBridge.getByPlayer(viewer.getPlayer());
             if (petHolder == null) return;
 
-            petHolder.setSilent(!petHolder.isSilent());
+            plugin.getPetManager().toggleSilent(petHolder);
             this.runNextTick(() -> this.flush(viewer));
         }));
 
@@ -138,10 +119,10 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
                     return petHolder.getConfig().isRideable();
                 }
                 else */if (handler == this.inventoryHandler) {
-                    return petHolder.getTier().hasInventory() && petHolder.getTemplate().canHaveInventory();
+                    return plugin.getPetManager().hasInventoryAccess(petHolder);
                 }
                 else if (handler == this.equipmentHandler) {
-                    return petHolder.getTier().hasEquipment();
+                    return plugin.getPetManager().hasEquipmentAccess(petHolder);
                 }
                 return true;
             });

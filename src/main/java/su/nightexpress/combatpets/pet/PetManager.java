@@ -42,6 +42,7 @@ import su.nightexpress.combatpets.api.pet.PetEntityBridge;
 import su.nightexpress.combatpets.api.pet.Template;
 import su.nightexpress.combatpets.api.pet.Tier;
 import su.nightexpress.combatpets.api.pet.event.generic.PetReleaseEvent;
+import su.nightexpress.combatpets.api.pet.type.CombatMode;
 import su.nightexpress.combatpets.config.Config;
 import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.config.Perms;
@@ -698,26 +699,60 @@ public class PetManager extends AbstractManager<PetsPlugin> {
             return false;
         }
 
-        boolean nametagRequired = Config.PET_NAME_RENAME_MENU_REQUIRES_NAMETAG.get();
-        if (nametagRequired) {
-            if (Players.countItem(player, Material.NAME_TAG) < 1) {
-                Lang.PET_RENAME_ERROR_NO_NAMETAG.message().send(player);
-                return false;
-            }
-            Players.takeItem(player, Material.NAME_TAG, 1);
+        boolean nametagRequired = isRenameNametagRequired();
+        if (nametagRequired && !this.takeRenameNametag(player)) {
+            return false;
         }
 
         Lang.PET_RENAME_PROMPT.message().send(player);
         Dialog.create(player, (dialog, input) -> {
-            this.plugin.runTask(task -> {
-                if (!this.tryRename(player, input.getText()) && nametagRequired) {
-                    Players.addItem(player, new ItemStack(Material.NAME_TAG));
-                }
-            });
+            this.plugin.runTask(task -> this.completeRename(player, input.getText(), nametagRequired));
             return true;
         });
 
         return true;
+    }
+
+    /**
+     * @return Whether renaming a pet from a menu (Java GUI or Bedrock form) costs a Name Tag.
+     */
+    public static boolean isRenameNametagRequired() {
+        return Config.PET_NAME_RENAME_MENU_REQUIRES_NAMETAG.get();
+    }
+
+    /**
+     * Checks whether the player has a Name Tag for a menu rename, without taking it.
+     * Sends the "no name tag" message if they don't.
+     */
+    public boolean hasRenameNametag(@NonNull Player player) {
+        if (Players.countItem(player, Material.NAME_TAG) < 1) {
+            Lang.PET_RENAME_ERROR_NO_NAMETAG.message().send(player);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Takes one Name Tag from the player as the cost of a menu rename.
+     * @return false (and a message is sent) if the player has no Name Tag.
+     */
+    public boolean takeRenameNametag(@NonNull Player player) {
+        if (!this.hasRenameNametag(player)) return false;
+
+        Players.takeItem(player, Material.NAME_TAG, 1);
+        return true;
+    }
+
+    /**
+     * Applies a rename requested from a menu. Refunds the Name Tag if the rename fails and one was taken.
+     */
+    public boolean completeRename(@NonNull Player player, @NonNull String name, boolean refundNametag) {
+        if (this.tryRename(player, name)) return true;
+
+        if (refundNametag) {
+            Players.addItem(player, new ItemStack(Material.NAME_TAG));
+        }
+        return false;
     }
 
     public boolean tryRename(@NonNull Player player, @NonNull String name) {
@@ -756,6 +791,152 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         holder.setName(name);
         Lang.PET_RENAME_SUCCESS.message().send(player, replacer -> replacer.replace(Placeholders.PET_NAME, holder
             .getName()));
+        return true;
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Shared menu actions.
+    // These are used by both the Java chest GUIs and the Bedrock forms so both editions execute
+    // exactly the same logic.
+    // ------------------------------------------------------------------------------------------
+
+    /**
+     * Result of the primary action on a pet in the collection.
+     */
+    public enum CollectionSelectResult {
+        /** The pet is dead, the revive confirmation should be shown. */
+        OPEN_REVIVE,
+        /** The selected pet was already summoned and has been returned to the collection. */
+        DESPAWNED,
+        /** Spawn was attempted (see {@link #spawnPet(Player, PetData)} for messages). */
+        SPAWN_ATTEMPTED
+    }
+
+    /**
+     * Primary collection action (Java: left-click on a pet in the Collection GUI).
+     * Dead pet -> revive; summoned pet -> despawn; otherwise despawn the current pet (if any) and summon the selected one.
+     */
+    @NonNull
+    public CollectionSelectResult selectCollectionPet(@NonNull Player player, @NonNull PetData petData) {
+        if (petData.isDead()) {
+            return CollectionSelectResult.OPEN_REVIVE;
+        }
+
+        ActivePet holder = this.getPlayerPet(player);
+        if (holder != null) {
+            this.despawnPet(player);
+            if (holder.getTemplate() == petData.getTemplate()) {
+                return CollectionSelectResult.DESPAWNED;
+            }
+        }
+
+        this.spawnPet(player, petData);
+        return CollectionSelectResult.SPAWN_ATTEMPTED;
+    }
+
+    /**
+     * @return Whether the given collection entry is the player's currently summoned pet.
+     */
+    public boolean isSummoned(@NonNull Player player, @NonNull PetData petData) {
+        ActivePet holder = this.getPlayerPet(player);
+        return holder != null && holder.getTemplate() == petData.getTemplate() && holder.getTier() == petData.getTier();
+    }
+
+    /**
+     * Whether the release confirmation can be opened for the pet (Java: Q/Drop key in the Collection GUI).
+     * Final checks (permissions, worlds, events) are done in {@link #releasePet(Player, PetData)}.
+     */
+    public boolean canOpenRelease(@NonNull Player player, @NonNull PetData petData) {
+        if (!Config.PET_RELEASE_ALLOWED.get()) return false;
+
+        return !this.isSummoned(player, petData);
+    }
+
+    public boolean hasInventoryAccess(@NonNull ActivePet pet) {
+        return pet.getTier().hasInventory() && pet.getTemplate().canHaveInventory();
+    }
+
+    public boolean hasEquipmentAccess(@NonNull ActivePet pet) {
+        return pet.getTier().hasEquipment();
+    }
+
+    /**
+     * Toggles the equipment lock (Java: left-click on the Equipment button).
+     */
+    public boolean toggleEquipmentLock(@NonNull ActivePet pet) {
+        if (!this.hasEquipmentAccess(pet)) return false;
+
+        pet.setEquipmentUnlocked(!pet.isEquipmentUnlocked());
+        return true;
+    }
+
+    /**
+     * Moves all pet equipment to the owner's inventory (Java: right-click on the Equipment button).
+     */
+    public boolean unequipAll(@NonNull Player player, @NonNull ActivePet pet) {
+        if (!this.hasEquipmentAccess(pet)) return false;
+
+        LivingEntity entity = pet.getEntity();
+        EntityEquipment equipment = entity.getEquipment();
+        if (equipment == null) return false;
+
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack wear = equipment.getItem(slot);
+            if (wear.getType().isAir()) continue;
+
+            Players.addItem(player, wear);
+            equipment.setItem(slot, null);
+        }
+
+        pet.saveData();
+        PetUser user = this.plugin.getUserManager().getOrFetch(player);
+        this.plugin.getUserManager().save(user);
+        return true;
+    }
+
+    public void toggleCombatMode(@NonNull ActivePet pet) {
+        pet.toggleCombatMode();
+    }
+
+    /**
+     * Sets a specific combat mode by cycling with {@link ActivePet#toggleCombatMode()},
+     * so the same code path as the Java GUI is used.
+     */
+    public void setCombatMode(@NonNull ActivePet pet, @NonNull CombatMode mode) {
+        int guard = CombatMode.values().length;
+        while (pet.getCombatMode() != mode && guard-- > 0) {
+            pet.toggleCombatMode();
+        }
+    }
+
+    public void toggleSilent(@NonNull ActivePet pet) {
+        pet.setSilent(!pet.isSilent());
+    }
+
+    public boolean canUpgradeAspect(@NonNull ActivePet pet, @NonNull Aspect aspect) {
+        return pet.getAspectPoints() > 0 && pet.getAspectValue(aspect) < pet.getTier().getAspectMax(aspect);
+    }
+
+    /**
+     * Spends one aspect point on the given aspect (Java: click on an aspect in the Aspects GUI).
+     */
+    public boolean upgradeAspect(@NonNull ActivePet pet, @NonNull Aspect aspect) {
+        if (!this.canUpgradeAspect(pet, aspect)) return false;
+
+        pet.setAspectValue(aspect, pet.getAspectValue(aspect) + 1);
+        pet.setAspectPoints(pet.getAspectPoints() - 1);
+        pet.update();
+        return true;
+    }
+
+    /**
+     * Resets all aspects and refunds the points (Java: Reallocate button in the Aspects GUI).
+     */
+    public boolean reallocateAspects(@NonNull ActivePet pet) {
+        if (!Config.PET_REALLOCATE_ASPECTS.get()) return false;
+
+        pet.reallocateAspects();
+        pet.update();
         return true;
     }
 

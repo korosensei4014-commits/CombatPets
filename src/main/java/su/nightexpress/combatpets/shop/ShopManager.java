@@ -6,6 +6,7 @@ import org.jspecify.annotations.Nullable;
 import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.Template;
 import su.nightexpress.combatpets.api.pet.Tier;
+import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.shop.data.EggPrice;
 import su.nightexpress.combatpets.shop.menu.EggConfirmMenu;
 import su.nightexpress.combatpets.shop.menu.ShopEggsMenu;
@@ -16,11 +17,14 @@ import su.nightexpress.nightcore.config.FileConfig;
 import su.nightexpress.nightcore.integration.currency.CurrencyId;
 import su.nightexpress.nightcore.integration.currency.EconomyBridge;
 import su.nightexpress.nightcore.manager.AbstractManager;
+import su.nightexpress.nightcore.util.Players;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+
+import static su.nightexpress.combatpets.Placeholders.GENERIC_PRICE;
 
 public class ShopManager extends AbstractManager<PetsPlugin> {
 
@@ -202,6 +206,38 @@ public class ShopManager extends AbstractManager<PetsPlugin> {
     //        EggPrice price = this.getCustomizationPrice(variant, value);
     //        return price != null && price.getPrice() >= 0D;
     //    }
+
+    /**
+     * Purchases a pet egg for the player. Used by both the Java confirmation GUI and the Bedrock forms.
+     * @return true if the egg was purchased.
+     */
+    public boolean purchaseEgg(@NonNull Player player, @NonNull Template template, @NonNull Tier tier) {
+        EggPrice price = this.getEggPrice(tier, template);
+        if (price == null) return false;
+
+        Currency currency = price.getCurrency();
+        double cost = price.getPrice();
+
+        double balance = currency.getBalance(player);
+        if (balance < cost) {
+            Lang.SHOP_PURCHASE_ERROR_NOT_ENOUGH_FUNDS.message().send(player, replacer -> replacer
+                .replace(GENERIC_PRICE, currency.format(cost))
+                .replace(template.replacePlaceholders())
+                .replace(tier.replacePlaceholders())
+            );
+            return false;
+        }
+
+        currency.take(player, cost);
+        Players.addItem(player, template.createEgg(tier));
+
+        Lang.SHOP_PURCHASE_SUCCESS.message().send(player, replacer -> replacer
+            .replace(GENERIC_PRICE, currency.format(cost))
+            .replace(template.replacePlaceholders())
+            .replace(tier.replacePlaceholders())
+        );
+        return true;
+    }
 
     public void openTiersMenu(@NonNull Player player) {
         this.tiersMenu.open(player);
