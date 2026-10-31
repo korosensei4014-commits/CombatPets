@@ -39,12 +39,22 @@ All upstream features, configs, permissions, commands, data storage and integrat
 
 Bedrock players are detected through the Floodgate/Geyser APIs. Usernames, prefixes and manual lists are never used, so Java players can't be misdetected, and linked accounts are handled by Floodgate.
 
+## Download
+
+Pre-built JARs are on the **[Releases](../../releases)** page (no GitHub account needed). Every push also builds a JAR under **Actions → Build plugin JAR → Artifacts** (GitHub account needed, kept 90 days).
+
+The fork's version is `<upstream version>-bedrock.<N>`, e.g. `2.8.4-bedrock.1`.
+
 ## Building
 
+The repository has no Gradle wrapper; use Gradle 9.1+ with JDK 25.
+
 ```bash
-./gradlew build
-# -> build/libs/CombatPets-2.8.4.jar
+gradle build
+# -> build/libs/CombatPets-2.8.4-bedrock.1.jar
 ```
+
+**Publishing a release:** bump `version` in `build.gradle.kts`, commit, then push a matching tag, for example `git tag v2.8.4-bedrock.2 && git push origin v2.8.4-bedrock.2`. GitHub Actions builds the plugin and creates the Release with the JAR attached.
 
 The build needs these Maven repositories (already configured in `build.gradle.kts`): Maven Central, `repo.papermc.io`, `repo.nightexpressdev.com`, `repo.extendedclip.com`, `mvn.lumine.io`, `repo.magmaguy.com`, and **`repo.opencollab.dev/main`** (new, for the Floodgate API).
 
@@ -101,6 +111,23 @@ Java Edition players rename their pet in Minecraft's dialog screen instead of ty
 - Texts: `Pet.Rename.Dialog.*` and `Pet.Rename.Error.Empty` in the language file.
 - Rules are unchanged (length, blocked words, bypass permissions). The Name Tag is taken only when **Save** is pressed and is refunded if the name is rejected. Pressing Esc or **Go Back** costs nothing.
 
+## WorldGuard region flags
+
+If [WorldGuard](https://enginehub.org/worldguard) is installed, CombatPets registers two region flags. Both default to `allow`, so regions without them behave exactly as before.
+
+| Flag | Effect when set to `deny` |
+|---|---|
+| `pet-pvp` | Pets can't hurt players or other players' pets, and players and pets can't hurt pets in the region. Pets drop player and pet targets. Pets still fight hostile mobs. |
+| `pet-summon` | Pets can't be summoned in the region (`Pet.Error.RegionSummon` message), and a summoned pet that walks or teleports in is returned to the collection. Players with WorldGuard region bypass (`/rg bypass`) aren't affected. |
+
+Examples:
+```
+/rg flag spawn pet-pvp deny      # pets allowed at spawn, but no pet fights with players
+/rg flag lobby pet-summon deny   # no pets in the lobby at all
+```
+
+Outside these regions, `Pets.PVP_Allowed` and `Pets.Disabled_Worlds` work as before. WorldGuard is optional; without it nothing changes.
+
 ## Configuration (`config.yml`)
 
 New section, added automatically on first start:
@@ -146,6 +173,8 @@ Unchanged. `/pets collection`, `/pets menu` and `/pets shop`, and right-clicking
 
 ## Known limitations
 
+- **nightcore `ConfigValue` deprecation.** nightcore marks its `ConfigValue` config class as "for removal" (211 uses here). It can't be migrated yet: nightcore itself still loads every plugin's `config.yml` through `ConfigValue` (`FileConfig.initializeOptions`), and its replacement (`ConfigProperty`) can't be used for a plugin's main config and changes some file formats (e.g. per-rank limits). This will be migrated when nightcore finishes its new config system, or when the plugin drops nightcore.
+
 - **Custom chest-menu layouts aren't mirrored.** The Bedrock forms are built in code, not read from `menu/*.yml`. If you removed or renamed buttons in those files, the Bedrock forms still show the standard actions. Restrict actions with the existing config options instead.
 - **Pet inventory is a container on both editions.** Moving items needs a real inventory; Geyser shows it as a native Bedrock chest, so no click types are needed.
 - **The proxy needs Floodgate on the backend** (see the network setups table).
@@ -169,6 +198,10 @@ See [`docs/BEDROCK_TESTING.md`](docs/BEDROCK_TESTING.md) for the full in-game te
 ## Changes in this fork
 
 - `refactor`: the click-handler logic moved out of the chest GUIs into `PetManager` / `ShopManager` methods. The Java GUIs call them with unchanged behaviour.
+- `feat`: WorldGuard flags `pet-pvp` and `pet-summon` (optional WorldGuard soft dependency).
+- `feat`: configurable follow distances (`Pets.Follow.Start_Distance` / `Stop_Distance`); Java rename dialog (`Pets.Name.Rename.Use_Dialog`).
+- `refactor`: nightcore economy calls that are marked for removal were replaced with their current API.
+- `build`: fork version `2.8.4-bedrock.N`, GitHub Actions build and automatic Releases on `v*` tags.
 - `build`: optional Floodgate API (compile-only), soft-depends on `floodgate` and `Geyser-Spigot`, new `Bedrock.*` config options.
 - `feat`: new `su.nightexpress.combatpets.bedrock` package:
   - `BedrockManager`: form sending, response validation, sessions and routing target

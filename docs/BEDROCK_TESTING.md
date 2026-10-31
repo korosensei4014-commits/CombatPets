@@ -79,7 +79,16 @@ Mark each line ✅ / ❌ and note anything unexpected.
 | B34 | Rapidly double-tap a button (lag simulation) | Action runs once |
 | B35 | No chest GUI ever appears for B1–B33 except B19 | ✅ |
 
-## 3. Mixed / lifecycle
+## 3. WorldGuard flags (if WorldGuard is installed)
+
+- [ ] Startup log: `Registered WorldGuard flags: pet-pvp, pet-summon`.
+- [ ] `/rg flag <region> pet-summon deny` → summoning inside is blocked with a message; walking in with a pet returns it.
+- [ ] Same region with `/rg bypass` on → summoning works.
+- [ ] `/rg flag <region> pet-pvp deny` (with `Pets.PVP_Allowed: true`) → players can't hit pets, pets don't attack players or other pets; pets still fight zombies.
+- [ ] Outside the region, PvP with pets follows `Pets.PVP_Allowed` as before.
+- [ ] Server without WorldGuard → no errors, everything else unchanged.
+
+## 4. Mixed / lifecycle
 
 - [ ] Java and Bedrock players use menus at the same time: each gets their own UI, and actions don't affect each other.
 - [ ] Bedrock player disconnects while a form is open: no errors; after rejoining, menus work.
