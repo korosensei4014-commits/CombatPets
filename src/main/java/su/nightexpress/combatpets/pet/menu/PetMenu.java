@@ -173,6 +173,7 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
                 LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Saturation: ") + PET_SATURATION + LIGHT_GRAY.enclose(
                     "/") + PET_MAX_SATURATION),
                 LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Food: ") + PET_FOOD),
+                LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Duels: ") + LIGHT_GREEN.enclose(PET_DUEL_WINS + " won") + LIGHT_GRAY.enclose(" / ") + LIGHT_RED.enclose(PET_DUEL_LOSSES + " lost")),
                 "",
                 LIGHT_YELLOW.enclose(BOLD.enclose("ATTRIBUTES")),
                 LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Damage: ") + PET_ATTRIBUTE.apply(

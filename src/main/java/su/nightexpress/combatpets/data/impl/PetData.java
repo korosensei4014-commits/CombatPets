@@ -47,6 +47,9 @@ public class PetData implements Placeholder {
     private CombatMode                    combatMode;
     private PetWardrobe                   wardrobe;
 
+    private int duelWins;
+    private int duelLosses;
+
     private final PlaceholderMap placeholderMap;
 
     public static PetData create(@NonNull Template config, @NonNull Tier tier) {
@@ -463,5 +466,21 @@ public class PetData implements Placeholder {
 
     public void setWardrobe(@NonNull PetWardrobe wardrobe) {
         this.wardrobe = wardrobe;
+    }
+
+    public int getDuelWins() {
+        return this.duelWins;
+    }
+
+    public void setDuelWins(int duelWins) {
+        this.duelWins = Math.max(0, duelWins);
+    }
+
+    public int getDuelLosses() {
+        return this.duelLosses;
+    }
+
+    public void setDuelLosses(int duelLosses) {
+        this.duelLosses = Math.max(0, duelLosses);
     }
 }

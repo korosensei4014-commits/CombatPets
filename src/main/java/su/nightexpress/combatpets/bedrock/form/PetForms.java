@@ -183,6 +183,7 @@ public class PetForms extends FormSupport {
             tier.replacePlaceholders(),
             petData.getTemplate().replacePlaceholders()
         );
+        content = content + "\n" + this.text(player, BedrockLang.PET_CONTENT_DUELS, petData.replacePlaceholders());
         if (releaseHint) {
             content = content + "\n\n" + this.text(player, BedrockLang.PET_HINT_RELEASE_ACTIVE);
         }
@@ -299,6 +300,7 @@ public class PetForms extends FormSupport {
         if (petManager.hasEquipmentAccess(pet)) {
             content = content + "\n" + this.text(player, BedrockLang.MENU_CONTENT_EQUIPMENT, pet.replacePlaceholders());
         }
+        content = content + "\n" + this.text(player, BedrockLang.MENU_CONTENT_DUELS, pet.replacePlaceholders());
 
         return this.manager.sendButtons(player, this.text(player, BedrockLang.MENU_TITLE, pet.replacePlaceholders()), content, buttons);
     }

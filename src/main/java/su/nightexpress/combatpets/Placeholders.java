@@ -71,6 +71,8 @@ public class Placeholders extends su.nightexpress.nightcore.util.Placeholders {
     public static final String PET_EQUIPMENT_UNLOCKED = "%pet_equipment_unlocked%";
     public static final String PET_INVENTORY_FILLED   = "%pet_inventory_filled%";
     public static final String PET_OWNER_NAME         = "%pet_owner_name%";
+    public static final String PET_DUEL_WINS          = "%pet_duel_wins%";
+    public static final String PET_DUEL_LOSSES        = "%pet_duel_losses%";
 
     public static final String TEMPLATE_DEFAULT_NAME = "%pet_config_default_name%";
     public static final String TEMPLATE_ID           = "%pet_config_id%";
@@ -110,7 +112,9 @@ public class Placeholders extends su.nightexpress.nightcore.util.Placeholders {
             .add(PET_XP, () -> NumberUtil.format(data.getXP()))
             .add(PET_REQUIRED_XP, () -> NumberUtil.format(data.getRequiredXP()))
             .add(PET_ASPECT_POINTS, () -> NumberUtil.format(data.getAspectPoints()))
-            .add(PET_COMBAT_MODE, () -> Lang.COMBAT_MODE.getLocalized(data.getCombatMode()));
+            .add(PET_COMBAT_MODE, () -> Lang.COMBAT_MODE.getLocalized(data.getCombatMode()))
+            .add(PET_DUEL_WINS, () -> NumberUtil.format(data.getDuelWins()))
+            .add(PET_DUEL_LOSSES, () -> NumberUtil.format(data.getDuelLosses()));
 
         for (String aspect : data.getTier().getAspectsMax().keySet()) {
             placeholderMap.add(PET_ASPECT.apply(aspect), () -> NumberUtil.format(data.getAspect(aspect)));

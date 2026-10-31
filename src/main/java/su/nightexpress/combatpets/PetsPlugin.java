@@ -28,6 +28,8 @@ import su.nightexpress.combatpets.nms.paper26p12.NMS26p12;
 import su.nightexpress.combatpets.nms.paper26p2.NMS26p2;
 import su.nightexpress.combatpets.nms.paper26p3.NMS26p3;
 import su.nightexpress.combatpets.pet.PetManager;
+import su.nightexpress.combatpets.pet.duel.DuelCommands;
+import su.nightexpress.combatpets.pet.duel.DuelManager;
 import su.nightexpress.combatpets.shop.ShopManager;
 import su.nightexpress.combatpets.shop.command.ShopCommands;
 import su.nightexpress.combatpets.wardrobe.WardrobeManager;
@@ -50,6 +52,7 @@ public class PetsPlugin extends NightPlugin {
     private WardrobeManager wardrobeManager;
     private ShopManager     shopManager;
     private BedrockManager  bedrockManager;
+    private DuelManager     duelManager;
 
     private PetNMS petNMS;
 
@@ -120,6 +123,11 @@ public class PetsPlugin extends NightPlugin {
             this.wardrobeManager.setup();
         }
 
+        if (Config.PET_DUEL_ENABLED.get()) {
+            this.duelManager = new DuelManager(this);
+            this.duelManager.setup();
+        }
+
         if (Config.isShopEnabled()) {
             this.shopManager = new ShopManager(this);
             this.shopManager.setup();
@@ -170,6 +178,10 @@ public class PetsPlugin extends NightPlugin {
             this.bedrockManager.shutdown();
             this.bedrockManager = null;
         }
+        if (this.duelManager != null) {
+            this.duelManager.shutdown();
+            this.duelManager = null;
+        }
         if (this.shopManager != null) this.shopManager.shutdown();
         if (this.captureManager != null) this.captureManager.shutdown();
         if (this.petManager != null) this.petManager.shutdown();
@@ -194,6 +206,9 @@ public class PetsPlugin extends NightPlugin {
             }
             if (this.shopManager != null) {
                 ShopCommands.load(this, this.shopManager, builder);
+            }
+            if (this.duelManager != null) {
+                DuelCommands.load(this, this.duelManager, builder);
             }
             if (this.wardrobeManager != null) {
                 WardrobeCommands.load(this, this.wardrobeManager, builder);
@@ -253,6 +268,14 @@ public class PetsPlugin extends NightPlugin {
     /**
      * @return Bedrock form manager, or null if Bedrock support is disabled or unavailable.
      */
+    /**
+     * @return Pet duel manager, or null if duels are disabled.
+     */
+    @Nullable
+    public DuelManager getDuelManager() {
+        return this.duelManager;
+    }
+
     @Nullable
     public BedrockManager getBedrockManager() {
         return this.bedrockManager;

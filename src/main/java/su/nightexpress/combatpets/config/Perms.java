@@ -23,6 +23,7 @@ public class Perms {
     public static final UniPermission COMMAND_EGG                   = new UniPermission(PREFIX_COMMAND + "egg");
     public static final UniPermission COMMAND_MYSTERY_EGG           = new UniPermission(PREFIX_COMMAND + "mysteryegg");
     public static final UniPermission COMMAND_SHOP                  = new UniPermission(PREFIX_COMMAND + "shop");
+    public static final UniPermission COMMAND_DUEL                  = new UniPermission(PREFIX_COMMAND + "duel");
     public static final UniPermission COMMAND_CAPTURE_ITEM          = new UniPermission(PREFIX_COMMAND + "captureitem");
     public static final UniPermission COMMAND_COLLECTION            = new UniPermission(PREFIX_COMMAND + "collection");
     public static final UniPermission COMMAND_ACCESSORY             = new UniPermission(PREFIX_COMMAND + "accessory");
@@ -61,6 +62,7 @@ public class Perms {
             COMMAND_EGG,
             COMMAND_MYSTERY_EGG,
             COMMAND_SHOP,
+            COMMAND_DUEL,
             COMMAND_CAPTURE_ITEM,
             COMMAND_COLLECTION,
             COMMAND_ACCESSORY,

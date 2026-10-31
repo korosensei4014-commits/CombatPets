@@ -88,7 +88,19 @@ Mark each line ✅ / ❌ and note anything unexpected.
 - [ ] Outside the region, PvP with pets follows `Pets.PVP_Allowed` as before.
 - [ ] Server without WorldGuard → no errors, everything else unchanged.
 
-## 4. Mixed / lifecycle
+## 4. Pet duels
+
+- [ ] `/pets duel <player>` with both pets summoned → challenger gets "sent", target gets the Accept/Decline screen (Java dialog / Bedrock form) + chat message.
+- [ ] Decline → challenger is told; no duel. No answer for 30 s → both get "expired".
+- [ ] Target types `/pets duel <challenger>` → accepts.
+- [ ] Accept → both pets healed, 3-2-1 titles, FIGHT!, pets attack only each other (test a goal pet, e.g. wolf, and a brain pet, e.g. goat).
+- [ ] During the fight: players, mobs and other pets can't hurt the duel pets; feeding and Return to Collection are blocked.
+- [ ] Loser pet dies (normal death/revive rules), VICTORY/DEFEAT titles, stats +1 win / +1 loss, survive restart.
+- [ ] Draw after Max_Duration; cancel on logout, owner death, pets too far apart, world change.
+- [ ] Errors: duel yourself, no pet, target without pet, too far, already in a duel, duplicate challenge.
+- [ ] Stats in Bedrock Pet Menu/collection, `%combatpets_duel_wins%` etc. with PlaceholderAPI.
+
+## 5. Mixed / lifecycle
 
 - [ ] Java and Bedrock players use menus at the same time: each gets their own UI, and actions don't affect each other.
 - [ ] Bedrock player disconnects while a form is open: no errors; after rejoining, menus work.

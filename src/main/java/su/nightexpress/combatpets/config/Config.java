@@ -101,6 +101,28 @@ public class Config {
         "While following, pets stop once they are this close to their owner (in blocks).",
         "Must be lower than Start_Distance. Big pets keep a little more space automatically.");
 
+    public static final ConfigValue<Boolean> PET_DUEL_ENABLED = ConfigValue.create("Pets.Duel.Enabled",
+        true,
+        "Enables pet duels: '/pets duel <player>' challenges another player's summoned pet.",
+        "The losing pet really dies (Pets death rules apply) and must be revived.");
+
+    public static final ConfigValue<Integer> PET_DUEL_REQUEST_TIMEOUT = ConfigValue.create("Pets.Duel.Request_Timeout",
+        30,
+        "Seconds a duel challenge stays valid.");
+
+    public static final ConfigValue<Integer> PET_DUEL_COUNTDOWN = ConfigValue.create("Pets.Duel.Countdown",
+        3,
+        "Countdown in seconds before the pets start fighting.");
+
+    public static final ConfigValue<Integer> PET_DUEL_MAX_DURATION = ConfigValue.create("Pets.Duel.Max_Duration",
+        120,
+        "Maximum fight length in seconds. When time runs out the duel ends in a draw (no pet dies).");
+
+    public static final ConfigValue<Double> PET_DUEL_MAX_DISTANCE = ConfigValue.create("Pets.Duel.Max_Distance",
+        24D,
+        "Players must be within this many blocks of each other to start a duel.",
+        "The duel is cancelled (no winner) if the pets get more than twice this far apart.");
+
     public static final ConfigValue<Boolean> PET_SNEAK_TO_OPEN_MENU = ConfigValue.create("Pets.Sneak_To_Open_Menu",
         false,
         "Sets whether or not player should sneak to open pet menu on right click."

@@ -173,7 +173,8 @@ public final class PetInstance implements ActivePet {
         }
 
         // WorldGuard 'pet-pvp: deny': drop player / pet targets so the pet doesn't keep chasing them.
-        if (this.entity instanceof org.bukkit.entity.Mob mob) {
+        boolean inDuel = this.plugin.getDuelManager() != null && this.plugin.getDuelManager().isInDuel(this);
+        if (!inDuel && this.entity instanceof org.bukkit.entity.Mob mob) {
             LivingEntity target = mob.getTarget();
             if (target != null && (target instanceof Player || this.plugin.getPetManager().isPetEntity(target))
                 && (RegionHook.isPetPvpDenied(this.entity.getLocation()) || RegionHook.isPetPvpDenied(target.getLocation()))) {

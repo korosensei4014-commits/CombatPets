@@ -99,6 +99,9 @@ public class BedrockLang implements LangContainer {
         GRAY.wrap("Defense: ") + WHITE.wrap(PET_ATTRIBUTE.apply(ARMOR)),
         GRAY.wrap("Speed: ") + WHITE.wrap("W: " + PET_ATTRIBUTE.apply(MOVEMENT_SPEED) + " / F: " + PET_ATTRIBUTE.apply(FLYING_SPEED))
     );
+    public static final TextLocale PET_CONTENT_DUELS = LangEntry.builder("Bedrock.Pet.Content_Duels").text(
+        GRAY.wrap("Duels: ") + DARK_GREEN.wrap(PET_DUEL_WINS + " won") + GRAY.wrap(" / ") + DARK_RED.wrap(PET_DUEL_LOSSES + " lost")
+    );
     public static final TextLocale PET_HINT_RELEASE_ACTIVE = LangEntry.builder("Bedrock.Pet.Hint.Release_Active").text(
         GRAY.wrap("Return this pet to your collection to be able to release it.")
     );
@@ -155,6 +158,9 @@ public class BedrockLang implements LangContainer {
         YELLOW.wrap(BOLD.wrap("SETTINGS")),
         GRAY.wrap("Combat Mode: ") + WHITE.wrap(PET_COMBAT_MODE),
         GRAY.wrap("Silent Mode: ") + WHITE.wrap(PET_SILENT)
+    );
+    public static final TextLocale MENU_CONTENT_DUELS = LangEntry.builder("Bedrock.Menu.Content_Duels").text(
+        GRAY.wrap("Duels: ") + WHITE.wrap(PET_DUEL_WINS + " won / " + PET_DUEL_LOSSES + " lost")
     );
     public static final TextLocale MENU_CONTENT_EQUIPMENT = LangEntry.builder("Bedrock.Menu.Content_Equipment").text(
         GRAY.wrap("Equipment Unlocked: ") + WHITE.wrap(PET_EQUIPMENT_UNLOCKED),

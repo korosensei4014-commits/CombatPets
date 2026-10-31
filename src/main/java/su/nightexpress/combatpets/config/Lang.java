@@ -384,6 +384,101 @@ public class Lang implements LangContainer {
         SOFT_RED.wrap("Pets are disabled in this world.")
     );
 
+    // ------------------------------------------------------------------------------------------
+    // Pet duels
+    // ------------------------------------------------------------------------------------------
+
+    public static final TextLocale COMMAND_DUEL_DESC = LangEntry.builder("Command.Duel.Desc").text("Challenge a player's pet to a duel.");
+
+    public static final MessageLocale DUEL_ERROR_SELF = LangEntry.builder("Duel.Error.Self").chatMessage(
+        SOFT_RED.wrap("You can't duel yourself."));
+
+    public static final MessageLocale DUEL_ERROR_NO_PET = LangEntry.builder("Duel.Error.NoPet").chatMessage(
+        SOFT_RED.wrap("You need a summoned pet to duel."));
+
+    public static final MessageLocale DUEL_ERROR_TARGET_NO_PET = LangEntry.builder("Duel.Error.TargetNoPet").chatMessage(
+        SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " doesn't have a summoned pet."));
+
+    public static final MessageLocale DUEL_ERROR_IN_DUEL = LangEntry.builder("Duel.Error.InDuel").chatMessage(
+        SOFT_RED.wrap("You are already in a pet duel."));
+
+    public static final MessageLocale DUEL_ERROR_TARGET_IN_DUEL = LangEntry.builder("Duel.Error.TargetInDuel").chatMessage(
+        SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " is already in a pet duel."));
+
+    public static final MessageLocale DUEL_ERROR_TOO_FAR = LangEntry.builder("Duel.Error.TooFar").chatMessage(
+        SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " is too far away. Get within " + SOFT_YELLOW.wrap(GENERIC_AMOUNT) + " blocks."));
+
+    public static final MessageLocale DUEL_ERROR_ALREADY_SENT = LangEntry.builder("Duel.Error.AlreadySent").chatMessage(
+        SOFT_RED.wrap("You already challenged " + SOFT_YELLOW.wrap(PLAYER_NAME) + ". Wait for an answer."));
+
+    public static final MessageLocale DUEL_ERROR_CANT_DESPAWN = LangEntry.builder("Duel.Error.CantDespawn").chatMessage(
+        SOFT_RED.wrap("You can't return your pet during a duel."));
+
+    public static final MessageLocale DUEL_ERROR_CANT_FEED = LangEntry.builder("Duel.Error.CantFeed").chatMessage(
+        SOFT_RED.wrap("You can't feed your pet during a duel."));
+
+    public static final MessageLocale DUEL_REQUEST_SENT = LangEntry.builder("Duel.Request.Sent").chatMessage(
+        GRAY.wrap("Duel challenge sent to " + SOFT_YELLOW.wrap(PLAYER_NAME) + ". It expires in " + SOFT_YELLOW.wrap(GENERIC_AMOUNT) + " seconds."));
+
+    public static final MessageLocale DUEL_REQUEST_RECEIVED = LangEntry.builder("Duel.Request.Received").chatMessage(
+        GRAY.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " challenged your pet to a duel! " +
+            "Type " + SOFT_YELLOW.wrap("/pets duel " + PLAYER_NAME) + " to accept."),
+        SOFT_RED.wrap("The losing pet dies and must be revived."));
+
+    public static final MessageLocale DUEL_REQUEST_EXPIRED = LangEntry.builder("Duel.Request.Expired").chatMessage(
+        GRAY.wrap("The pet duel challenge between you and " + SOFT_YELLOW.wrap(PLAYER_NAME) + " expired."));
+
+    public static final MessageLocale DUEL_REQUEST_DECLINED = LangEntry.builder("Duel.Request.Declined").chatMessage(
+        GRAY.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " declined the pet duel."));
+
+    public static final MessageLocale DUEL_COUNTDOWN = LangEntry.builder("Duel.Countdown").titleMessage(
+        SOFT_YELLOW.wrap(BOLD.wrap(GENERIC_TIME)),
+        GRAY.wrap("Pet duel vs " + SOFT_YELLOW.wrap(PLAYER_NAME)), 0, 25);
+
+    public static final MessageLocale DUEL_START = LangEntry.builder("Duel.Start").titleMessage(
+        SOFT_RED.wrap(BOLD.wrap("FIGHT!")),
+        GRAY.wrap(SOFT_YELLOW.wrap(PET_NAME) + " vs " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s pet"), 0, 30);
+
+    public static final MessageLocale DUEL_WIN = LangEntry.builder("Duel.Win").titleMessage(
+        SOFT_GREEN.wrap(BOLD.wrap("VICTORY!")),
+        GRAY.wrap(SOFT_GREEN.wrap(PET_NAME) + " defeated " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s pet!"));
+
+    public static final MessageLocale DUEL_LOSE = LangEntry.builder("Duel.Lose").titleMessage(
+        SOFT_RED.wrap(BOLD.wrap("DEFEAT")),
+        GRAY.wrap(SOFT_RED.wrap(PET_NAME) + " was defeated by " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s pet."));
+
+    public static final MessageLocale DUEL_DRAW = LangEntry.builder("Duel.Draw").titleMessage(
+        SOFT_YELLOW.wrap(BOLD.wrap("DRAW")),
+        GRAY.wrap("Time is up! Both pets survived."));
+
+    public static final MessageLocale DUEL_CANCELLED = LangEntry.builder("Duel.Cancelled").chatMessage(
+        GRAY.wrap("The pet duel with " + SOFT_YELLOW.wrap(PLAYER_NAME) + " was cancelled: " + SOFT_RED.wrap(GENERIC_TYPE)));
+
+    public static final TextLocale DUEL_CANCEL_LEFT     = LangEntry.builder("Duel.CancelReason.Left").text("a player left");
+    public static final TextLocale DUEL_CANCEL_PET_GONE = LangEntry.builder("Duel.CancelReason.PetGone").text("a pet is no longer summoned");
+    public static final TextLocale DUEL_CANCEL_DIED     = LangEntry.builder("Duel.CancelReason.OwnerDied").text("a player died");
+    public static final TextLocale DUEL_CANCEL_TOO_FAR  = LangEntry.builder("Duel.CancelReason.TooFar").text("the pets got too far apart");
+
+    public static final TextLocale DUEL_DIALOG_TITLE = LangEntry.builder("Duel.Dialog.Title").text(
+        YELLOW.wrap(BOLD.wrap("PET DUEL")) + DARK_GRAY.wrap(" » ") + WHITE.wrap(PLAYER_NAME));
+
+    public static final TextLocale DUEL_DIALOG_BODY = LangEntry.builder("Duel.Dialog.Body").text(
+        SOFT_YELLOW.wrap(PLAYER_NAME) + GRAY.wrap(" challenges your pet to a duel!"),
+        "",
+        GRAY.wrap("Their pet: ") + WHITE.wrap(GENERIC_NAME),
+        GRAY.wrap("Your pet: ") + WHITE.wrap(PET_NAME),
+        "",
+        SOFT_RED.wrap("The losing pet dies and must be revived."));
+
+    public static final ButtonLocale DUEL_DIALOG_ACCEPT = LangEntry.builder("Duel.Dialog.Accept").button(
+        GREEN.wrap("✔") + " Accept");
+
+    public static final ButtonLocale DUEL_DIALOG_DECLINE = LangEntry.builder("Duel.Dialog.Decline").button(
+        RED.wrap("✘") + " Decline");
+
+    public static final TextLocale DUEL_PET_INFO = LangEntry.builder("Duel.PetInfo").text(
+        PET_NAME + GRAY.wrap(" (Lv. " + PET_LEVEL + ", " + TIER_NAME + GRAY.wrap(", ") + GENERIC_AMOUNT + GRAY.wrap(" HP)")));
+
     public static final MessageLocale PET_RELEASE_SUCCESS = LangEntry.builder("Pet.Release.Success").chatMessage(
         GRAY.wrap("You released " + SOFT_YELLOW.wrap(PET_NAME) + "!")
     );

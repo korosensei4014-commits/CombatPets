@@ -42,6 +42,8 @@ public class PetDataSerializer implements JsonSerializer<PetData>, JsonDeseriali
         object.add("equipmentSlots", context.serialize(equipmentRaw));
         object.addProperty("state", petData.getCombatMode().name());
         object.add("wardrobe", context.serialize(petData.getWardrobe()));
+        object.addProperty("duelWins", petData.getDuelWins());
+        object.addProperty("duelLosses", petData.getDuelLosses());
 
         return object;
     }
@@ -102,6 +104,12 @@ public class PetDataSerializer implements JsonSerializer<PetData>, JsonDeseriali
         }
         else wardrobe = new PetWardrobe();
 
-        return new PetData(config, tier, name, silent, reviveDate, health, saturation, level, xp, aspectPoints, aspects, inventory, equipment, state, wardrobe);
+        PetData petData = new PetData(config, tier, name, silent, reviveDate, health, saturation, level, xp, aspectPoints, aspects, inventory, equipment, state, wardrobe);
+
+        // Duel stats (added in the Bedrock fork). Missing in older data: defaults to 0.
+        if (object.has("duelWins")) petData.setDuelWins(object.get("duelWins").getAsInt());
+        if (object.has("duelLosses")) petData.setDuelLosses(object.get("duelLosses").getAsInt());
+
+        return petData;
     }
 }

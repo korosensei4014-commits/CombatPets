@@ -46,6 +46,7 @@ import su.nightexpress.combatpets.api.pet.event.generic.PetReleaseEvent;
 import su.nightexpress.combatpets.api.pet.type.CombatMode;
 import su.nightexpress.combatpets.bedrock.form.PetForms;
 import su.nightexpress.combatpets.pet.dialog.PetRenameDialog;
+import su.nightexpress.combatpets.pet.duel.DuelManager;
 import su.nightexpress.combatpets.config.Config;
 import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.config.Perms;
@@ -528,6 +529,13 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         ActivePet holder = getPlayerPet(player);
         if (holder == null) return;
 
+        // A pet can't be returned while it's fighting a duel (prevents escaping a lost fight).
+        DuelManager duels = this.plugin.getDuelManager();
+        if (duels != null && duels.isInDuel(holder) && player.isOnline()) {
+            Lang.DUEL_ERROR_CANT_DESPAWN.message().send(player);
+            return;
+        }
+
         this.despawnPet(holder);
     }
 
@@ -674,6 +682,11 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
         ItemStack handItem = player.getInventory().getItemInMainHand();
         FoodItem foodItem = this.getFoodItem(handItem);
+        DuelManager duels = this.plugin.getDuelManager();
+        if (foodItem != null && duels != null && duels.isInDuel(petHolder)) {
+            Lang.DUEL_ERROR_CANT_FEED.message().send(player);
+            return true;
+        }
         if (foodItem != null && petHolder.getTemplate().isFood(foodItem) && petHolder.doFeed(foodItem)) {
             handItem.setAmount(handItem.getAmount() - 1);
             return true;
@@ -1017,6 +1030,13 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     }
 
     public boolean canDamage(@NonNull LivingEntity damager, @NonNull LivingEntity victim) {
+        // Pet duels: only the two dueling pets can hurt each other; nothing else can interfere.
+        DuelManager duels = this.plugin.getDuelManager();
+        if (duels != null) {
+            Boolean duelResult = duels.checkDamage(damager, victim);
+            if (duelResult != null) return duelResult;
+        }
+
         ActivePet damagerPet = this.getPetByMob(damager);
         if (damagerPet != null) {
             return this.canBeDamaged(damagerPet, victim);

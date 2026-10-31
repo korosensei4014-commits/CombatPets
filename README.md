@@ -111,6 +111,43 @@ Java Edition players rename their pet in Minecraft's dialog screen instead of ty
 - Texts: `Pet.Rename.Dialog.*` and `Pet.Rename.Error.Empty` in the language file.
 - Rules are unchanged (length, blocked words, bypass permissions). The Name Tag is taken only when **Save** is pressed and is refunded if the name is rejected. Pressing Esc or **Go Back** costs nothing.
 
+## Pet duels
+
+Players can make their pets fight each other with **`/pets duel <player>`** (permission `combatpets.command.duel`).
+
+1. **Challenge:** `/pets duel Steve`. Both players need a summoned pet and must be within `Pets.Duel.Max_Distance` blocks of each other.
+2. **Accept:** Steve gets an **Accept / Decline** screen (a dialog on Java, a form on Bedrock) showing both pets. He can also accept by typing `/pets duel <challenger>`. Challenges expire after `Pets.Duel.Request_Timeout` seconds.
+3. **Countdown:** both pets are healed to full, then a 3… 2… 1… **FIGHT!** title appears.
+4. **Fight:** the pets attack only each other. Nothing else can interfere: players, other pets and mobs can't hurt them, and they can't hurt anything else. Owners can't feed or return their pet during the fight.
+5. **Result:** the losing pet **really dies**, using the server's normal pet death rules (revive cost, auto-revive time, `Pets.Permanent_Death`, item drops). The winner gets a **VICTORY** title, the loser **DEFEAT**.
+
+Other endings, all without a winner and without any pet dying:
+- **Time limit:** after `Pets.Duel.Max_Duration` seconds the duel ends in a **draw**.
+- **Cancelled:** a player logs out or dies, a pet is no longer summoned, or the pets get more than twice `Max_Distance` apart.
+
+Duels work anywhere, even in `pet-pvp: deny` regions and with `Pets.PVP_Allowed: false`, because both players agreed. There are no rewards and no level limits.
+
+**Stats** are saved per pet:
+- **Bedrock forms:** shown automatically in the Pet Menu and the collection pet details.
+- **Java menus:** shown in the Pet Menu stats item and the collection lore for newly generated menu files. On an existing server, add a line like this to the lore in `menu/pet_overview.yml` and `menu/pet_collection.yml`, or delete those files to regenerate them:
+  ```yaml
+  - '<lyellow>▪ <lgray>Duels: </lgray><lgreen>%pet_duel_wins% won</lgreen><lgray> / </lgray><lred>%pet_duel_losses% lost</lred></lyellow>'
+  ```
+- **Plugin placeholders:** `%pet_duel_wins%`, `%pet_duel_losses%`.
+- **PlaceholderAPI:** `%combatpets_duel_wins%` / `%combatpets_duel_losses%` for the summoned pet, and `%combatpets_duel_wins_total%` / `%combatpets_duel_losses_total%` for all of a player's pets.
+
+```yaml
+Pets:
+  Duel:
+    Enabled: true
+    Request_Timeout: 30   # seconds
+    Countdown: 3          # seconds
+    Max_Duration: 120     # seconds, then draw
+    Max_Distance: 24.0    # blocks between players to start; cancelled at 2x between pets
+```
+
+Texts are in the language file under `Duel.*` and `Command.Duel.Desc`.
+
 ## WorldGuard region flags
 
 If [WorldGuard](https://enginehub.org/worldguard) is installed, CombatPets registers two region flags. Both default to `allow`, so regions without them behave exactly as before.
@@ -198,6 +235,7 @@ See [`docs/BEDROCK_TESTING.md`](docs/BEDROCK_TESTING.md) for the full in-game te
 ## Changes in this fork
 
 - `refactor`: the click-handler logic moved out of the chest GUIs into `PetManager` / `ShopManager` methods. The Java GUIs call them with unchanged behaviour.
+- `feat`: pet duels (`/pets duel <player>`), real death for the loser, per-pet win/loss stats and placeholders.
 - `feat`: WorldGuard flags `pet-pvp` and `pet-summon` (optional WorldGuard soft dependency).
 - `feat`: configurable follow distances (`Pets.Follow.Start_Distance` / `Stop_Distance`); Java rename dialog (`Pets.Name.Rename.Use_Dialog`).
 - `refactor`: nightcore economy calls that are marked for removal were replaced with their current API.

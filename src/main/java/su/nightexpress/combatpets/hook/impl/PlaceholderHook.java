@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.ActivePet;
+import su.nightexpress.combatpets.data.impl.PetData;
 import su.nightexpress.combatpets.api.pet.Aspect;
 import su.nightexpress.combatpets.api.pet.Stat;
 import su.nightexpress.combatpets.config.Lang;
@@ -63,8 +64,22 @@ public class PlaceholderHook {
 
         @Override
         public String onPlaceholderRequest(@NonNull Player player, @NonNull String params) {
+            // Duel totals across all of the player's pets (work without a summoned pet).
+            if (params.equalsIgnoreCase("duel_wins_total") || params.equalsIgnoreCase("duel_losses_total")) {
+                boolean wins = params.equalsIgnoreCase("duel_wins_total");
+                int total = this.plugin.getUserManager().getOrFetch(player).getPets().values().stream()
+                    .mapToInt(data -> wins ? data.getDuelWins() : data.getDuelLosses()).sum();
+                return NumberUtil.format(total);
+            }
+
             ActivePet pet = this.plugin.getPetManager().getPlayerPet(player);
             if (pet == null) return "-";
+
+            if (params.equalsIgnoreCase("duel_wins") || params.equalsIgnoreCase("duel_losses")) {
+                PetData data = this.plugin.getUserManager().getOrFetch(player).getPet(pet.getTemplate(), pet.getTier());
+                if (data == null) return "0";
+                return NumberUtil.format(params.equalsIgnoreCase("duel_wins") ? data.getDuelWins() : data.getDuelLosses());
+            }
 
             if (params.equalsIgnoreCase("health")) {
                 return NumberUtil.format(pet.getEntity().getHealth());
