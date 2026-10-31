@@ -283,6 +283,7 @@ See [`docs/BEDROCK_TESTING.md`](docs/BEDROCK_TESTING.md) for the full in-game te
 
 - `refactor`: the click-handler logic moved out of the chest GUIs into `PetManager` / `ShopManager` methods. The Java GUIs call them with unchanged behaviour.
 - `feat`: pet XP scaled by mob max health (`Settings.Health_Scaling` in leveling.yml).
+- `fix`: pets could stay registered forever (and keep their owner "busy") if removal hit a missing owner; open dialogs are forgotten when a player quits.
 - `fix`: the leveling damage tracker never forgot mobs (memory leak); records are now removed on death and when a mob leaves the world.
 - `feat`: pet duels (`/pets duel <player>`), real death for the loser, per-pet win/loss stats and placeholders.
 - `feat`: WorldGuard flags `pet-pvp` and `pet-summon` (optional WorldGuard soft dependency).

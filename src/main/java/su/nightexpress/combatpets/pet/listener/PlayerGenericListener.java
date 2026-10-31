@@ -13,6 +13,7 @@ import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.ActivePet;
 import su.nightexpress.combatpets.pet.PetManager;
 import su.nightexpress.nightcore.manager.AbstractListener;
+import su.nightexpress.nightcore.ui.dialog.Dialogs;
 
 public class PlayerGenericListener extends AbstractListener<PetsPlugin> {
 
@@ -100,6 +101,12 @@ public class PlayerGenericListener extends AbstractListener<PetsPlugin> {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.petManager.despawnPet(event.getPlayer());
+
+        // nightcore only forgets an open dialog when a button is clicked. Forget it on quit, so dialogs closed
+        // with Esc (rename, duel request) don't keep the player object in memory.
+        if (Dialogs.isInDialog(event.getPlayer())) {
+            Dialogs.exitDialog(event.getPlayer());
+        }
     }
 }
 

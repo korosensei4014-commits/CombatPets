@@ -220,24 +220,28 @@ public final class PetInstance implements ActivePet {
 
     @Override
     public void remove() {
-        this.removeHealthBar();
+        try {
+            this.removeHealthBar();
 
-        // Close owner's inventory if it's custom engine GUI.
-        Menu menu = AbstractMenu.getMenu(this.getOwner());
-        if (menu != null) {
-            this.getOwner().closeInventory();
+            // Close owner's inventory if it's custom engine GUI.
+            Player owner = this.getOwner();
+            if (owner != null && AbstractMenu.getMenu(owner) != null) {
+                owner.closeInventory();
+            }
+
+            this.saveData(); // Save pet's settings to the data holder.
+            this.getInventory().clear(); // Clear pet's inventory content.
+
+            // Keep death animation
+            if (!this.entity.isDead()) {
+                this.getTemplate().getDespawnParticle().play(this.entity.getEyeLocation(), 0.5, 0.1, 25);
+                this.entity.remove();
+            }
         }
-
-        this.saveData(); // Save pet's settings to the data holder.
-        this.getInventory().clear(); // Clear pet's inventory content.
-
-        // Keep death animation
-        if (!this.entity.isDead()) {
-            this.getTemplate().getDespawnParticle().play(this.entity.getEyeLocation(), 0.5, 0.1, 25);
-            this.entity.remove();
+        finally {
+            // Always unregister, even if something above failed, so the pet can't stay registered forever.
+            PetEntityBridge.removeHolder(this);
         }
-
-        PetEntityBridge.removeHolder(this);
     }
 
     @Override

@@ -59,8 +59,9 @@ public class PetEntityBridge {
     }*/
 
     public static void removeHolder(@NonNull ActivePet holder) {
-        BY_PET.values().remove(holder);
-        BY_ID.remove(holder.getEntity().getUniqueId());
-        BY_ID.remove(holder.getOwner().getUniqueId());
+        // Remove every entry of this pet by identity. Doesn't depend on the owner being online
+        // (getOwner() can be null), so entries can't be left behind.
+        BY_PET.values().removeIf(value -> value == holder);
+        BY_ID.values().removeIf(value -> value == holder);
     }
 }
