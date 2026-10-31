@@ -8,7 +8,8 @@ plugins {
 // Shared configuration for all modules
 allprojects {
     group = "su.nightexpress.combatpets" 
-    version = "2.8.4"
+    // Fork version: upstream version + "-bedrock.N". Bump N for each fork release.
+    version = "2.8.4-bedrock.1"
 
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")

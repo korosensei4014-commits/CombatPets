@@ -3,7 +3,12 @@ name: Build plugin JAR
 on:
   push:
     branches: [ bedrock-dialog-support, main ]
+    # Pushing a tag like v2.8.4-bedrock.1 also publishes a GitHub Release with the JAR.
+    tags: [ 'v*' ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -38,3 +43,13 @@ jobs:
             build/libs/*.jar
             !build/libs/*-sources.jar
           if-no-files-found: error
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: CombatPets ${{ github.ref_name }}
+          generate_release_notes: true
+          # Matches CombatPets-<version>.jar but not the -sources.jar
+          files: build/libs/CombatPets-*[0-9].jar
+          fail_on_unmatched_files: true
