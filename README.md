@@ -172,6 +172,29 @@ Pets:
 
 Texts are in the language file under `Duel.*` and `Command.Duel.Desc`.
 
+## Pet XP: scaled by mob health
+
+Upstream gives the same XP for a Warden as for a zombie: XP comes from 4 broad groups in `leveling.yml` (`XPSources`: animals, monsters, illagers, others). This fork **multiplies that XP by the mob's max health**:
+
+`XP = random amount from the mob's group × (Max Health ÷ Base_Health, from 1 up to Max_Multiplier) × share of damage dealt by the pet`
+
+| Mob | Max health | Multiplier | XP when the pet deals all damage (`monsters`: 20–60, 50% chance) |
+|---|---|---|---|
+| Zombie | 20 | ×1 | 20–60 |
+| Iron golem (natural) | 100 | ×5 | 100–300 |
+| Wither | 300 | ×15 | 300–900 |
+| Warden | 500 | ×25 | 500–1500 |
+
+Settings in `leveling.yml`:
+```yaml
+Settings:
+  Health_Scaling:
+    Enabled: true
+    Base_Health: 20.0      # health that gives x1
+    Max_Multiplier: 25.0   # cap (protects against custom mobs with huge health)
+```
+This only applies when `Use_Custom_XP_Table: true` (the default). The group's chance roll and the damage share still apply: if a player does most of the damage to a boss, the pet only gets its share.
+
 ## WorldGuard region flags
 
 If [WorldGuard](https://enginehub.org/worldguard) is installed, CombatPets registers two region flags. Both default to `allow`, so regions without them behave exactly as before.
@@ -259,6 +282,8 @@ See [`docs/BEDROCK_TESTING.md`](docs/BEDROCK_TESTING.md) for the full in-game te
 ## Changes in this fork
 
 - `refactor`: the click-handler logic moved out of the chest GUIs into `PetManager` / `ShopManager` methods. The Java GUIs call them with unchanged behaviour.
+- `feat`: pet XP scaled by mob max health (`Settings.Health_Scaling` in leveling.yml).
+- `fix`: the leveling damage tracker never forgot mobs (memory leak); records are now removed on death and when a mob leaves the world.
 - `feat`: pet duels (`/pets duel <player>`), real death for the loser, per-pet win/loss stats and placeholders.
 - `feat`: WorldGuard flags `pet-pvp` and `pet-summon` (optional WorldGuard soft dependency).
 - `feat`: configurable follow distances (`Pets.Follow.Start_Distance` / `Stop_Distance`); Java rename dialog (`Pets.Name.Rename.Use_Dialog`).

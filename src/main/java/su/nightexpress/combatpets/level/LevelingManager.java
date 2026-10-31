@@ -1,6 +1,8 @@
 package su.nightexpress.combatpets.level;
 
 import org.bukkit.World;
+import su.nightexpress.nightcore.util.EntityUtil;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -119,6 +121,19 @@ public class LevelingManager extends AbstractManager<PetsPlugin> {
         return this.getXPSources().stream().filter(xpSource -> xpSource.isMob(name)).findFirst().orElse(null);
     }
 
+    /**
+     * @return XP multiplier based on the victim's max health (1 when health scaling is disabled).
+     */
+    public double getHealthMultiplier(@NonNull LivingEntity victim) {
+        if (!LevelingConfig.HEALTH_SCALING_ENABLED.get()) return 1D;
+
+        double base = Math.max(1D, LevelingConfig.HEALTH_SCALING_BASE.get());
+        double max = Math.max(1D, LevelingConfig.HEALTH_SCALING_MAX.get());
+        double maxHealth = EntityUtil.getAttribute(victim, Attribute.MAX_HEALTH);
+
+        return Math.max(1D, Math.min(max, maxHealth / base));
+    }
+
     public int rewardXP(@NonNull ActivePet activePet, @NonNull LivingEntity victim, double damagePercent,
                         int naturalXP) {
         if (!activePet.canGainXP()) return 0;
@@ -133,7 +148,8 @@ public class LevelingManager extends AbstractManager<PetsPlugin> {
         }
         else xpReward = naturalXP;
 
-        xpReward = (int) ((double) xpReward * damagePercent);
+        double multiplier = this.useCustomXPTable() ? this.getHealthMultiplier(victim) : 1D;
+        xpReward = (int) ((double) xpReward * multiplier * damagePercent);
         if (xpReward <= 0) return 0;
 
         activePet.addXP(xpReward);

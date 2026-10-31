@@ -31,6 +31,24 @@ public class LevelingConfig {
 //        "Example: If pet dealt 10% damage = 10% XP of total XP amount."
 //    );
 
+    public static final ConfigValue<Boolean> HEALTH_SCALING_ENABLED = ConfigValue.create("Settings.Health_Scaling.Enabled",
+        true,
+        "Scales the XP from 'XPSources' with the killed mob's max health, so strong mobs and bosses",
+        "give more XP than weak ones. Multiplier = Max Health / Base_Health (never below 1).",
+        "Examples with Base_Health 20: zombie (20 HP) x1, iron golem (100) x5, Wither (300) x15, Warden (500) x25.",
+        "Only applies when Use_Custom_XP_Table is enabled. XP is still split by the damage the pet dealt."
+    );
+
+    public static final ConfigValue<Double> HEALTH_SCALING_BASE = ConfigValue.create("Settings.Health_Scaling.Base_Health",
+        20D,
+        "Max health that gives the normal (x1) XP amount. Mobs with more max health give proportionally more."
+    );
+
+    public static final ConfigValue<Double> HEALTH_SCALING_MAX = ConfigValue.create("Settings.Health_Scaling.Max_Multiplier",
+        25D,
+        "Upper limit for the multiplier (25 = Warden level). Protects against modded / custom mobs with huge health."
+    );
+
     public static final ConfigValue<Boolean> USE_CUSTOM_XP_TABLE = ConfigValue.create("Settings.Use_Custom_XP_Table",
         true,
         "Sets whether or not to use custom XP table - 'XPSources'.",
