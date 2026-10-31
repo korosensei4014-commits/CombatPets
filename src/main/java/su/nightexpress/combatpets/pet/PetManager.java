@@ -735,7 +735,11 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         }
 
         if (Config.PET_NAME_RENAME_USE_DIALOG.get()) {
-            PetRenameDialog.show(this.plugin, player);
+            // Delay so the Pet Menu finishes closing first: its scheduled closeInventory() would
+            // otherwise close the dialog screen right after it opens.
+            this.plugin.runTaskLater(() -> {
+                if (player.isOnline()) PetRenameDialog.show(this.plugin, player);
+            }, 2L);
             return true;
         }
 
