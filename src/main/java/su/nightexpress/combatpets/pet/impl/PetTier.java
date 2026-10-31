@@ -102,7 +102,7 @@ public class PetTier extends AbstractFileData<PetsPlugin> implements Tier {
         this.setReviveCurrency(ConfigValue.create("Death.Revive_Currency",
             CurrencyId.VAULT,
             "Sets currency for pet revive.",
-            "Available currencies: [" + String.join(", ", EconomyBridge.getCurrencyIds()) + "]"
+            "Available currencies: [" + String.join(", ", EconomyBridge.api().getCurrencyIds()) + "]"
         ).read(config));
 
         this.setReviveCost(ConfigValue.create("Death.Revive_Cost",

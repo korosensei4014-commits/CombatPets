@@ -151,7 +151,7 @@ public class Placeholders extends su.nightexpress.nightcore.util.Placeholders {
             .add(TIER_EQUIPMENT_HAS, () -> CoreLang.STATE_YES_NO.get(tier.hasEquipment()))
             .add(TIER_DEATH_REVIVE_COOLDOWN, () -> TimeUtil.formatTime(tier.getAutoRespawnTime()))
             .add(TIER_DEATH_REVIVE_COST, () -> {
-                Currency currency = EconomyBridge.getCurrency(tier.getReviveCurrency());
+                Currency currency = EconomyBridge.api().getCurrency(tier.getReviveCurrency());
                 return currency == null ? "0" : currency.format(tier.getReviveCost());
             });
     }

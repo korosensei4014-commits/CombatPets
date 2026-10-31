@@ -587,20 +587,20 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     public boolean revivePet(@NonNull Player player, @NonNull PetData petData) {
         Tier tier = petData.getTier();
 
-        Currency currency = EconomyBridge.getCurrency(tier.getReviveCurrency());
+        Currency currency = EconomyBridge.api().getCurrency(tier.getReviveCurrency());
         if (currency == null) return false;
 
         double cost = tier.getReviveCost();
 
         if (cost > 0) {
-            if (currency.getBalance(player) < cost) {
+            if (currency.queryBalance(player) < cost) {
                 Lang.PET_REVIVE_ERROR_NOT_ENOUGH_FUNDS.message().send(player, replacer -> replacer
                     .replace(Placeholders.PET_NAME, petData.getName())
                     .replace(Placeholders.GENERIC_AMOUNT, currency.format(cost))
                 );
                 return false;
             }
-            currency.take(player, cost);
+            currency.withdrawAsync(player.getUniqueId(), cost);
         }
 
         petData.revive();

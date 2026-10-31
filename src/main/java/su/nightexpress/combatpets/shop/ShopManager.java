@@ -92,7 +92,7 @@ public class ShopManager extends AbstractManager<PetsPlugin> {
 
                 String currencyId = CurrencyId.reroute(ConfigValue.create(path + ".Currency", CurrencyId.VAULT).read(
                     config));
-                Currency currency = EconomyBridge.getCurrency(currencyId);
+                Currency currency = EconomyBridge.api().getCurrency(currencyId);
                 if (currency == null) {
                     this.plugin.warn("Invalid currency '" + currencyId + "' for default tier price for '" + tier
                         .getId() + "' tier.");
@@ -123,7 +123,7 @@ public class ShopManager extends AbstractManager<PetsPlugin> {
 
                 String currencyId = CurrencyId.reroute(ConfigValue.create(path + ".Currency", CurrencyId.VAULT).read(
                     config));
-                Currency currency = EconomyBridge.getCurrency(currencyId);
+                Currency currency = EconomyBridge.api().getCurrency(currencyId);
                 if (currency == null) {
                     this.plugin.warn("Invalid currency '" + currencyId + "' for '" + tier.getId() + " -> " + petConfig
                         .getId() + "' pet egg price.");
@@ -219,7 +219,7 @@ public class ShopManager extends AbstractManager<PetsPlugin> {
         Currency currency = price.getCurrency();
         double cost = price.getPrice();
 
-        double balance = currency.getBalance(player);
+        double balance = currency.queryBalance(player);
         if (balance < cost) {
             Lang.SHOP_PURCHASE_ERROR_NOT_ENOUGH_FUNDS.message().send(player, replacer -> replacer
                 .replace(GENERIC_PRICE, currency.format(cost))
@@ -229,7 +229,7 @@ public class ShopManager extends AbstractManager<PetsPlugin> {
             return false;
         }
 
-        currency.take(player, cost);
+        currency.withdrawAsync(player.getUniqueId(), cost);
         Players.addItem(player, template.createEgg(tier));
 
         Lang.SHOP_PURCHASE_SUCCESS.message().send(player, replacer -> replacer
