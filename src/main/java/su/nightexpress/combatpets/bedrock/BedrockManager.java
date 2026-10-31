@@ -161,7 +161,7 @@ public class BedrockManager extends AbstractManager<PetsPlugin> {
      * @return true if the form was sent.
      */
     public boolean sendCustom(@NonNull Player player,
-                              @NonNull CustomForm.Builder builder,
+                              CustomForm.@NonNull Builder builder,
                               @NonNull Consumer<CustomFormResponse> onSubmit,
                               @NonNull Runnable onClose) {
         long formId = this.getSession(player).nextForm();
