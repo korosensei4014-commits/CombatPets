@@ -19,6 +19,7 @@ import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.config.Perms;
 import su.nightexpress.combatpets.data.DataHandler;
 import su.nightexpress.combatpets.data.UserManager;
+import su.nightexpress.combatpets.hook.RegionHook;
 import su.nightexpress.combatpets.hook.impl.PlaceholderHook;
 import su.nightexpress.combatpets.item.ItemManager;
 import su.nightexpress.combatpets.level.LevelingManager;
@@ -66,6 +67,13 @@ public class PetsPlugin extends NightPlugin {
 
         this.registerLang(Lang.class);
         this.registerLang(BedrockLang.class);
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        // WorldGuard flags must be registered before WorldGuard is enabled.
+        RegionHook.load(this);
     }
 
     @Override

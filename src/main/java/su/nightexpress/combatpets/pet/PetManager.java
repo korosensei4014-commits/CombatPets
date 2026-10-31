@@ -52,6 +52,7 @@ import su.nightexpress.combatpets.config.Perms;
 import su.nightexpress.combatpets.data.impl.PetData;
 import su.nightexpress.combatpets.data.impl.PetUser;
 import su.nightexpress.combatpets.hook.HookId;
+import su.nightexpress.combatpets.hook.RegionHook;
 import su.nightexpress.combatpets.pet.impl.PetAspect;
 import su.nightexpress.combatpets.pet.impl.PetAttribute;
 import su.nightexpress.combatpets.pet.impl.PetFoodCategory;
@@ -485,6 +486,10 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         }
         if (!PetUtils.isAllowedPetZone(player.getLocation())) {
             Lang.PET_ERROR_BAD_WORLD.message().send(player);
+            return false;
+        }
+        if (RegionHook.isPetSummonDenied(player, player.getLocation())) {
+            Lang.PET_ERROR_REGION_SUMMON.message().send(player);
             return false;
         }
 
@@ -1028,6 +1033,13 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     public boolean canBeDamaged(@NonNull ActivePet pet, @NonNull LivingEntity entity) {
         if (entity == pet.getOwner()) return false;
         if (entity == pet.getEntity()) return true;
+
+        // WorldGuard 'pet-pvp: deny': no fights between pets and players / other pets in the region.
+        boolean playerOrPet = entity instanceof Player || this.isPetEntity(entity);
+        if (playerOrPet && (RegionHook.isPetPvpDenied(pet.getEntity().getLocation()) || RegionHook.isPetPvpDenied(entity.getLocation()))) {
+            return false;
+        }
+
         if (Config.PET_PVP_ALLOWED.get()) return true;
 
         return (!(entity instanceof Player) && !this.isPetEntity(entity));

@@ -34,6 +34,7 @@ import su.nightexpress.combatpets.api.pet.type.CombatMode;
 import su.nightexpress.combatpets.api.pet.type.ExhaustReason;
 import su.nightexpress.combatpets.config.Config;
 import su.nightexpress.combatpets.config.Lang;
+import su.nightexpress.combatpets.hook.RegionHook;
 import su.nightexpress.combatpets.data.impl.PetData;
 import su.nightexpress.combatpets.level.LevelingConfig;
 import su.nightexpress.combatpets.pet.AttributeRegistry;
@@ -161,6 +162,23 @@ public final class PetInstance implements ActivePet {
             Lang.PET_ERROR_BAD_WORLD.message().send(this.getOwner());
             this.plugin.getPetManager().removePetAndSave(this);
             return;
+        }
+
+        // WorldGuard 'pet-summon: deny': pets can't stay in the region.
+        Player regionOwner = this.getOwner();
+        if (regionOwner != null && RegionHook.isPetSummonDenied(regionOwner, this.entity.getLocation())) {
+            Lang.PET_ERROR_REGION_SUMMON.message().send(regionOwner);
+            this.plugin.getPetManager().removePetAndSave(this);
+            return;
+        }
+
+        // WorldGuard 'pet-pvp: deny': drop player / pet targets so the pet doesn't keep chasing them.
+        if (this.entity instanceof org.bukkit.entity.Mob mob) {
+            LivingEntity target = mob.getTarget();
+            if (target != null && (target instanceof Player || this.plugin.getPetManager().isPetEntity(target))
+                && (RegionHook.isPetPvpDenied(this.entity.getLocation()) || RegionHook.isPetPvpDenied(target.getLocation()))) {
+                mob.setTarget(null);
+            }
         }
 
         if (this.entity.getNoDamageTicks() <= 0) {

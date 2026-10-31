@@ -23,6 +23,7 @@ allprojects {
         maven("https://repo.magmaguy.com/releases/")
         maven("https://central.sonatype.com/")
         maven("https://repo.opencollab.dev/main/") // Geyser / Floodgate / Cumulus
+        maven("https://maven.enginehub.org/repo/") // WorldGuard / WorldEdit
     }
 
     dependencies {
@@ -74,6 +75,15 @@ dependencies {
     // Bedrock Edition forms. Optional at runtime: only used when Floodgate or Geyser is installed.
     // Brings the Cumulus form API (org.geysermc.cumulus) transitively.
     compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
+
+    // WorldGuard region flags (pet-pvp, pet-summon). Optional at runtime.
+    // Server APIs are excluded so they don't clash with the Paper API used by this project.
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.9") {
+        exclude(group = "org.bukkit")
+        exclude(group = "org.spigotmc")
+        exclude(group = "io.papermc.paper")
+        exclude(group = "com.destroystokyo.paper")
+    }
 
     implementation(project(":API"))
     implementation(project(":nms-paper"))

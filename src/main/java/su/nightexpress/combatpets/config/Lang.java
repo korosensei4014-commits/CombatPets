@@ -376,6 +376,10 @@ public class Lang implements LangContainer {
         Sound.ENTITY_VILLAGER_NO
     );
 
+    public static final MessageLocale PET_ERROR_REGION_SUMMON = LangEntry.builder("Pet.Error.RegionSummon").chatMessage(
+        SOFT_RED.wrap("Pets are not allowed in this area.")
+    );
+
     public static final MessageLocale PET_ERROR_BAD_WORLD = LangEntry.builder("Pet.Error.BadWorld").chatMessage(
         SOFT_RED.wrap("Pets are disabled in this world.")
     );

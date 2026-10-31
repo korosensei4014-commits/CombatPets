@@ -11,4 +11,5 @@ softdepend:
   - EconomyBridge
   - floodgate
   - Geyser-Spigot
+  - WorldGuard
 api-version: 1.20
