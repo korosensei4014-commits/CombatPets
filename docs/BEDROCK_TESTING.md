@@ -98,6 +98,8 @@ Mark each line ✅ / ❌ and note anything unexpected.
 - [ ] Loser pet dies (normal death/revive rules), VICTORY/DEFEAT titles, stats +1 win / +1 loss, survive restart.
 - [ ] Draw after Max_Duration; cancel on logout, owner death, pets too far apart, world change.
 - [ ] Errors: duel yourself, no pet, target without pet, too far, already in a duel, duplicate challenge.
+- [ ] `/pets duels off` → challenges to you are declined automatically (challenger sees "isn't accepting"), you can't challenge others; pending challenges to you are dropped. `/pets duels on` / `/pets duels` toggle back. Setting survives relog + restart.
+- [ ] Bedrock Pet Settings toggle "Accept Pet Duel Challenges"; Java Pet Menu "Duel Challenges" button; `%combatpets_duels_enabled%` shows On/Off.
 - [ ] Stats in Bedrock Pet Menu/collection, `%combatpets_duel_wins%` etc. with PlaceholderAPI.
 
 ## 5. Mixed / lifecycle

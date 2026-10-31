@@ -2,12 +2,15 @@ package su.nightexpress.combatpets.pet.menu;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.ActivePet;
 import su.nightexpress.combatpets.api.pet.PetEntityBridge;
 import su.nightexpress.combatpets.config.Config;
+import su.nightexpress.combatpets.config.Lang;
+import su.nightexpress.combatpets.pet.duel.DuelManager;
 import su.nightexpress.combatpets.pet.AttributeRegistry;
 import su.nightexpress.combatpets.util.PetUtils;
 import su.nightexpress.nightcore.config.FileConfig;
@@ -38,6 +41,7 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
     private final ItemHandler aspectsHandler;
     private final ItemHandler combatModeHandler;
     private final ItemHandler silentHandler;
+    private final ItemHandler duelToggleHandler;
     //private final ItemHandler rideHandler;
 
     public PetMenu(@NonNull PetsPlugin plugin) {
@@ -101,6 +105,16 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
         }));
 
 
+        // Player-wide pet duel setting (same as /pets duels on|off).
+        this.addHandler(this.duelToggleHandler = new ItemHandler("duel_toggle", (viewer, event) -> {
+            DuelManager duels = plugin.getDuelManager();
+            if (duels == null) return;
+
+            Player player = viewer.getPlayer();
+            duels.handleToggleCommand(player, null);
+            this.runNextTick(() -> this.flush(viewer));
+        }));
+
         //        this.addHandler(this.rideHandler = new ItemHandler("pet_ride", (viewer, event) -> {
         //            plugin.getPetManager().ridePet(viewer.getPlayer());
         //            this.runNextTick(() -> viewer.getPlayer().closeInventory());
@@ -124,6 +138,9 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
                 else if (handler == this.equipmentHandler) {
                     return plugin.getPetManager().hasEquipmentAccess(petHolder);
                 }
+                else if (handler == this.duelToggleHandler) {
+                    return plugin.getDuelManager() != null;
+                }
                 return true;
             });
 
@@ -131,7 +148,9 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
                 ActivePet petHolder = PetEntityBridge.getByPlayer(viewer.getPlayer());
                 if (petHolder == null) return;
 
+                DuelManager duels = plugin.getDuelManager();
                 ItemReplacer.create(item).readMeta().hideFlags().trimmed()
+                    .replace(DUELS_STATUS, () -> duels == null ? Lang.DUEL_STATUS_OFF.text() : duels.getStatusText(viewer.getPlayer()))
                     .replace(petHolder.getPlaceholders())
                     .replace(petHolder.getTier().getPlaceholders())
                     .replace(petHolder.getTemplate().getPlaceholders())
@@ -222,6 +241,20 @@ public class PetMenu extends ConfigMenu<PetsPlugin> {
             ));
         });
         list.add(new MenuItem(silentItem).setPriority(10).setSlots(19).setHandler(this.silentHandler));
+
+        ItemStack duelItem = new ItemStack(Material.IRON_SWORD);
+        ItemUtil.editMeta(duelItem, meta -> {
+            meta.setDisplayName(LIGHT_YELLOW.enclose(BOLD.enclose("Duel Challenges")));
+            meta.setLore(Lists.newList(
+                LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Status: ") + DUELS_STATUS),
+                "",
+                LIGHT_GRAY.enclose("When on, other players can challenge"),
+                LIGHT_GRAY.enclose("your pet with " + LIGHT_YELLOW.enclose("/pets duel <player>") + "."),
+                "",
+                LIGHT_YELLOW.enclose("[▶] ") + LIGHT_GRAY.enclose("Click to " + LIGHT_YELLOW.enclose("toggle") + ".")
+            ));
+        });
+        list.add(new MenuItem(duelItem).setPriority(10).setSlots(31).setHandler(this.duelToggleHandler));
 
         //        ItemStack rideItem = ItemUtil.getSkinHead("");
         //        ItemUtil.editMeta(rideItem, meta -> {

@@ -106,6 +106,11 @@ public class Config {
         "Enables pet duels: '/pets duel <player>' challenges another player's summoned pet.",
         "The losing pet really dies (Pets death rules apply) and must be revived.");
 
+    public static final ConfigValue<Boolean> PET_DUEL_DEFAULT_ENABLED = ConfigValue.create("Pets.Duel.Default_Enabled",
+        true,
+        "Whether players accept duel challenges until they change it with '/pets duels on|off'.",
+        "Players who already changed the setting keep their choice.");
+
     public static final ConfigValue<Integer> PET_DUEL_REQUEST_TIMEOUT = ConfigValue.create("Pets.Duel.Request_Timeout",
         30,
         "Seconds a duel challenge stays valid.");

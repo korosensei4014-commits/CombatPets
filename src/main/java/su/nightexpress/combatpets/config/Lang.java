@@ -390,6 +390,23 @@ public class Lang implements LangContainer {
 
     public static final TextLocale COMMAND_DUEL_DESC = LangEntry.builder("Command.Duel.Desc").text("Challenge a player's pet to a duel.");
 
+    public static final TextLocale COMMAND_DUELS_DESC = LangEntry.builder("Command.Duels.Desc").text("Turn pet duel challenges on or off.");
+
+    public static final TextLocale DUEL_STATUS_ON  = LangEntry.builder("Duel.Status.On").text("On");
+    public static final TextLocale DUEL_STATUS_OFF = LangEntry.builder("Duel.Status.Off").text("Off");
+
+    public static final MessageLocale DUEL_TOGGLE_ON = LangEntry.builder("Duel.Toggle.On").chatMessage(
+        GRAY.wrap("Pet duels " + SOFT_GREEN.wrap("on") + ": other players can challenge your pet."));
+
+    public static final MessageLocale DUEL_TOGGLE_OFF = LangEntry.builder("Duel.Toggle.Off").chatMessage(
+        GRAY.wrap("Pet duels " + SOFT_RED.wrap("off") + ": all challenges are declined automatically."));
+
+    public static final MessageLocale DUEL_ERROR_SELF_DISABLED = LangEntry.builder("Duel.Error.SelfDisabled").chatMessage(
+        SOFT_RED.wrap("Your pet duels are turned off. Turn them on with " + SOFT_YELLOW.wrap("/pets duels on") + " first."));
+
+    public static final MessageLocale DUEL_ERROR_TARGET_DISABLED = LangEntry.builder("Duel.Error.TargetDisabled").chatMessage(
+        SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " isn't accepting pet duels."));
+
     public static final MessageLocale DUEL_ERROR_SELF = LangEntry.builder("Duel.Error.Self").chatMessage(
         SOFT_RED.wrap("You can't duel yourself."));
 

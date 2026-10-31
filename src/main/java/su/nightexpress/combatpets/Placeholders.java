@@ -73,6 +73,8 @@ public class Placeholders extends su.nightexpress.nightcore.util.Placeholders {
     public static final String PET_OWNER_NAME         = "%pet_owner_name%";
     public static final String PET_DUEL_WINS          = "%pet_duel_wins%";
     public static final String PET_DUEL_LOSSES        = "%pet_duel_losses%";
+    /** On/Off state of the viewing player's duel setting (used in the Pet Menu). */
+    public static final String DUELS_STATUS           = "%duels_status%";
 
     public static final String TEMPLATE_DEFAULT_NAME = "%pet_config_default_name%";
     public static final String TEMPLATE_ID           = "%pet_config_id%";

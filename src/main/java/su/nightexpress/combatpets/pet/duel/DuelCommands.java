@@ -2,6 +2,8 @@ package su.nightexpress.combatpets.pet.duel;
 
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
+
+import java.util.List;
 import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.command.CommandArguments;
 import su.nightexpress.combatpets.config.Lang;
@@ -12,7 +14,9 @@ import su.nightexpress.nightcore.commands.builder.HubNodeBuilder;
 
 public class DuelCommands {
 
-    private static final String DUEL = "duel";
+    private static final String DUEL  = "duel";
+    private static final String DUELS = "duels";
+    private static final String STATE = "state";
 
     /**
      * {@code /pets duel <player>}: challenges the player, or accepts their pending challenge.
@@ -27,6 +31,20 @@ public class DuelCommands {
                 Player player = context.getPlayerOrThrow();
                 Player target = arguments.getPlayer(CommandArguments.PLAYER);
                 manager.handleCommand(player, target);
+                return true;
+            })
+        );
+
+        // /pets duels [on|off] - turn duel challenges on/off (toggles without an argument).
+        rootNode.branch(Commands.literal(DUELS)
+            .description(Lang.COMMAND_DUELS_DESC)
+            .permission(Perms.COMMAND_DUEL)
+            .playerOnly()
+            .withArguments(Arguments.string(STATE).optional().suggestions((reader, context) -> List.of("on", "off")))
+            .executes((context, arguments) -> {
+                Player player = context.getPlayerOrThrow();
+                String state = arguments.contains(STATE) ? arguments.getString(STATE) : null;
+                manager.handleToggleCommand(player, state);
                 return true;
             })
         );

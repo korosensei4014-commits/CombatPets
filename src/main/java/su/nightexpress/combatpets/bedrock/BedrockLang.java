@@ -196,6 +196,7 @@ public class BedrockLang implements LangContainer {
     public static final TextLocale SETTINGS_COMBAT_MODE      = LangEntry.builder("Bedrock.Settings.CombatMode").text("Combat Mode");
     public static final TextLocale SETTINGS_SILENT           = LangEntry.builder("Bedrock.Settings.Silent").text("Silent Mode (disables pet sounds)");
     public static final TextLocale SETTINGS_EQUIPMENT        = LangEntry.builder("Bedrock.Settings.Equipment").text("Equipment Unlocked");
+    public static final TextLocale SETTINGS_DUELS            = LangEntry.builder("Bedrock.Settings.Duels").text("Accept Pet Duel Challenges");
 
     // ------------------------------------------------------------------------------------------
     // Rename

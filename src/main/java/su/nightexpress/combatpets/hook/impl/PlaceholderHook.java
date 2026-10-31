@@ -6,6 +6,7 @@ import org.jspecify.annotations.NonNull;
 import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.ActivePet;
 import su.nightexpress.combatpets.data.impl.PetData;
+import su.nightexpress.combatpets.pet.duel.DuelManager;
 import su.nightexpress.combatpets.api.pet.Aspect;
 import su.nightexpress.combatpets.api.pet.Stat;
 import su.nightexpress.combatpets.config.Lang;
@@ -64,6 +65,11 @@ public class PlaceholderHook {
 
         @Override
         public String onPlaceholderRequest(@NonNull Player player, @NonNull String params) {
+            if (params.equalsIgnoreCase("duels_enabled")) {
+                DuelManager duels = this.plugin.getDuelManager();
+                return duels == null ? Lang.DUEL_STATUS_OFF.text() : duels.getStatusText(player);
+            }
+
             // Duel totals across all of the player's pets (work without a summoned pet).
             if (params.equalsIgnoreCase("duel_wins_total") || params.equalsIgnoreCase("duel_losses_total")) {
                 boolean wins = params.equalsIgnoreCase("duel_wins_total");

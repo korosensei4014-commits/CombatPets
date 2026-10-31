@@ -1,6 +1,8 @@
 package su.nightexpress.combatpets.pet.duel;
 
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.LivingEntity;
@@ -49,11 +51,49 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
 
     private final List<DuelRequest> requests;
     private final List<PetDuel>     duels;
+    private final NamespacedKey     settingKey;
 
     public DuelManager(@NonNull PetsPlugin plugin) {
         super(plugin);
         this.requests = new ArrayList<>();
         this.duels = new ArrayList<>();
+        this.settingKey = new NamespacedKey(plugin, "duels_enabled");
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Per-player on/off setting (stored on the player, survives relogs and restarts)
+    // ------------------------------------------------------------------------------------------
+
+    public boolean isAcceptingDuels(@NonNull Player player) {
+        Byte value = player.getPersistentDataContainer().get(this.settingKey, PersistentDataType.BYTE);
+        return value == null ? Config.PET_DUEL_DEFAULT_ENABLED.get() : value != 0;
+    }
+
+    public void setAcceptingDuels(@NonNull Player player, boolean accepting) {
+        player.getPersistentDataContainer().set(this.settingKey, PersistentDataType.BYTE, (byte) (accepting ? 1 : 0));
+
+        // Turning duels off silently drops challenges waiting for this player.
+        if (!accepting) {
+            this.requests.removeIf(request -> request.targetId().equals(player.getUniqueId()));
+        }
+    }
+
+    /**
+     * {@code /pets duels [on|off]}: sets or toggles the player's setting and tells them the new state.
+     */
+    public void handleToggleCommand(@NonNull Player player, @Nullable String state) {
+        boolean accepting;
+        if (state != null && state.equalsIgnoreCase("on")) accepting = true;
+        else if (state != null && state.equalsIgnoreCase("off")) accepting = false;
+        else accepting = !this.isAcceptingDuels(player);
+
+        this.setAcceptingDuels(player, accepting);
+        (accepting ? Lang.DUEL_TOGGLE_ON : Lang.DUEL_TOGGLE_OFF).message().send(player);
+    }
+
+    @NonNull
+    public String getStatusText(@NonNull Player player) {
+        return (this.isAcceptingDuels(player) ? Lang.DUEL_STATUS_ON : Lang.DUEL_STATUS_OFF).text();
     }
 
     @Override
@@ -143,6 +183,15 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
     private boolean canDuel(@NonNull Player player, @NonNull Player target) {
         if (player.equals(target)) {
             Lang.DUEL_ERROR_SELF.message().send(player);
+            return false;
+        }
+        // Players who turned duels off can't challenge or accept, and can't be challenged.
+        if (!this.isAcceptingDuels(player)) {
+            Lang.DUEL_ERROR_SELF_DISABLED.message().send(player);
+            return false;
+        }
+        if (!this.isAcceptingDuels(target)) {
+            Lang.DUEL_ERROR_TARGET_DISABLED.message().send(player, replacer -> replacer.replace(PLAYER_NAME, target.getName()));
             return false;
         }
         if (this.isInDuel(player)) {

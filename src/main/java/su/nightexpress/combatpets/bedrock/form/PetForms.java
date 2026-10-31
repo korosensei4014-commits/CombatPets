@@ -18,6 +18,7 @@ import su.nightexpress.combatpets.data.impl.PetData;
 import su.nightexpress.combatpets.data.impl.PetUser;
 import su.nightexpress.combatpets.pet.AttributeRegistry;
 import su.nightexpress.combatpets.pet.PetManager;
+import su.nightexpress.combatpets.pet.duel.DuelManager;
 import su.nightexpress.nightcore.util.NumberUtil;
 import su.nightexpress.nightcore.util.TimeUtil;
 
@@ -342,14 +343,25 @@ public class PetForms extends FormSupport {
         }
         int finalEquipmentIndex = equipmentIndex;
 
+        // Player-wide duel setting (shown only when duels are enabled on the server).
+        DuelManager duels = this.plugin.getDuelManager();
+        int duelIndex = -1;
+        if (duels != null) {
+            builder.toggle(this.text(player, BedrockLang.SETTINGS_DUELS), duels.isAcceptingDuels(player));
+            duelIndex = index++;
+        }
+        int finalDuelIndex = duelIndex;
+
         return this.manager.sendCustom(player, builder, response -> this.withActivePet(player, current -> {
             int modeChoice;
             boolean silent;
             boolean equipment;
+            boolean acceptDuels;
             try {
                 modeChoice = response.asDropdown(modeIndex);
                 silent = response.asToggle(silentIndex);
                 equipment = finalEquipmentIndex >= 0 && response.asToggle(finalEquipmentIndex);
+                acceptDuels = finalDuelIndex >= 0 && response.asToggle(finalDuelIndex);
             }
             catch (IllegalArgumentException | IllegalStateException exception) {
                 this.openSettings(player);
@@ -364,6 +376,10 @@ public class PetForms extends FormSupport {
             }
             if (finalEquipmentIndex >= 0 && petManager.hasEquipmentAccess(current) && equipment != current.isEquipmentUnlocked()) {
                 petManager.toggleEquipmentLock(current);
+            }
+
+            if (finalDuelIndex >= 0 && duels != null && acceptDuels != duels.isAcceptingDuels(player)) {
+                duels.setAcceptingDuels(player, acceptDuels);
             }
 
             BedrockLang.SETTINGS_SAVED.message().send(player);

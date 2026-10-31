@@ -125,6 +125,29 @@ Other endings, all without a winner and without any pet dying:
 - **Time limit:** after `Pets.Duel.Max_Duration` seconds the duel ends in a **draw**.
 - **Cancelled:** a player logs out or dies, a pet is no longer summoned, or the pets get more than twice `Max_Distance` apart.
 
+**Turning duels off:** players who don't want duels can use **`/pets duels off`**. All challenges to them are then declined automatically, with no popup; the challenger sees "<player> isn't accepting pet duels." `/pets duels on` turns them back on, and `/pets duels` alone toggles.
+- **Duels off works both ways:** players with duels off also can't challenge others. They're asked to turn duels on first.
+- **Where it's saved:** on the player (survives relogs and restarts on this server). New players start with duels **on** (`Pets.Duel.Default_Enabled`).
+- **Bedrock:** a toggle in **Pet Settings**, "Accept Pet Duel Challenges".
+- **Java:** a **Duel Challenges** button in the Pet Menu (slot 31) for newly generated menu files. On an existing server, add this under `Content:` in `menu/pet_overview.yml`, or delete the file to regenerate it:
+  ```yaml
+    duel_toggle:
+      Priority: 10
+      Item:
+        Material: IRON_SWORD
+        Name: '<lyellow><b>Duel Challenges</b></lyellow>'
+        Lore:
+        - '<lyellow>▪ <lgray>Status: </lgray>%duels_status%</lyellow>'
+        - ''
+        - '<lgray>When on, other players can challenge</lgray>'
+        - '<lgray>your pet with <lyellow>/pets duel <player></lyellow>.</lgray>'
+        - ''
+        - '<lyellow>[▶] </lyellow><lgray>Click to <lyellow>toggle</lyellow>.</lgray>'
+      Slots: '31'
+      Type: duel_toggle
+  ```
+- **Placeholder:** `%combatpets_duels_enabled%` (On/Off, from the `Duel.Status.*` texts).
+
 Duels work anywhere, even in `pet-pvp: deny` regions and with `Pets.PVP_Allowed: false`, because both players agreed. There are no rewards and no level limits.
 
 **Stats** are saved per pet:
@@ -140,6 +163,7 @@ Duels work anywhere, even in `pet-pvp: deny` regions and with `Pets.PVP_Allowed:
 Pets:
   Duel:
     Enabled: true
+    Default_Enabled: true # new players accept challenges until they use /pets duels off
     Request_Timeout: 30   # seconds
     Countdown: 3          # seconds
     Max_Duration: 120     # seconds, then draw
