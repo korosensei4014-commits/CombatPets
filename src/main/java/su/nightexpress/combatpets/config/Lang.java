@@ -12,6 +12,7 @@ import su.nightexpress.combatpets.wardrobe.handler.CreeperPowerVariantHandler;
 import su.nightexpress.combatpets.wardrobe.handler.SheepShearVariantHandler;
 import su.nightexpress.nightcore.locale.LangContainer;
 import su.nightexpress.nightcore.locale.LangEntry;
+import su.nightexpress.nightcore.locale.entry.ButtonLocale;
 import su.nightexpress.nightcore.locale.entry.EnumLocale;
 import su.nightexpress.nightcore.locale.entry.MessageLocale;
 import su.nightexpress.nightcore.locale.entry.TextLocale;
@@ -299,6 +300,33 @@ public class Lang implements LangContainer {
         SOFT_RED.wrap(BOLD.wrap("Unacceptable Name!")),
         GRAY.wrap("Name contains " + SOFT_RED.wrap("forbidden") + " characters!"),
         Sound.ENTITY_VILLAGER_NO
+    );
+
+    public static final TextLocale PET_RENAME_DIALOG_TITLE = LangEntry.builder("Pet.Rename.Dialog.Title").text(
+        YELLOW.wrap(BOLD.wrap("RENAME PET")) + DARK_GRAY.wrap(" » ") + WHITE.wrap(PET_NAME)
+    );
+
+    public static final TextLocale PET_RENAME_DIALOG_BODY = LangEntry.builder("Pet.Rename.Dialog.Body").text(
+        GRAY.wrap("Enter a " + GREEN.wrap("new name") + " for " + WHITE.wrap(PET_NAME) + "."),
+        GRAY.wrap("Length: " + WHITE.wrap(GENERIC_AMOUNT + " - " + GENERIC_MAX) + " characters.")
+    );
+
+    public static final TextLocale PET_RENAME_DIALOG_BODY_NAMETAG = LangEntry.builder("Pet.Rename.Dialog.Body_NameTag").text(
+        YELLOW.wrap("Renaming costs 1 Name Tag, taken when you press Save.")
+    );
+
+    public static final TextLocale PET_RENAME_DIALOG_INPUT = LangEntry.builder("Pet.Rename.Dialog.Input").text("New Name");
+
+    public static final ButtonLocale PET_RENAME_DIALOG_SAVE = LangEntry.builder("Pet.Rename.Dialog.Save").button(
+        GREEN.wrap("✔") + " Save"
+    );
+
+    public static final ButtonLocale PET_RENAME_DIALOG_BACK = LangEntry.builder("Pet.Rename.Dialog.Back").button(
+        SOFT_YELLOW.wrap("←") + " Go Back"
+    );
+
+    public static final MessageLocale PET_RENAME_ERROR_EMPTY = LangEntry.builder("Pet.Rename.Error.Empty").chatMessage(
+        SOFT_RED.wrap("Please enter a name.")
     );
 
     public static final MessageLocale PET_RENAME_SUCCESS = LangEntry.builder("Pet.Rename.Success").titleMessage(

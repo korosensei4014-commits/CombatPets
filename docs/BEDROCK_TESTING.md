@@ -31,7 +31,8 @@ Mark each line ✅ / ❌ and note anything unexpected.
 | J9 | Equipment **right-click** | All pet armour/items go to your inventory |
 | J10 | Combat Mode click | Cycles Passive → Protective → Supportive → Protective & Supportive |
 | J11 | Silent click | Toggles |
-| J12 | Rename | Chat prompt; Name Tag taken only when a name is entered; invalid name → refunded; leaving the prompt → nothing taken |
+| J12 | Rename | **Dialog window** with the current name; Save → renamed, Name Tag taken, Pet Menu reopens; invalid name → error title + refund; empty → "Please enter a name." + dialog reopens; Esc / Go Back → nothing taken |
+| J12b | Rename with `Pets.Name.Rename.Use_Dialog: false` | Old chat prompt is used |
 | J13 | Inventory | Pet storage opens |
 | J14 | Aspects → click aspect | 1 point spent, value +1 (blocked at max / 0 points) |
 | J15 | Aspects → Reallocate (if enabled) | Points refunded |

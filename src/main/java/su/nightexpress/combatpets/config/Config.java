@@ -170,6 +170,11 @@ public class Config {
         true,
         "Sets whether or not Name tag items can be used on pets to rename them.");
 
+    public static final ConfigValue<Boolean> PET_NAME_RENAME_USE_DIALOG = ConfigValue.create("Pets.Name.Rename.Use_Dialog",
+        true,
+        "When enabled, Java Edition players rename pets in a dialog window (text box + Save/Back buttons).",
+        "When disabled, the old chat prompt is used. Bedrock players always get a Bedrock form.");
+
     public static final ConfigValue<Boolean> PET_NAME_RENAME_MENU_REQUIRES_NAMETAG = ConfigValue.create("Pets.Name.Rename.Menu_Requires_NameTag",
         true,
         "Sets whether or not Rename button in Pet Menu will require Name tag item in player's inventory.");

@@ -93,6 +93,14 @@ When a menu opens (from a command, by interacting with your pet, or from a back 
 
 ---
 
+## Rename dialog for Java players
+
+Java Edition players rename their pet in Minecraft's dialog screen instead of typing in chat. The screen has the current name in a text box, the length rules, the Name Tag cost (if enabled), and **Save** / **Go Back** buttons. It uses nightcore's dialog system, the same one NightExpress plugins use for their editors.
+
+- Option: `Pets.Name.Rename.Use_Dialog: true` (set it to `false` to go back to the chat prompt).
+- Texts: `Pet.Rename.Dialog.*` and `Pet.Rename.Error.Empty` in the language file.
+- Rules are unchanged (length, blocked words, bypass permissions). The Name Tag is taken only when **Save** is pressed and is refunded if the name is rejected. Pressing Esc or **Go Back** costs nothing.
+
 ## Configuration (`config.yml`)
 
 New section, added automatically on first start:

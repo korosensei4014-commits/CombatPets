@@ -44,6 +44,7 @@ import su.nightexpress.combatpets.api.pet.Tier;
 import su.nightexpress.combatpets.api.pet.event.generic.PetReleaseEvent;
 import su.nightexpress.combatpets.api.pet.type.CombatMode;
 import su.nightexpress.combatpets.bedrock.form.PetForms;
+import su.nightexpress.combatpets.pet.dialog.PetRenameDialog;
 import su.nightexpress.combatpets.config.Config;
 import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.config.Perms;
@@ -731,6 +732,11 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         // if the player leaves the prompt or it times out.
         if (isRenameNametagRequired() && !this.hasRenameNametag(player)) {
             return false;
+        }
+
+        if (Config.PET_NAME_RENAME_USE_DIALOG.get()) {
+            PetRenameDialog.show(this.plugin, player);
+            return true;
         }
 
         Lang.PET_RENAME_PROMPT.message().send(player);
