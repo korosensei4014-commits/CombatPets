@@ -21,6 +21,7 @@ allprojects {
         maven("https://mvn.lumine.io/repository/maven-public/")
         maven("https://repo.magmaguy.com/releases/")
         maven("https://central.sonatype.com/")
+        maven("https://repo.opencollab.dev/main/") // Geyser / Floodgate / Cumulus
     }
 
     dependencies {
@@ -68,6 +69,10 @@ dependencies {
     compileOnly("io.lumine:Mythic-Dist:5.0.1-SNAPSHOT")
     compileOnly("com.magmaguy:FreeMinecraftModels:2.3.17")
     compileOnly("io.github.arcaneplugins:levelledmobs-plugin:4.0.3.1")
+
+    // Bedrock Edition forms. Optional at runtime: only used when Floodgate or Geyser is installed.
+    // Brings the Cumulus form API (org.geysermc.cumulus) transitively.
+    compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
 
     implementation(project(":API"))
     implementation(project(":nms-paper"))

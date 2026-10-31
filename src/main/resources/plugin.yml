@@ -9,4 +9,6 @@ softdepend:
   - MythicMobs
   - PlaceholderAPI
   - EconomyBridge
+  - floodgate
+  - Geyser-Spigot
 api-version: 1.20

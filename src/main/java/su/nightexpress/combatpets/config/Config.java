@@ -212,6 +212,63 @@ public class Config {
         "Use '-1' for unlimited amount."
     );
 
+    // ------------------------------------------------------------------------------------------
+    // Bedrock Edition (Geyser / Floodgate) support
+    // ------------------------------------------------------------------------------------------
+
+    public static final ConfigValue<Boolean> BEDROCK_ENABLED = ConfigValue.create("Bedrock.Enabled",
+        true,
+        "When enabled, Bedrock Edition players (joining through Geyser) get native Bedrock forms",
+        "instead of the chest GUIs. Java Edition players are not affected.",
+        "Requires Floodgate (recommended) or Geyser-Spigot installed on THIS server.",
+        "If neither is installed, this option does nothing and everyone gets the chest GUIs."
+    );
+
+    public static final ConfigValue<String> BEDROCK_PROVIDER = ConfigValue.create("Bedrock.Provider",
+        "auto",
+        "Which API is used to detect Bedrock players and send them forms.",
+        "Available values: auto, floodgate, geyser",
+        "'auto' prefers Floodgate, then Geyser.",
+        "Behind a Velocity/BungeeCord proxy, install Floodgate on BOTH the proxy and this server."
+    );
+
+    public static final ConfigValue<Integer> BEDROCK_PAGE_SIZE = ConfigValue.create("Bedrock.Page_Size",
+        10,
+        "Maximum number of pets / eggs listed on a single page of a Bedrock form."
+    );
+
+    public static final ConfigValue<Long> BEDROCK_SUBMIT_COOLDOWN = ConfigValue.create("Bedrock.Submit_Cooldown_Millis",
+        300L,
+        "Minimal time (in milliseconds) between two form submissions of a player.",
+        "Protects against accidental double submissions on laggy connections. Set to 0 to disable."
+    );
+
+    public static final ConfigValue<Boolean> BEDROCK_ICONS_ENABLED = ConfigValue.create("Bedrock.Icons.Enabled",
+        true,
+        "Sets whether form buttons show icons. Icons are Bedrock texture paths (e.g. 'textures/items/lead')",
+        "or full image URLs starting with 'http'. Leave an icon empty to hide it."
+    );
+
+    public static final ConfigValue<String> BEDROCK_ICON_TIER       = bedrockIcon("Tier", "textures/items/egg");
+    public static final ConfigValue<String> BEDROCK_ICON_PET        = bedrockIcon("Pet", "textures/items/name_tag");
+    public static final ConfigValue<String> BEDROCK_ICON_SUMMON     = bedrockIcon("Summon", "textures/items/lead");
+    public static final ConfigValue<String> BEDROCK_ICON_DESPAWN    = bedrockIcon("Despawn", "textures/items/ender_pearl");
+    public static final ConfigValue<String> BEDROCK_ICON_REVIVE     = bedrockIcon("Revive", "textures/items/totem");
+    public static final ConfigValue<String> BEDROCK_ICON_RELEASE    = bedrockIcon("Release", "textures/items/feather");
+    public static final ConfigValue<String> BEDROCK_ICON_MANAGE     = bedrockIcon("Manage", "textures/items/book_writable");
+    public static final ConfigValue<String> BEDROCK_ICON_INVENTORY  = bedrockIcon("Inventory", "textures/blocks/chest_front");
+    public static final ConfigValue<String> BEDROCK_ICON_UNEQUIP    = bedrockIcon("Unequip", "textures/items/iron_chestplate");
+    public static final ConfigValue<String> BEDROCK_ICON_ASPECTS    = bedrockIcon("Aspects", "textures/items/experience_bottle");
+    public static final ConfigValue<String> BEDROCK_ICON_REALLOCATE = bedrockIcon("Reallocate", "textures/items/clock_item");
+    public static final ConfigValue<String> BEDROCK_ICON_RENAME     = bedrockIcon("Rename", "textures/items/name_tag");
+    public static final ConfigValue<String> BEDROCK_ICON_SETTINGS   = bedrockIcon("Settings", "textures/items/redstone_dust");
+    public static final ConfigValue<String> BEDROCK_ICON_EGG        = bedrockIcon("Egg", "textures/items/egg");
+    public static final ConfigValue<String> BEDROCK_ICON_NAVIGATION = bedrockIcon("Navigation", "");
+
+    private static ConfigValue<String> bedrockIcon(String name, String def) {
+        return ConfigValue.create("Bedrock.Icons." + name, def);
+    }
+
     @Deprecated
     public static boolean isGUIPlaceholdersEnabled() {
         return GENERAL_PLACEHOLDER_API_GUI.get();
