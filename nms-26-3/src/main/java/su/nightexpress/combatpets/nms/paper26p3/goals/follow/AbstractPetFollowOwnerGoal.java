@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import su.nightexpress.combatpets.api.pet.ActivePet;
 import su.nightexpress.combatpets.api.pet.PetEntity;
+import su.nightexpress.combatpets.api.pet.PetFollowSettings;
 import su.nightexpress.nightcore.util.random.Rnd;
 
 public abstract class AbstractPetFollowOwnerGoal extends Goal {
@@ -53,10 +54,34 @@ public abstract class AbstractPetFollowOwnerGoal extends Goal {
             return false;
         }
 
-        double distance = this.pet.distanceToSqr(this.owner);
-        double reach = this.getReach(this.owner);
+        // Only start following when the owner is far enough away (no random nudges when close).
+        double start = this.getStartDistance();
+        return this.pet.distanceToSqr(this.owner) > start * start;
+    }
 
-        return distance > reach || Rnd.nextFloat() < 0.05;
+    @Override
+    public boolean canContinueToUse() {
+        if (this.isTargettedToEnemy() || this.owner == null || !this.owner.isAlive()) return false;
+        if (this.pet.passengers.contains(this.owner)) return false;
+        if (!this.pet.level().equals(this.owner.level())) return false;
+
+        // Keep following until the pet is within the stop distance.
+        double stop = this.getStopDistance();
+        return this.pet.distanceToSqr(this.owner) > stop * stop;
+    }
+
+    /**
+     * @return Distance at which the pet stops following: the configured value, or more for big pets.
+     */
+    protected double getStopDistance() {
+        return Math.max(PetFollowSettings.getStopDistance(), Math.sqrt(this.getReach(this.owner)));
+    }
+
+    /**
+     * @return Distance above which the pet starts following. Always a bit above the stop distance.
+     */
+    protected double getStartDistance() {
+        return Math.max(PetFollowSettings.getStartDistance(), this.getStopDistance() + 1.5D);
     }
 
     public void moveToOwner() {

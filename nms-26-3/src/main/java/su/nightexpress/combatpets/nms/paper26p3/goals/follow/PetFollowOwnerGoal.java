@@ -12,8 +12,15 @@ import su.nightexpress.nightcore.util.random.Rnd;
 
 public class PetFollowOwnerGoal extends AbstractPetFollowOwnerGoal {
 
+    private int pathRecalcDelay;
+
     public PetFollowOwnerGoal(@NonNull Mob pet) {
         super(pet);
+    }
+
+    @Override
+    public void start() {
+        this.pathRecalcDelay = 0;
     }
 
     @Override
@@ -44,15 +51,11 @@ public class PetFollowOwnerGoal extends AbstractPetFollowOwnerGoal {
             return;
         }
 
+        // Recalculate the path every 10 ticks (or when the pet stopped) instead of every tick.
+        if (--this.pathRecalcDelay > 0 && !this.pet.getNavigation().isDone()) return;
+        this.pathRecalcDelay = this.adjustedTickDelay(10);
+
         Vec3 target = this.owner.position();
-
-        double distance = this.pet.distanceToSqr(this.owner);
-        double reach = this.getReach(this.owner);
-        if (distance <= reach) {
-            double xOff = Rnd.getDouble(0.25);
-            target = new Vec3(this.owner.getBlockX() + xOff, this.owner.getBlockY(), this.owner.getBlockZ() + xOff);
-        }
-
         this.pet.getNavigation().moveTo(target.x, target.y, target.z, speedModifier);
         super.tick();
     }

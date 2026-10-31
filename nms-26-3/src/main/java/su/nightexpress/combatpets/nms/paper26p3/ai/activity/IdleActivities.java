@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.player.Player;
+import su.nightexpress.combatpets.api.pet.PetFollowSettings;
 import su.nightexpress.combatpets.api.pet.PetEntity;
 import su.nightexpress.combatpets.nms.paper26p3.ai.AIUtils;
 import su.nightexpress.combatpets.nms.paper26p3.ai.MobUtils;
@@ -86,12 +87,15 @@ public final class IdleActivities {
                             .findFirst()
                             .orElse(null);
 
-                        if (owner == null || pet.closerThan(owner, OWNER_REACH_RANGE)) return false;
+                        // Only start following when the owner is farther than the start distance.
+                        if (owner == null || pet.closerThan(owner, PetFollowSettings.getStartDistance())) return false;
 
                         boolean forEyes = pet.getType() == EntityTypes.ALLAY;
 
                         //lookTarget.set(new EntityTracker(owner, true));
-                        walkTarget.set(new WalkTarget(new EntityTracker(owner, forEyes), 1F, 1));
+                        // Stop walking once within the stop distance.
+                        int stopDistance = (int) Math.ceil(PetFollowSettings.getStopDistance());
+                        walkTarget.set(new WalkTarget(new EntityTracker(owner, forEyes), 1F, stopDistance));
                         return true;
                     };
                 });

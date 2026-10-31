@@ -91,6 +91,16 @@ public class Config {
         "Sets whether or not player's pets can attack each other."
     );
 
+    public static final ConfigValue<Double> PET_FOLLOW_START_DISTANCE = ConfigValue.create("Pets.Follow.Start_Distance",
+        6D,
+        "Pets only start walking to their owner when they are farther than this many blocks.",
+        "Closer than this, the pet stays where it is instead of constantly walking up to you.");
+
+    public static final ConfigValue<Double> PET_FOLLOW_STOP_DISTANCE = ConfigValue.create("Pets.Follow.Stop_Distance",
+        3D,
+        "While following, pets stop once they are this close to their owner (in blocks).",
+        "Must be lower than Start_Distance. Big pets keep a little more space automatically.");
+
     public static final ConfigValue<Boolean> PET_SNEAK_TO_OPEN_MENU = ConfigValue.create("Pets.Sneak_To_Open_Menu",
         false,
         "Sets whether or not player should sneak to open pet menu on right click."

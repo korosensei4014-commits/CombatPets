@@ -39,6 +39,7 @@ import su.nightexpress.combatpets.api.pet.Aspect;
 import su.nightexpress.combatpets.api.pet.FoodCategory;
 import su.nightexpress.combatpets.api.pet.FoodItem;
 import su.nightexpress.combatpets.api.pet.PetEntityBridge;
+import su.nightexpress.combatpets.api.pet.PetFollowSettings;
 import su.nightexpress.combatpets.api.pet.Template;
 import su.nightexpress.combatpets.api.pet.Tier;
 import su.nightexpress.combatpets.api.pet.event.generic.PetReleaseEvent;
@@ -108,6 +109,8 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
     @Override
     protected void onLoad() {
+        PetFollowSettings.set(Config.PET_FOLLOW_START_DISTANCE.get(), Config.PET_FOLLOW_STOP_DISTANCE.get());
+
         this.loadAttributes();
         this.loadAspects();
         this.loadFood();
