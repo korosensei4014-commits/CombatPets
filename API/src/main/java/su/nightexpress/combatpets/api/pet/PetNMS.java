@@ -25,4 +25,14 @@ public interface PetNMS {
     void sneak(LivingEntity entity, boolean value);
 
     boolean hasNavigationPath(LivingEntity entity);
+
+    /**
+     * Makes the pet attack the given target (or stop attacking when null). Works for both goal-based
+     * and brain-based pets. Used by pet duels.
+     */
+    default void setAttackTarget(LivingEntity pet, @org.jspecify.annotations.Nullable LivingEntity target) {
+        if (pet instanceof org.bukkit.entity.Mob mob) {
+            mob.setTarget(target);
+        }
+    }
 }

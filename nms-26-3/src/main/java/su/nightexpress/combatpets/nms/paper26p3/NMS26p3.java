@@ -128,4 +128,20 @@ public class NMS26p3 implements PetNMS {
 
         return mob.getNavigation().isInProgress();
     }
+
+    @Override
+    public void setAttackTarget(LivingEntity entity, @org.jspecify.annotations.Nullable LivingEntity target) {
+        if (!(((CraftLivingEntity) entity).getHandle() instanceof Mob mob)) return;
+
+        net.minecraft.world.entity.LivingEntity handle = target == null ? null : ((CraftLivingEntity) target).getHandle();
+
+        // Goal-based pets use the mob target, brain-based pets use the ATTACK_TARGET memory.
+        mob.setTarget(handle, org.bukkit.event.entity.EntityTargetEvent.TargetReason.CUSTOM);
+        if (handle == null) {
+            mob.getBrain().eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET);
+        }
+        else {
+            mob.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET, handle);
+        }
+    }
 }
