@@ -54,7 +54,7 @@ gradle build
 # -> build/libs/CombatPets-2.8.4-bedrock.1.jar
 ```
 
-**Publishing a release:** bump `version` in `build.gradle.kts`, commit, then push a matching tag, for example `git tag v2.8.4-bedrock.2 && git push origin v2.8.4-bedrock.2`. GitHub Actions builds the plugin and creates the Release with the JAR attached.
+**Publishing a release:** bump `version` in `build.gradle.kts` (e.g. `2.8.4-bedrock.2`) and push. GitHub Actions builds the plugin and, because that version has no release yet, creates the tag `v2.8.4-bedrock.2` and a Release with the JAR attached. Pushes that don't change the version only produce a build artifact. Pushing a `v*` tag yourself also works.
 
 The build needs these Maven repositories (already configured in `build.gradle.kts`): Maven Central, `repo.papermc.io`, `repo.nightexpressdev.com`, `repo.extendedclip.com`, `mvn.lumine.io`, `repo.magmaguy.com`, and **`repo.opencollab.dev/main`** (new, for the Floodgate API).
 
