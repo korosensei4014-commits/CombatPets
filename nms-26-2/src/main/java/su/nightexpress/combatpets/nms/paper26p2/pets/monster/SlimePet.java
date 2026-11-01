@@ -121,4 +121,10 @@ public class SlimePet extends Slime implements PetEntity {
             slime.getMoveControl().setWantedPosition(target.getX(), target.getY(), target.getZ(), 1);
         }
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

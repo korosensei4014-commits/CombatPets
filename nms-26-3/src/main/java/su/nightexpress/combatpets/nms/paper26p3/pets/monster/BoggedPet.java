@@ -90,4 +90,10 @@ public class BoggedPet extends Bogged implements PetEntity {
     public void shear(ServerLevel worldserver, SoundSource soundcategory, ItemStack itemstack) {
 
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

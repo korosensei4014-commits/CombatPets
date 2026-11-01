@@ -102,4 +102,10 @@ public class PiglinBrutePet extends PiglinBrute implements PetEntity {
     public boolean startRiding(Entity entity, boolean flag, boolean flag2) {
         return false;
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

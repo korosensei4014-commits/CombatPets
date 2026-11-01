@@ -190,6 +190,8 @@ With `Pets.Attack_Damage_For_Projectiles: true` (upstream default), a pet's proj
 
 **Ghast pets** now keep about 8 blocks from ground targets (a few blocks above them) instead of sitting on top of them, and hover above their owner against flying targets. They shoot from the side facing the target, straight at it.
 
+**Pets can target Ghasts.** Vanilla Minecraft hard-codes that mobs never target a Ghast (the target is dropped immediately), so a Wither, Zombie or any other pet ignored a Ghast pet even in a duel. Pets now accept any target.
+
 **Wither pets** no longer break blocks around them after taking damage (`Pets.Wither.Destroy_Blocks: false`; set `true` for vanilla behaviour).
 
 ### Warden sonic boom

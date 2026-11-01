@@ -74,4 +74,10 @@ public class WitherSkeletonPet extends WitherSkeleton implements PetEntity {
     protected void hurtArmor(DamageSource source, float amount) {
         this.doHurtEquipment(source, amount, AIUtils.ARMOR_SLOTS);
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

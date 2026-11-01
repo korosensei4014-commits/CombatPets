@@ -71,4 +71,10 @@ public class ZombieVillagerPet extends ZombieVillager implements PetEntity {
     public void startConverting(@Nullable UUID uuid, int i) {
 
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

@@ -143,4 +143,10 @@ public class CreeperPet extends Creeper implements PetEntity {
     protected boolean shouldDropLoot(ServerLevel var0) {
         return false;
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

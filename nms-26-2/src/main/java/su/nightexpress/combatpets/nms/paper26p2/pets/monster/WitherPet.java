@@ -66,4 +66,10 @@ public class WitherPet extends WitherBoss implements PetEntity {
     public void setAlternativeTarget(int i, int j) {
 
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

@@ -68,4 +68,10 @@ public class ZoglinPet extends Zoglin implements PetEntity {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS_SERVER;
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

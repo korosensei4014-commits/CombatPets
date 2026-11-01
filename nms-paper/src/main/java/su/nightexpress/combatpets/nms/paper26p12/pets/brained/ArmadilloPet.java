@@ -72,4 +72,10 @@ public class ArmadilloPet extends Armadillo implements PetEntity {
     @Override
     public void rollUp() {
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

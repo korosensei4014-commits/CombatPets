@@ -55,4 +55,10 @@ public class HuskPet extends Husk implements PetEntity {
     protected boolean convertsInWater() {
         return false;
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }

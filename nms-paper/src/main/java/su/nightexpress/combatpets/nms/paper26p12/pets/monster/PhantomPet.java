@@ -209,4 +209,10 @@ public class PhantomPet extends Phantom implements PetEntity {
             Reflex.setFieldValue(PhantomPet.this, MOVE_TARGET_POINT, point);
         }
     }
+
+    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    @Override
+    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
+        return true;
+    }
 }
