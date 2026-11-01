@@ -219,6 +219,20 @@ public final class PetInstance implements ActivePet {
         }
     }
 
+    /**
+     * Removes Vexes summoned by this pet (Evoker), also ones in chunks that don't tick, which wouldn't notice the
+     * Evoker is gone until they tick again.
+     */
+    private void removeSummonedVexes() {
+        if (this.entity.getType() != org.bukkit.entity.EntityType.EVOKER) return;
+
+        for (org.bukkit.entity.Entity nearby : this.entity.getNearbyEntities(64, 64, 64)) {
+            if (nearby instanceof org.bukkit.entity.Vex vex && vex.getSummoner() == this.entity) {
+                vex.remove();
+            }
+        }
+    }
+
     @Override
     public void remove() {
         try {
@@ -230,6 +244,7 @@ public final class PetInstance implements ActivePet {
                 owner.closeInventory();
             }
 
+            this.removeSummonedVexes();
             this.saveData(); // Save pet's settings to the data holder.
             this.getInventory().clear(); // Clear pet's inventory content.
 

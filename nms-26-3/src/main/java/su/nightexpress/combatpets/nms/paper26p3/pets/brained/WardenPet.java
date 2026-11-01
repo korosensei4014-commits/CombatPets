@@ -108,8 +108,7 @@ public class WardenPet extends Warden implements PetEntity {
     private int boomCooldown;
     private int lastMeleeTick = -1000;
     private int targetSinceTick;
-    @Nullable
-    private LivingEntity lastTarget;
+    private int lastTargetId = -1; // Entity id, not a reference: never keeps a removed target object alive.
 
     @Override
     public boolean doHurtTarget(ServerLevel level, Entity target) {
@@ -121,8 +120,9 @@ public class WardenPet extends Warden implements PetEntity {
         if (this.boomCooldown > 0) this.boomCooldown--;
 
         LivingEntity target = this.getTarget();
-        if (target != this.lastTarget) {
-            this.lastTarget = target;
+        int targetId = target == null ? -1 : target.getId();
+        if (targetId != this.lastTargetId) {
+            this.lastTargetId = targetId;
             this.targetSinceTick = this.tickCount;
         }
 
