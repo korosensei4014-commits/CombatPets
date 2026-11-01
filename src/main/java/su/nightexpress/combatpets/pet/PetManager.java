@@ -193,6 +193,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
             else this.plugin.warn("Pet not loaded: '" + config.getName() + "' !");
         }
 
+        PetCreator.fixCompanionEggSkins(this.plugin, this.templateMap.values());
         this.plugin.info("Loaded " + this.templateMap.size() + " pet configs!");
     }
 

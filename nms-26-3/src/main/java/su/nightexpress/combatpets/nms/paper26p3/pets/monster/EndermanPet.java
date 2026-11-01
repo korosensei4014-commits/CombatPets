@@ -49,6 +49,44 @@ public class EndermanPet extends Enderman implements PetEntity {
     protected void customServerAiStep(ServerLevel worldserver) {
         Reflex.setFieldValue(this, TARGET_CHANGE_TIME, this.tickCount + 600); // targetChangeTime
         super.customServerAiStep(worldserver);
+        this.tickChaseTeleport(worldserver);
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Chase teleport: like vanilla, teleports next to a target that is far away or can't be reached on foot.
+    // ------------------------------------------------------------------------------------------
+
+    private static final double CHASE_MIN_DISTANCE = 8D;  // Never teleport when closer than this.
+    private static final double CHASE_FAR_DISTANCE = 16D; // Always teleport when farther than this.
+    private static final int    CHASE_COOLDOWN     = 40;  // Ticks between teleports.
+
+    private int chaseCooldown;
+
+    private void tickChaseTeleport(ServerLevel level) {
+        if (this.chaseCooldown > 0) {
+            this.chaseCooldown--;
+            return;
+        }
+
+        net.minecraft.world.entity.LivingEntity target = this.getTarget();
+        if (target == null || !target.isAlive() || target.level() != this.level()) return;
+
+        double distance = this.distanceTo(target);
+        if (distance < CHASE_MIN_DISTANCE) return;
+
+        this.chaseCooldown = 10; // Re-check twice a second.
+        if (distance <= CHASE_FAR_DISTANCE) {
+            net.minecraft.world.level.pathfinder.Path path = this.getNavigation().createPath(target, 0);
+            if (path != null && path.canReach()) return; // Reachable on foot: just walk.
+        }
+
+        double oldX = this.getX(), oldY = this.getY(), oldZ = this.getZ();
+        su.nightexpress.combatpets.nms.paper26p3.ai.MobUtils.teleportToAround(this, target.blockPosition());
+        if (this.getX() == oldX && this.getY() == oldY && this.getZ() == oldZ) return; // No safe spot found.
+
+        level.playSound(null, oldX, oldY, oldZ, net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+        this.playSound(net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+        this.chaseCooldown = CHASE_COOLDOWN;
     }
 
     @Override

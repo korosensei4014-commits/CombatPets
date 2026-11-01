@@ -55,7 +55,9 @@ public class LevelingListener extends AbstractListener<PetsPlugin> {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onExpGainHit(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity victim)) return;
-        if (!(event.getDamageSource().getCausingEntity() instanceof LivingEntity damager)) return;
+        if (!(event.getDamageSource().getCausingEntity() instanceof LivingEntity causing)) return;
+        // Damage by Vexes summoned by an Evoker pet counts as the Evoker's, so their kills give the Evoker XP.
+        LivingEntity damager = causing instanceof org.bukkit.entity.Vex vex && vex.getSummoner() != null ? vex.getSummoner() : causing;
         if (!this.manager.shouldDropXP(victim)) return;
         if (this.manager.isDisabledWorld(victim.getWorld())) return;
 

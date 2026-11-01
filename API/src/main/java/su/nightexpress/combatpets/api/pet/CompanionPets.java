@@ -15,7 +15,9 @@ public final class CompanionPets {
         EntityType.CAMEL_HUSK,
         EntityType.COPPER_GOLEM,
         EntityType.STRIDER,
-        EntityType.PARROT
+        EntityType.PARROT,
+        EntityType.FROG,
+        EntityType.AXOLOTL
     );
 
     private CompanionPets() {

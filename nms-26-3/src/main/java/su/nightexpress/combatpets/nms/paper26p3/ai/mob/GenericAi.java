@@ -45,6 +45,26 @@ public final class GenericAi {
             .build();
     }
 
+    /**
+     * Like {@link #brainProvider(Class)}, plus the vanilla crossbow attack (charge, then shoot) when the pet holds
+     * a crossbow. Used by Piglins.
+     */
+    public static <E extends PathfinderMob & net.minecraft.world.entity.monster.CrossbowAttackMob> Brain.Provider<E> crossbowBrainProvider(Class<E> type) {
+        return BrainUtils.brainProvider(pet -> List.of(initCoreActivity(type), initIdleActivity(type), initCrossbowFightActivity(type)));
+    }
+
+    private static <E extends PathfinderMob & net.minecraft.world.entity.monster.CrossbowAttackMob> ActivityData<E> initCrossbowFightActivity(Class<E> type) {
+        return ActivityBuilder.init(Activity.FIGHT, type)
+            .priorityOfFirstBehavior(10)
+            .memoryThatMustHaveValueAndWillBeErasedAfter(MemoryModuleType.ATTACK_TARGET)
+            .goal(FightActivities.walkAttackTargetIfOutOfRange())
+            .goal(FightActivities.meleeAttack())
+            .goal(new net.minecraft.world.entity.ai.behavior.CrossbowAttack<E, net.minecraft.world.entity.LivingEntity>())
+            .goal(FightActivities.stopAttackingIfFarFromOwner())
+            .goal(FightActivities.stopAttackingIfTargetInvalid())
+            .build();
+    }
+
     public static void updateActivity(PathfinderMob pet) {
         pet.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
         pet.setAggressive(pet.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET));
