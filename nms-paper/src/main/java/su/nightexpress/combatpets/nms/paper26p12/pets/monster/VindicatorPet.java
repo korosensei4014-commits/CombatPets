@@ -141,10 +141,4 @@ public class VindicatorPet extends Vindicator implements PetEntity {
     public void applyRaidBuffs(ServerLevel var0, int var1, boolean var2) {
 
     }
-
-    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
-    @Override
-    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
-        return true;
-    }
 }

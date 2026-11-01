@@ -64,10 +64,4 @@ public class IronGolemPet extends net.minecraft.world.entity.animal.golem.IronGo
     public boolean canAttack(LivingEntity entitytypes) {
         return true;
     }
-
-    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
-    @Override
-    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
-        return true;
-    }
 }

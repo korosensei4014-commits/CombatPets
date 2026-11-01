@@ -79,9 +79,9 @@ public class MagmaCubePet extends MagmaCube implements PetEntity {
         return true;
     }
 
-    // Vanilla mobs never target Ghasts (the target gets dropped right away). Pets may attack anything.
+    // Vanilla Mob.canAttack() always rejects Ghasts, which drops them as a target right away. Pets may attack them.
     @Override
-    public boolean canAttackType(net.minecraft.world.entity.EntityType<?> type) {
-        return true;
+    public boolean canAttack(net.minecraft.world.entity.LivingEntity target) {
+        return super.canAttack(target) || (target instanceof net.minecraft.world.entity.monster.Ghast && target.canBeSeenAsEnemy());
     }
 }
