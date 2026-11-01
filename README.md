@@ -1,6 +1,14 @@
-# CombatPets — Bedrock Forms Fork
+# CombatPets Reforged
 
-A fork of [nulli0n/CombatPets](https://github.com/nulli0n/CombatPets) (v2.8.4, `main` branch) that adds **native Bedrock Edition menus** for players who join through [Geyser](https://geysermc.org/).
+A fork of [nulli0n/CombatPets](https://github.com/nulli0n/CombatPets) (v2.8.4, `main` branch) by nulli0n. All credit for the original plugin goes to its author.
+
+**CombatPets Reforged** adds native Bedrock Edition menus, pet duels, region support, restored mob abilities (Warden sonic boom, Evoker vexes, Illusioner illusions, Piglin crossbows, Enderman teleports), companion-only pets, many upstream bug fixes and more. It is a drop-in replacement: the plugin is still named `CombatPets` on the server, so the `plugins/CombatPets/` folder, saved pets, permissions (`combatpets.*`) and placeholders (`%combatpets_...%`) stay the same.
+
+Releases: `CombatPets-Reforged-<version>.jar` (versions `2.8.4-rN`; older releases were named `2.8.4-bedrock.N`).
+
+## Bedrock menus
+
+Adds **native Bedrock Edition menus** for players who join through [Geyser](https://geysermc.org/).
 
 The original chest GUIs rely on left-click, right-click and the Q/Drop key. Bedrock players can't use all of these reliably, and can't use Q at all. This fork shows Bedrock players **Bedrock forms** (buttons, toggles, dropdowns and text inputs) instead. Every action has its own clearly labelled button. Java players keep the original chest GUIs, unchanged.
 

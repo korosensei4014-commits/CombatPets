@@ -20,6 +20,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -92,6 +93,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
     private final Map<String, Tier>         tierMap;
     private final Map<String, Template>     templateMap;
+    private final Map<EntityType, Template> templateByType; // Fast lookup for getTemplate(LivingEntity).
     private final Map<String, Aspect>       aspectMap;
     private final Map<String, FoodCategory> foodMap;
 
@@ -106,6 +108,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         super(plugin);
         this.tierMap = new HashMap<>();
         this.templateMap = new HashMap<>();
+        this.templateByType = new HashMap<>();
         this.aspectMap = new HashMap<>();
         this.foodMap = new HashMap<>();
     }
@@ -150,6 +153,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
         this.tierMap.clear();
         this.templateMap.clear();
+        this.templateByType.clear();
         this.aspectMap.clear();
         this.foodMap.clear();
 
@@ -184,6 +188,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
             Template petConfig = new PetTemplate(this.plugin, config);
             if (petConfig.load()) {
                 this.templateMap.put(petConfig.getId(), petConfig);
+                this.templateByType.putIfAbsent(petConfig.getEntityType(), petConfig);
             }
             else this.plugin.warn("Pet not loaded: '" + config.getName() + "' !");
         }
@@ -332,8 +337,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
     @Nullable
     public Template getTemplate(@NonNull LivingEntity entity) {
-        return this.getTemplates().stream()
-            .filter(config -> config.getEntityType() == entity.getType()).findAny().orElse(null);
+        return this.templateByType.get(entity.getType());
     }
 
     @NonNull

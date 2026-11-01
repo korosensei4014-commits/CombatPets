@@ -399,11 +399,19 @@ public final class PetInstance implements ActivePet {
         });
     }
 
+    // Last applied nametag / health bar text. Converting the text (MiniMessage -> legacy) is the expensive part,
+    // so it's skipped when nothing changed since the last update.
+    private String lastNameFormat;
+    private String lastHealthBarTitle;
+    private double lastHealthBarProgress = -1D;
+
     @Override
     public void updateName() {
         Tier tier = this.getTier();
         String format = this.replacePlaceholders().apply(tier.getNameFormat());
+        if (format.equals(this.lastNameFormat) && this.entity.getCustomName() != null) return;
 
+        this.lastNameFormat = format;
         this.entity.setCustomName(NightMessage.asLegacy(format));
         this.entity.setCustomNameVisible(true);
     }
@@ -418,6 +426,8 @@ public final class PetInstance implements ActivePet {
                 Config.PET_HEALTHBAR_STYLE.get());
             this.healthBar.setVisible(true);
             this.healthBar.addPlayer(this.getOwner());
+            this.lastHealthBarTitle = null;
+            this.lastHealthBarProgress = -1D;
         }
 
         double maxHealth = this.getMaxHealth();
@@ -426,8 +436,14 @@ public final class PetInstance implements ActivePet {
         double result = maxHealth <= 0D ? 0D : Math.max(0D, Math.min(1D, this.entity.getHealth() / maxHealth));
         String title = this.replacePlaceholders().apply(Config.PET_HEALTHBAR_TITLE.get());
 
-        this.healthBar.setProgress(result);
-        this.healthBar.setTitle(NightMessage.asLegacy(title));
+        if (result != this.lastHealthBarProgress) {
+            this.lastHealthBarProgress = result;
+            this.healthBar.setProgress(result);
+        }
+        if (!title.equals(this.lastHealthBarTitle)) {
+            this.lastHealthBarTitle = title;
+            this.healthBar.setTitle(NightMessage.asLegacy(title));
+        }
     }
 
     @Override
