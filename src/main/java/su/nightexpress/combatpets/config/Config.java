@@ -101,6 +101,26 @@ public class Config {
         "While following, pets stop once they are this close to their owner (in blocks).",
         "Must be lower than Start_Distance. Big pets keep a little more space automatically.");
 
+    public static final ConfigValue<Boolean> PET_FIREBALLS_IGNORE_FIRE_IMMUNITY = ConfigValue.create("Pets.Fireballs_Ignore_Fire_Immunity",
+        true,
+        "When enabled, fireballs shot by pets (Ghast, Blaze) also hurt fire-immune targets they're allowed to attack",
+        "(Wither, Warden, Ghast, Blaze, ...). Their hit counts as normal projectile damage instead of fire damage.",
+        "Fire immunity still works for everything else (lava, burning, vanilla mobs' fireballs)."
+    );
+
+    public static final ConfigValue<Boolean> PET_WARDEN_SONIC_BOOM = ConfigValue.create("Pets.Warden.Sonic_Boom",
+        true,
+        "When enabled, Warden pets use the vanilla sonic boom when they can't hit their target in melee",
+        "(e.g. a flying pet, or a player who pillared up). Range: 15 blocks sideways, 20 up/down.",
+        "Like vanilla it goes through blocks and ignores armor and shields. Normal pet damage rules still apply",
+        "(Pets.PVP_Allowed, WorldGuard pet-pvp, no friendly fire, duels)."
+    );
+
+    public static final ConfigValue<Double> PET_WARDEN_SONIC_BOOM_DAMAGE = ConfigValue.create("Pets.Warden.Sonic_Boom_Damage",
+        10D,
+        "Damage of a Warden pet's sonic boom. Vanilla: 10."
+    );
+
     public static final ConfigValue<Boolean> PET_DUEL_ENABLED = ConfigValue.create("Pets.Duel.Enabled",
         true,
         "Enables pet duels: '/pets duel <player>' challenges another player's summoned pet.",

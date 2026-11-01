@@ -30,6 +30,13 @@ public interface PetNMS {
      * Makes the pet attack the given target (or stop attacking when null). Works for both goal-based
      * and brain-based pets. Used by pet duels.
      */
+    /**
+     * @return true if the entity is immune to fire damage (Ghast, Blaze, Wither, Warden, ...).
+     */
+    default boolean isFireImmune(LivingEntity entity) {
+        return false;
+    }
+
     default void setAttackTarget(LivingEntity pet, @org.jspecify.annotations.Nullable LivingEntity target) {
         if (pet instanceof org.bukkit.entity.Mob mob) {
             mob.setTarget(target);

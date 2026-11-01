@@ -186,6 +186,26 @@ Texts are in the language file under `Duel.*`, `Command.Duel.Desc` and `Command.
 
 With `Pets.Attack_Damage_For_Projectiles: true` (upstream default), a pet's projectile damage is replaced by the pet's **Attack Damage** + 25% of the projectile's normal damage. Pets without a melee attack have Attack Damage **1**, so a Ghast fireball (normally 6+) only did ~2.5, less than the target regenerated. This fork adds `Pets.Projectile_Damage_Not_Below_Original: true`: projectiles never deal **less** than their normal damage. This applies everywhere, not only in duels, so ranged pets are a bit stronger in normal combat too. Set it to `false` for the upstream behaviour.
 
+**Fire-immune targets:** in vanilla a fireball's hit is fire damage, so the Wither, Warden, Ghast, Blaze and other fire-immune mobs take nothing from it (only from the small explosion, which rarely reaches). With `Pets.Fireballs_Ignore_Fire_Immunity: true`, a pet's fireball that hits a target the pet may attack deals its hit as normal projectile damage (Ghast 6, Blaze 5, before the rules above). Fire immunity still works for everything else.
+
+**Ghast pets** now keep about 8 blocks from their target (a few blocks above ground targets, at a fixed height above the owner for flying targets) instead of sitting on top of it, and shoot from the side facing the target, straight at it.
+
+### Warden sonic boom
+
+Upstream Warden pets only punch. They now also use the vanilla **sonic boom** when they haven't landed a melee hit for 2 seconds, e.g. against a flying pet or a player who pillared up. This works everywhere, not only in duels.
+
+- Range 15 blocks sideways, 20 up/down; vanilla charge-up (~1.7 s) and cooldown.
+- Like vanilla it goes through blocks and ignores armor and shields.
+- Normal pet damage rules apply: `Pets.PVP_Allowed`, the WorldGuard `pet-pvp` flag, no friendly fire, and in a duel only the opponent can be hit.
+
+```yaml
+Pets:
+  Fireballs_Ignore_Fire_Immunity: true
+  Warden:
+    Sonic_Boom: true          # false = Warden pets only use melee (upstream behaviour)
+    Sonic_Boom_Damage: 10.0   # vanilla: 10
+```
+
 ## Pet XP: scaled by mob health
 
 Upstream gives the same XP for a Warden as for a zombie: XP comes from 4 broad groups in `leveling.yml` (`XPSources`: animals, monsters, illagers, others). This fork **multiplies that XP by the mob's max health**:

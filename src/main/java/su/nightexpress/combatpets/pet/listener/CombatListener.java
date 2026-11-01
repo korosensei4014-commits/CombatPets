@@ -1,6 +1,12 @@
 package su.nightexpress.combatpets.pet.listener;
 
 import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
+import org.bukkit.entity.LargeFireball;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.jspecify.annotations.Nullable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -50,7 +56,8 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPetDamageInFriendly(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity victim)) return;
-        if (!(event.getDamageSource().getCausingEntity() instanceof LivingEntity damager)) return;
+        LivingEntity damager = getAttacker(event);
+        if (damager == null) return;
 
         if (!this.petManager.canDamage(damager, victim)) {
             event.setCancelled(true);
@@ -62,9 +69,8 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
         if (!Config.PET_ATTACK_DAMAGE_FOR_PROJECTILES.get()) return;
 
         // Non-hand attacks only.
-        Entity causingEntity = event.getDamageSource().getCausingEntity();
-        Entity directEntity = event.getDamageSource().getDirectEntity();
-        if (!(causingEntity instanceof LivingEntity damager) || causingEntity == directEntity) return;
+        LivingEntity damager = getAttacker(event);
+        if (damager == null || damager == event.getDamager()) return;
 
         ActivePet activePet = this.petManager.getPetByMob(damager);
         if (activePet == null) return;
@@ -81,5 +87,42 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
         }
 
         event.setDamage(atkDamage);
+    }
+
+    /**
+     * Vanilla treats a fireball's hit as fire damage, so fire-immune mobs (Wither, Warden, Ghast, Blaze, ...) take
+     * none of it. For pet fireballs hitting a target the pet may attack, deal that hit as normal projectile damage.
+     */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPetFireballHit(ProjectileHitEvent event) {
+        if (!Config.PET_FIREBALLS_IGNORE_FIRE_IMMUNITY.get()) return;
+
+        Projectile projectile = event.getEntity();
+        if (!(projectile instanceof LargeFireball) && !(projectile instanceof SmallFireball)) return;
+        if (!(projectile.getShooter() instanceof LivingEntity shooter)) return;
+        if (!(event.getHitEntity() instanceof LivingEntity victim) || victim == shooter || victim.isDead()) return;
+        if (this.petManager.getPetByMob(shooter) == null) return;
+        if (!this.plugin.getPetNMS().isFireImmune(victim)) return;
+        if (!this.petManager.canDamage(shooter, victim)) return;
+
+        double damage = projectile instanceof LargeFireball ? 6D : 5D; // vanilla direct-hit damage
+        victim.damage(damage, DamageSource.builder(DamageType.MOB_PROJECTILE)
+            .withCausingEntity(shooter)
+            .withDirectEntity(projectile)
+            .build());
+    }
+
+    /**
+     * The attacker behind a hit. Some pets drop the causing entity from damage they take,
+     * so fall back to the projectile's shooter or the direct damager.
+     */
+    @Nullable
+    private static LivingEntity getAttacker(@NonNull EntityDamageByEntityEvent event) {
+        Entity attacker = event.getDamageSource().getCausingEntity();
+        if (attacker == null) {
+            Entity direct = event.getDamager();
+            attacker = direct instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter ? shooter : direct;
+        }
+        return attacker instanceof LivingEntity living ? living : null;
     }
 }

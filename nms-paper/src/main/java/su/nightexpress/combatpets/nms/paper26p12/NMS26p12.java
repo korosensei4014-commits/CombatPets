@@ -144,4 +144,9 @@ public class NMS26p12 implements PetNMS {
             mob.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET, handle);
         }
     }
+
+    @Override
+    public boolean isFireImmune(LivingEntity entity) {
+        return ((CraftLivingEntity) entity).getHandle().fireImmune();
+    }
 }

@@ -95,23 +95,26 @@ public class GhastPet extends Ghast implements PetEntity {
                 }
 
                 if (this.isTimeToAttack()) {
-                    double dirMod = 4D;
-                    Vec3 direction = this.ghast.getViewVector(1.0F);
-                    double xMod = target.getX() - (this.ghast.getX() + direction.x * dirMod);
-                    double yMod = target.getY(0.5) - (0.5 + this.ghast.getY(0.5));
-                    double zMod = target.getZ() - (this.ghast.getZ() + direction.z * dirMod);
+                    // Fire from the side of the Ghast that faces the target (its mouth), straight at the target's
+                    // body. The old code used the view direction horizontally only, so shots at targets below
+                    // or above the Ghast came out of its top and flew past.
+                    Vec3 center = new Vec3(this.ghast.getX(), this.ghast.getY(0.5), this.ghast.getZ());
+                    Vec3 aimPoint = new Vec3(target.getX(), target.getY(0.5), target.getZ());
+                    Vec3 toTarget = aimPoint.subtract(center);
+                    if (toTarget.lengthSqr() < 1.0E-4) toTarget = this.ghast.getViewVector(1.0F);
+                    Vec3 spawn = center.add(toTarget.normalize().scale(2.5D));
+                    Vec3 shot = aimPoint.subtract(spawn);
+                    if (shot.lengthSqr() < 1.0E-4) shot = toTarget;
+
                     if (!this.ghast.isSilent()) {
                         world.levelEvent(null, 1016, this.ghast.blockPosition(), 0);
                     }
 
-                    Vec3 vec3d1 = new Vec3(xMod, yMod, zMod);
-                    LargeFireball fireball = new LargeFireball(world, this.ghast, vec3d1.normalize(), this.ghast
+                    LargeFireball fireball = new LargeFireball(world, this.ghast, shot.normalize(), this.ghast
                         .getExplosionPower());
 
-                    //LargeFireball fireball = new LargeFireball(world, this.ghast, xMod, yMod, zMod, this.ghast.getExplosionPower());
                     fireball.bukkitYield = (float) (fireball.explosionPower = this.ghast.getExplosionPower());
-                    fireball.setPos(this.ghast.getX() + direction.x * dirMod, this.ghast.getY(0.5) + 0.5, fireball
-                        .getZ() + direction.z * dirMod);
+                    fireball.setPos(spawn.x, spawn.y, spawn.z);
                     world.addFreshEntity(fireball);
                     this.setAttackCooldown();
                     this.petHolder.doExhaust(ExhaustReason.COMBAT);
@@ -131,11 +134,14 @@ public class GhastPet extends Ghast implements PetEntity {
             super(pet);
         }
 
+        // While fighting, the Ghast keeps this distance (blocks, horizontal) from its target.
+        private static final double FIGHT_DISTANCE = 8D;
+
         @Override
         public boolean canUse() {
             LivingEntity target = this.pet.getTarget();
             if (target != null && target.isAlive()) {
-                return this.pet.distanceToSqr(target) >= 512D;
+                return true;
             }
             //LivingEntity target = this.pet.getTarget();
             //if (target != null && target.isAlive()) return false;
@@ -163,11 +169,6 @@ public class GhastPet extends Ghast implements PetEntity {
 
         @Override
         public boolean canContinueToUse() {
-            LivingEntity target = this.pet.getTarget();
-            if (target != null && target.isAlive()) {
-                return this.pet.distanceToSqr(target) >= 512D;
-            }
-
             return true;
         }
 
@@ -188,7 +189,8 @@ public class GhastPet extends Ghast implements PetEntity {
             LivingEntity follow = this.owner;
             LivingEntity target = this.pet.getTarget();
             if (target != null && target.isAlive()) {
-                follow = target;
+                this.tickFight(target);
+                return;
             }
 
             Location location = follow.getBukkitEntity().getLocation();
@@ -202,6 +204,29 @@ public class GhastPet extends Ghast implements PetEntity {
             // Move & Look to the owner.
             this.pet.getMoveControl().setWantedPosition(x, y, z, 1D);
             this.pet.lookAt(follow, 30f, 30f);
+        }
+
+        /**
+         * Hover a few blocks away from the target instead of on top of it, so fireballs can reach it.
+         * Ground targets: slightly above them. Flying targets (e.g. a Wither, which always rises above its target):
+         * stay at a fixed height above the owner instead of chasing them upwards.
+         */
+        private void tickFight(LivingEntity target) {
+            double dx = this.pet.getX() - target.getX();
+            double dz = this.pet.getZ() - target.getZ();
+            double length = Math.sqrt(dx * dx + dz * dz);
+            if (length < 0.1D) {
+                dx = 1D;
+                dz = 0D;
+                length = 1D;
+            }
+
+            double x = target.getX() + dx / length * FIGHT_DISTANCE;
+            double z = target.getZ() + dz / length * FIGHT_DISTANCE;
+            double y = target.onGround() || target.isInWater() ? target.getY() + 3D : this.owner.getY() + 4D;
+
+            this.pet.getMoveControl().setWantedPosition(x, y, z, 1D);
+            this.pet.lookAt(target, 30f, 30f);
         }
     }
 }
