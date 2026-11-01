@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +43,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NonNull;
 
 import su.nightexpress.combatpets.PetsPlugin;
+import su.nightexpress.combatpets.api.pet.CompanionPets;
 import su.nightexpress.combatpets.api.pet.FoodItem;
 import su.nightexpress.combatpets.api.pet.PetNMS;
 import su.nightexpress.combatpets.api.pet.Stat;
@@ -162,6 +164,53 @@ public class PetCreator {
         PetNMS nms = plugin.getPetNMS();
 
         for (EntityType entityType : nms.getSupportedEntities()) {
+            createConfig(plugin, entityType);
+        }
+    }
+
+    /**
+     * Creates pet configs for companion-only pet types that are supported but have never been generated, so existing
+     * servers get them too. Each type is generated once (tracked in pets/.generated_companions), so deleting a
+     * file keeps that pet removed.
+     */
+    public static void createMissingCompanionConfigs(@NonNull PetsPlugin plugin) {
+        File marker = new File(plugin.getDataFolder() + Config.DIR_PETS, ".generated_companions");
+        Set<String> generated = new HashSet<>();
+        try {
+            if (marker.exists()) generated.addAll(java.nio.file.Files.readAllLines(marker.toPath()));
+        }
+        catch (java.io.IOException exception) {
+            plugin.warn("Could not read " + marker.getName() + ": " + exception.getMessage());
+            return;
+        }
+
+        boolean changed = false;
+        for (EntityType entityType : plugin.getPetNMS().getSupportedEntities()) {
+            if (!CompanionPets.isCompanion(entityType)) continue;
+
+            String name = entityType.name().toLowerCase();
+            if (generated.contains(name)) continue;
+
+            File file = new File(plugin.getDataFolder() + Config.DIR_PETS, name + ".yml");
+            if (!file.exists()) {
+                createConfig(plugin, entityType);
+                plugin.info("Created pet config for new companion pet: " + name);
+            }
+            generated.add(name);
+            changed = true;
+        }
+
+        if (!changed) return;
+        try {
+            java.nio.file.Files.write(marker.toPath(), new ArrayList<>(generated));
+        }
+        catch (java.io.IOException exception) {
+            plugin.warn("Could not write " + marker.getName() + ": " + exception.getMessage());
+        }
+    }
+
+    private static void createConfig(@NonNull PetsPlugin plugin, @NonNull EntityType entityType) {
+        {
             String name = entityType.name().toLowerCase();//.getKey().getKey();
             File file = new File(plugin.getDataFolder() + Config.DIR_PETS, name + ".yml");
             PetTemplate petTemplate = new PetTemplate(plugin, file);
@@ -174,6 +223,8 @@ public class PetCreator {
             petTemplate.setCapturable(true);
             petTemplate.setCaptureChance(30D);
             petTemplate.setCaptureEscapeChance(0.5D);
+            // Companion pets are peaceful: catchable at full health by default.
+            petTemplate.setCaptureHealthPercent(CompanionPets.isCompanion(entityType) ? 100D : -1D);
             petTemplate.setSpawnParticle(UniParticle.of(Particle.CLOUD));
             petTemplate.setDespawnParticle(UniParticle.of(Particle.ASH));
             petTemplate.setEatSound(NightSound.of(Sound.ENTITY_GENERIC_EAT));
@@ -486,7 +537,10 @@ public class PetCreator {
             case BEE -> Lists.newSet(FOOD_FLOWERS);
             case CAT, OCELOT, FOX, WOLF, POLAR_BEAR, SPIDER, CAVE_SPIDER, RAVAGER, WARDEN -> Lists.newSet(FOOD_RAW_MEAT,
                 FOOD_RAW_FISH);
-            case CHICKEN -> Lists.newSet(FOOD_WHEAT_SEEDS);
+            case CHICKEN, PARROT -> Lists.newSet(FOOD_WHEAT_SEEDS);
+            case CAMEL -> Lists.newSet(FOOD_WHEAT, FOOD_APPLES);
+            case CAMEL_HUSK -> Lists.newSet(FOOD_ROTTEN_FLESH);
+            case STRIDER -> Lists.newSet(FOOD_MUSHROOMS);
             case COW, LLAMA, TRADER_LLAMA, SHEEP, GOAT -> Lists.newSet(FOOD_WHEAT);
             case CREAKING -> Lists.newSet(FOOD_CREAKING);
             case DONKEY, HORSE, MULE -> Lists.newSet(FOOD_APPLES);

@@ -413,6 +413,12 @@ public class Lang implements LangContainer {
     public static final MessageLocale DUEL_ERROR_NO_PET = LangEntry.builder("Duel.Error.NoPet").chatMessage(
         SOFT_RED.wrap("You need a summoned pet to duel."));
 
+    public static final MessageLocale DUEL_ERROR_COMPANION = LangEntry.builder("Duel.Error.Companion").chatMessage(
+        SOFT_RED.wrap("Your pet is a companion and can't fight in duels."));
+
+    public static final MessageLocale DUEL_ERROR_TARGET_COMPANION = LangEntry.builder("Duel.Error.TargetCompanion").chatMessage(
+        SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + "'s pet is a companion and can't fight in duels."));
+
     public static final MessageLocale DUEL_ERROR_TARGET_NO_PET = LangEntry.builder("Duel.Error.TargetNoPet").chatMessage(
         SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " doesn't have a summoned pet."));
 

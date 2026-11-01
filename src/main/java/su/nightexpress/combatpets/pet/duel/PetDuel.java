@@ -22,6 +22,7 @@ public final class PetDuel {
     private State state;
     private int   countdown;
     private int   secondsLeft;
+    private long  nextStepAt; // System time (ms) of the next once-per-second step of this duel.
 
     public PetDuel(@NonNull Player first, @NonNull ActivePet firstPet, @NonNull Player second, @NonNull ActivePet secondPet,
                    int countdown, int duration) {
@@ -32,6 +33,18 @@ public final class PetDuel {
         this.state = State.COUNTDOWN;
         this.countdown = countdown;
         this.secondsLeft = duration;
+    }
+
+    public boolean isStepDue(long now) {
+        return now >= this.nextStepAt;
+    }
+
+    public void setNextStepAt(long nextStepAt) {
+        this.nextStepAt = nextStepAt;
+    }
+
+    public long getNextStepAt() {
+        return this.nextStepAt;
     }
 
     public boolean involves(@NonNull UUID playerId) {

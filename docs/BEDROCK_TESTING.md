@@ -111,6 +111,10 @@ Mark each line ✅ / ❌ and note anything unexpected.
 - [ ] Sonic boom never hits the owner or the owner's other pets; with `Pets.PVP_Allowed: false` / WorldGuard `pet-pvp: deny` it doesn't hurt players. In a duel it only hits the opponent pet.
 - [ ] Illusioner pet in a fight: turns invisible and shows illusion copies, then keeps shooting.
 - [ ] `Pets.Evoker.Summon_Vexes: true`: Evoker pet casts the summon spell (white particles), up to `Max_Vexes` Vexes appear and attack only the Evoker's target; never the owner or the owner's pets; with PvP off they don't hurt players. In a duel they only hurt the opponent pet. Despawning/returning the Evoker removes them; they don't come back after a restart. Off → fangs only.
+- [ ] Duel countdown: 3, 2 and 1 each stay on screen for a full second (no instant 3 → 2).
+- [ ] Existing server: after updating, `pets/` contains camel, camel_husk, copper_golem, strider and parrot configs; deleting one and restarting doesn't bring it back.
+- [ ] Companion pets: summon, follow owner, never attack (even when hit or with protective/aggressive mode). Copper Golem doesn't sort chests. Right-click does nothing (no riding/taming). `/pets duel` with a companion → "companion" error (both directions).
+- [ ] Capture a wild Parrot/Camel at full health (Health_Percent 100). Set `Capture.Health_Percent: 20` in a pet file → that type needs ≤20% health; `-1` → global setting.
 - [ ] `/pets surrender` during countdown and during the fight → surrenderer gets SURRENDERED + loss, opponent gets VICTORY + win, both pets alive. With `Surrender_Kills_Pet: true` the surrendering pet dies. `/pets surrender` outside a duel → "You are not in a pet duel."
 
 ## 5. Mixed / lifecycle

@@ -41,6 +41,7 @@ public class PetTemplate extends AbstractFileData<PetsPlugin> implements Templat
     private boolean     canHaveEquipment;
     private boolean     capturable;
     private double      captureEscapeChance;
+    private double      captureHealthPercent = -1D;
     private double      captureChance;
     private Set<String> foodCategories;
     private NightSound  eatSound;
@@ -114,6 +115,12 @@ public class PetTemplate extends AbstractFileData<PetsPlugin> implements Templat
         this.setCaptureChance(ConfigValue.create("Capture.Chance",
             30D,
             "Sets the capture chance for this type of pet."
+        ).read(config));
+
+        this.setCaptureHealthPercent(ConfigValue.create("Capture.Health_Percent",
+            -1D,
+            "Max. health (in % of max. health) a mob of this type may have to be captured.",
+            "-1 = use 'Settings.Health_Percent' from the capture config. 100 = can be captured at full health."
         ).read(config));
 
         this.setCaptureEscapeChance(ConfigValue.create("Capture.Escape_Chance",
@@ -201,6 +208,7 @@ public class PetTemplate extends AbstractFileData<PetsPlugin> implements Templat
         config.set("Can_Have_Inventory", this.canHaveInventory());
         config.set("Can_Have_Equipment", this.canHaveEquipment());
         config.set("Catchable", this.isCapturable());
+        config.set("Capture.Health_Percent", this.getCaptureHealthPercent());
         this.getSpawnParticle().write(config, "Spawn_Particle");
         this.getDespawnParticle().write(config, "Despawn_Particle");
         config.set("Saturation.Eat_Sound", this.getEatSound());
@@ -309,6 +317,16 @@ public class PetTemplate extends AbstractFileData<PetsPlugin> implements Templat
     @Override
     public void setCapturable(boolean capturable) {
         this.capturable = capturable;
+    }
+
+    @Override
+    public double getCaptureHealthPercent() {
+        return this.captureHealthPercent;
+    }
+
+    @Override
+    public void setCaptureHealthPercent(double percent) {
+        this.captureHealthPercent = percent;
     }
 
     @Override

@@ -171,7 +171,10 @@ public class CaptureManager extends AbstractManager<PetsPlugin> {
     }
 
     public boolean isReadyToCapture(@NonNull LivingEntity entity) {
-        double maxPercent = CaptureConfig.CAPTURE_HEALTH_PERCENT.get();
+        Template template = this.plugin.getPetManager().getTemplate(entity);
+        double maxPercent = template != null && template.getCaptureHealthPercent() >= 0D
+            ? template.getCaptureHealthPercent()
+            : CaptureConfig.CAPTURE_HEALTH_PERCENT.get();
         if (maxPercent <= 0D || maxPercent >= 100D) return true;
 
         double maxHealth = EntityUtil.getAttribute(entity, Attribute.MAX_HEALTH);

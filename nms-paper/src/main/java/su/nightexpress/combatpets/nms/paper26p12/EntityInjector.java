@@ -87,6 +87,13 @@ public final class EntityInjector {
     }
 
     public static void register() {
+        // Companion-only pets (never fight).
+        addCreator(EntityType.CAMEL, su.nightexpress.combatpets.nms.paper26p12.pets.companion.CamelPet::new);
+        addCreator(EntityType.CAMEL_HUSK, su.nightexpress.combatpets.nms.paper26p12.pets.companion.CamelHuskPet::new);
+        addCreator(EntityType.COPPER_GOLEM, su.nightexpress.combatpets.nms.paper26p12.pets.companion.CopperGolemPet::new);
+        addCreator(EntityType.STRIDER, su.nightexpress.combatpets.nms.paper26p12.pets.companion.StriderPet::new);
+        addCreator(EntityType.PARROT, su.nightexpress.combatpets.nms.paper26p12.pets.companion.ParrotPet::new);
+
         addCreator(EntityType.ALLAY, AllayPet::new);
         //addCreator(EntityType.AXOLOTL, AxolotlPet::new); TODO Reimplement
         addCreator(EntityType.ARMADILLO, ArmadilloPet::new);

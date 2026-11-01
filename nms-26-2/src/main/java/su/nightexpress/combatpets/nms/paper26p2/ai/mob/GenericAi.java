@@ -24,6 +24,27 @@ public final class GenericAi {
         return BrainUtils.brainProvider(pet -> initActivities(type));
     }
 
+    /**
+     * Brain for companion-only pets: follows the owner and idles, never picks targets or fights.
+     */
+    public static <E extends PathfinderMob> Brain.Provider<E> companionBrainProvider(Class<E> type) {
+        return BrainUtils.brainProvider(pet -> List.of(initCoreActivity(type), initCompanionIdleActivity(type)));
+    }
+
+    public static void updateCompanionActivity(PathfinderMob pet) {
+        pet.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.IDLE));
+        pet.setAggressive(false);
+    }
+
+    private static <E extends PathfinderMob> ActivityData<E> initCompanionIdleActivity(Class<E> type) {
+        return ActivityBuilder.init(Activity.IDLE, type)
+            .priorityOfFirstBehavior(10)
+            .goal(IdleActivities.setWalkLookTargetToNearbyOwner())
+            .goal(IdleActivities.teleportToOwnerWhenFarAway())
+            .goal(IdleActivities.createIdleMovementBehaviors())
+            .build();
+    }
+
     public static void updateActivity(PathfinderMob pet) {
         pet.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
         pet.setAggressive(pet.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET));

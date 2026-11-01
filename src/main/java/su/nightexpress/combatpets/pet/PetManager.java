@@ -178,6 +178,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         if (!dir.exists() && dir.mkdirs()) {
             PetCreator.createConfigs(this.plugin);
         }
+        PetCreator.createMissingCompanionConfigs(this.plugin);
 
         for (File config : FileUtil.getConfigFiles(plugin.getDataFolder() + Config.DIR_PETS)) {
             Template petConfig = new PetTemplate(this.plugin, config);

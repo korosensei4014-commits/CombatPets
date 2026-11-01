@@ -63,6 +63,14 @@ public interface Template extends Placeholder {
 
     void setCapturable(boolean capturable);
 
+    /**
+     * @return Max. health (in % of max. health) a mob of this type may have to be captured, or a negative value to use
+     * the global capture setting.
+     */
+    double getCaptureHealthPercent();
+
+    void setCaptureHealthPercent(double percent);
+
     double getCaptureEscapeChance();
 
     void setCaptureEscapeChance(double catchingEscapeChance);

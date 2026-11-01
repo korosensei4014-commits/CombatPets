@@ -202,6 +202,20 @@ Upstream Warden pets only punch. They now also use the vanilla **sonic boom** wh
 - Like vanilla it goes through blocks and ignores armor and shields.
 - Normal pet damage rules apply: `Pets.PVP_Allowed`, the WorldGuard `pet-pvp` flag, no friendly fire, and in a duel only the opponent can be hit.
 
+### Companion-only pets
+
+New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel Husk, Strider, Parrot**.
+
+- Summon, follow, collection, menus, rename, feeding, inventory and Bedrock forms work like any other pet.
+- They never pick a target or attack, whatever the combat mode, and can't be used in duels ("this pet is a companion").
+- Their vanilla behaviour is replaced by the pet AI: a Copper Golem pet doesn't sort chests (and never turns into a statue), Camels/Striders can't be ridden.
+- Existing servers get their pet configs generated automatically on the next start (`pets/<type>.yml`, tracked in `pets/.generated_companions` so a deleted file stays deleted). Their eggs use the default head texture; set `Egg_Skin` in the pet file to change it.
+- Catchable at **full health** by default (`Capture.Health_Percent: 100` in their pet files).
+
+### Per-pet capture health
+
+Every pet file has `Capture.Health_Percent`: the max. health (in % of max.) a wild mob of that type may have to be captured. `-1` (default for existing pets) uses the global `Settings.Health_Percent` from the capture config; `100` means no damage needed. Useful for small mobs like Parrots, Rabbits and Chickens.
+
 ### Evoker Vexes and Illusioner illusions
 
 - **Illusioner pets** now really use their mirror spell (invisibility + illusion copies). Upstream picked the spell by position in Minecraft's code and could get the wrong one.

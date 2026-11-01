@@ -12,6 +12,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.ActivePet;
+import su.nightexpress.combatpets.api.pet.CompanionPets;
 import su.nightexpress.combatpets.bedrock.BedrockManager;
 import su.nightexpress.combatpets.bedrock.BedrockText;
 import su.nightexpress.combatpets.config.Config;
@@ -212,6 +213,14 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
             Lang.DUEL_ERROR_TARGET_NO_PET.message().send(player, replacer -> replacer.replace(PLAYER_NAME, target.getName()));
             return false;
         }
+        if (CompanionPets.isCompanion(this.pets().getPlayerPet(player).getTemplate().getEntityType())) {
+            Lang.DUEL_ERROR_COMPANION.message().send(player);
+            return false;
+        }
+        if (CompanionPets.isCompanion(this.pets().getPlayerPet(target).getTemplate().getEntityType())) {
+            Lang.DUEL_ERROR_TARGET_COMPANION.message().send(player, replacer -> replacer.replace(PLAYER_NAME, target.getName()));
+            return false;
+        }
 
         double maxDistance = Config.PET_DUEL_MAX_DISTANCE.get();
         if (!player.getWorld().equals(target.getWorld()) || player.getLocation().distanceSquared(target.getLocation()) > maxDistance * maxDistance) {
@@ -341,7 +350,10 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
         PetDuel duel = new PetDuel(first, firstPet, second, secondPet,
             Math.max(0, Config.PET_DUEL_COUNTDOWN.get()), Math.max(10, Config.PET_DUEL_MAX_DURATION.get()));
         this.duels.add(duel);
-        this.tickDuel(duel); // Shows the first countdown number immediately.
+        // Shows the first countdown number immediately; every next step follows exactly 1 second later
+        // (each duel has its own clock, so the first number is never cut short).
+        duel.setNextStepAt(System.currentTimeMillis() + 1000L);
+        this.tickDuel(duel);
     }
 
     private static void heal(@NonNull ActivePet pet) {
@@ -357,7 +369,15 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
      * after being hit by a Ghast), which made it stop fighting until the next once-per-second refresh.
      */
     private void tickTargets() {
-        for (PetDuel duel : this.duels) {
+        long now = System.currentTimeMillis();
+        for (PetDuel duel : new ArrayList<>(this.duels)) {
+            // Once-per-second duel step (countdown, checks, timer), timed per duel.
+            if (duel.isStepDue(now)) {
+                duel.setNextStepAt(Math.max(duel.getNextStepAt() + 1000L, now));
+                this.tickDuel(duel);
+                if (!this.duels.contains(duel)) continue;
+            }
+
             if (!duel.isFighting()) continue;
 
             this.keepTarget(duel.getFirstPet(), duel.getSecondPet());
@@ -388,7 +408,7 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
             }
         });
 
-        new ArrayList<>(this.duels).forEach(this::tickDuel);
+        // Duels are stepped by their own clocks in tickTargets().
     }
 
     private void tickDuel(@NonNull PetDuel duel) {
