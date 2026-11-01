@@ -81,8 +81,7 @@ public class GhastPet extends Ghast implements PetEntity {
 
         /**
          * Hover a few blocks away from the target instead of on top of it, so fireballs can reach it.
-         * Ground targets: slightly above them. Flying targets (e.g. a Wither, which always rises above its target):
-         * stay at a fixed height above the owner instead of chasing them upwards.
+         * Ground targets: slightly above them. Flying targets: hold position above the owner.
          */
         private void keepFightPosition(LivingEntity target) {
             // Ghasts use ground navigation, which would overwrite the wanted position with ground-level path points.
@@ -99,13 +98,14 @@ public class GhastPet extends Ghast implements PetEntity {
 
             double x = target.getX() + dx / length * FIGHT_DISTANCE;
             double z = target.getZ() + dz / length * FIGHT_DISTANCE;
-            double y;
-            if (target.onGround() || target.isInWater()) {
-                y = target.getY() + 3D;
-            }
-            else {
-                org.bukkit.entity.Player owner = this.petHolder.getOwner();
-                y = (owner != null ? owner.getLocation().getY() : target.getY()) + 4D;
+            double y = target.getY() + 3D;
+            if (!target.onGround() && !target.isInWater()) {
+                // Flying targets (Wither, Phantom, another Ghast, ...) come to the Ghast anyway. Hold position above
+                // the owner instead of backing away, otherwise the target chases the Ghast and its shots miss.
+                org.bukkit.Location owner = this.petHolder.getOwner().getLocation();
+                x = owner.getX();
+                y = owner.getY() + 5D;
+                z = owner.getZ();
             }
 
             this.ghast.getMoveControl().setWantedPosition(x, y, z, 1D);

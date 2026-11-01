@@ -101,6 +101,7 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
     protected void onLoad() {
         this.addListener(new DuelListener(this.plugin, this));
         this.addTask(this.plugin.createTask(this::tick).setSecondsInterval(1));
+        this.addTask(this.plugin.createTask(this::tickTargets).setTicksInterval(2L));
     }
 
     @Override
@@ -349,6 +350,28 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
         double max = attribute == null ? pet.getMaxHealth() : attribute.getValue();
         entity.setHealth(Math.max(1D, max));
         pet.updateHealthBar();
+    }
+
+    /**
+     * Keeps fighting duel pets locked on each other. Some pet AI drops its target (e.g. a Wither clears it right
+     * after being hit by a Ghast), which made it stop fighting until the next once-per-second refresh.
+     */
+    private void tickTargets() {
+        for (PetDuel duel : this.duels) {
+            if (!duel.isFighting()) continue;
+
+            this.keepTarget(duel.getFirstPet(), duel.getSecondPet());
+            this.keepTarget(duel.getSecondPet(), duel.getFirstPet());
+        }
+    }
+
+    private void keepTarget(@NonNull ActivePet pet, @NonNull ActivePet opponent) {
+        LivingEntity entity = pet.getEntity();
+        LivingEntity target = opponent.getEntity();
+        if (!entity.isValid() || entity.isDead() || !target.isValid() || target.isDead()) return;
+        if (entity instanceof org.bukkit.entity.Mob mob && mob.getTarget() == target) return;
+
+        this.plugin.getPetNMS().setAttackTarget(entity, target);
     }
 
     private void tick() {

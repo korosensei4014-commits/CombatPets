@@ -124,7 +124,7 @@ Players can make their pets fight each other with **`/pets duel <player>`** (per
 **Surrender:** `/pets surrender` gives up your current duel (countdown or fight). It counts as a **loss** for you and a **win** for your opponent. Your pet **survives** by default; set `Pets.Duel.Surrender_Kills_Pet: true` to make it die like a real loss.
 
 Other endings, all without a winner and without any pet dying:
-- **Time limit:** after `Pets.Duel.Max_Duration` seconds the duel ends in a **draw**.
+- **Time limit:** after `Pets.Duel.Max_Duration` seconds (default 120) the duel ends in a **draw**. Raise it for pets with a lot of health.
 - **Cancelled:** a player logs out or dies, a pet is no longer summoned, or the pets get more than twice `Max_Distance` apart.
 
 **Turning duels off:** players who don't want duels can use **`/pets duels off`**. All challenges to them are then declined automatically, with no popup; the challenger sees "<player> isn't accepting pet duels." `/pets duels on` turns them back on, and `/pets duels` alone toggles.
@@ -188,7 +188,9 @@ With `Pets.Attack_Damage_For_Projectiles: true` (upstream default), a pet's proj
 
 **Fire-immune targets:** in vanilla a fireball's hit is fire damage, so the Wither, Warden, Ghast, Blaze and other fire-immune mobs take nothing from it (only from the small explosion, which rarely reaches). With `Pets.Fireballs_Ignore_Fire_Immunity: true`, a pet's fireball that hits a target the pet may attack deals its hit as normal projectile damage (Ghast 6, Blaze 5, before the rules above). Fire immunity still works for everything else.
 
-**Ghast pets** now keep about 8 blocks from their target (a few blocks above ground targets, at a fixed height above the owner for flying targets) instead of sitting on top of it, and shoot from the side facing the target, straight at it.
+**Ghast pets** now keep about 8 blocks from ground targets (a few blocks above them) instead of sitting on top of them, and hover above their owner against flying targets. They shoot from the side facing the target, straight at it.
+
+**Wither pets** no longer break blocks around them after taking damage (`Pets.Wither.Destroy_Blocks: false`; set `true` for vanilla behaviour).
 
 ### Warden sonic boom
 
@@ -201,6 +203,8 @@ Upstream Warden pets only punch. They now also use the vanilla **sonic boom** wh
 ```yaml
 Pets:
   Fireballs_Ignore_Fire_Immunity: true
+  Wither:
+    Destroy_Blocks: false
   Warden:
     Sonic_Boom: true          # false = Warden pets only use melee (upstream behaviour)
     Sonic_Boom_Damage: 10.0   # vanilla: 10

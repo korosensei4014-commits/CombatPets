@@ -3,6 +3,7 @@ package su.nightexpress.combatpets.pet.listener;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockIgniteEvent;
@@ -162,6 +163,17 @@ public class PetGenericListener extends AbstractListener<PetsPlugin> {
 
         if (event.getEntity() instanceof LivingEntity entity) {
             event.setCancelled(this.petManager.isPetEntity(entity));
+        }
+    }
+
+    // Wither pets break blocks around them after taking damage (vanilla). Off by default.
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPetWitherBreakBlocks(EntityChangeBlockEvent event) {
+        if (Config.PET_WITHER_DESTROY_BLOCKS.get()) return;
+        if (!(event.getEntity() instanceof Wither wither)) return;
+
+        if (this.petManager.isPetEntity(wither)) {
+            event.setCancelled(true);
         }
     }
 

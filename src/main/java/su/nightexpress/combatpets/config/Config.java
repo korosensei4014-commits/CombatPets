@@ -108,6 +108,12 @@ public class Config {
         "Fire immunity still works for everything else (lava, burning, vanilla mobs' fireballs)."
     );
 
+    public static final ConfigValue<Boolean> PET_WITHER_DESTROY_BLOCKS = ConfigValue.create("Pets.Wither.Destroy_Blocks",
+        false,
+        "When disabled, Wither pets don't break blocks around them after taking damage (vanilla Wither behaviour).",
+        "Explosions from pets never break blocks either way."
+    );
+
     public static final ConfigValue<Boolean> PET_WARDEN_SONIC_BOOM = ConfigValue.create("Pets.Warden.Sonic_Boom",
         true,
         "When enabled, Warden pets use the vanilla sonic boom when they can't hit their target in melee",

@@ -105,6 +105,8 @@ Mark each line ✅ / ❌ and note anything unexpected.
 - [ ] Ghast vs Wither duel: fireballs and wither skulls visibly damage the other pet, neither regenerates, and the duel ends with a winner (not a draw).
 - [ ] Ghast pet vs Warden / Wither pet: the Ghast keeps ~8 blocks away (not on top), fireballs fly from its face to the target and deal damage (Warden/Wither health drops). `Fireballs_Ignore_Fire_Immunity: false` → back to no damage.
 - [ ] Ghast pet vs Zombie pet still works as before.
+- [ ] Ghast pet vs Wither pet: the Wither keeps attacking the Ghast after being hit (rises above it and fires skulls); the Ghast hovers above its owner.
+- [ ] Wither pet taking damage near blocks → no blocks break. `Pets.Wither.Destroy_Blocks: true` → vanilla breaking.
 - [ ] Warden pet vs a flying pet, or a player pillaring 3+ blocks up: after ~2 s without melee hits, the Warden charges and sonic booms (particles, sound, damage, knockback). While it can punch, it doesn't boom. `Sonic_Boom: false` → never. `Sonic_Boom_Damage` changes the damage.
 - [ ] Sonic boom never hits the owner or the owner's other pets; with `Pets.PVP_Allowed: false` / WorldGuard `pet-pvp: deny` it doesn't hurt players. In a duel it only hits the opponent pet.
 - [ ] `/pets surrender` during countdown and during the fight → surrenderer gets SURRENDERED + loss, opponent gets VICTORY + win, both pets alive. With `Surrender_Kills_Pet: true` the surrendering pet dies. `/pets surrender` outside a duel → "You are not in a pet duel."
