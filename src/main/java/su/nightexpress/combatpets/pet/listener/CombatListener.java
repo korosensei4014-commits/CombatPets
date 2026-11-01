@@ -61,7 +61,7 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
         if (damager == null) return;
 
         // Vexes summoned by an Evoker pet follow the Evoker's damage rules.
-        if (damager instanceof Vex vex && vex.getOwner() instanceof LivingEntity summoner && this.petManager.getPetByMob(summoner) != null) {
+        if (damager instanceof Vex vex && vex.getSummoner() instanceof LivingEntity summoner && this.petManager.getPetByMob(summoner) != null) {
             damager = summoner;
         }
 
