@@ -74,6 +74,12 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
         double add = origin * mod;
         double atkDamage = activePet.getAttackDamage() + add;
 
+        // Pets without a melee attack (Ghast, Wither, ...) have Attack Damage 1, which made their projectiles
+        // much weaker than vanilla. Optionally never go below the projectile's normal damage.
+        if (Config.PET_PROJECTILE_DAMAGE_NOT_BELOW_ORIGINAL.get()) {
+            atkDamage = Math.max(origin, atkDamage);
+        }
+
         event.setDamage(atkDamage);
     }
 }

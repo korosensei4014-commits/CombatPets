@@ -15,7 +15,8 @@ import su.nightexpress.nightcore.commands.builder.HubNodeBuilder;
 public class DuelCommands {
 
     private static final String DUEL  = "duel";
-    private static final String DUELS = "duels";
+    private static final String DUELS     = "duels";
+    private static final String SURRENDER = "surrender";
     private static final String STATE = "state";
 
     /**
@@ -31,6 +32,17 @@ public class DuelCommands {
                 Player player = context.getPlayerOrThrow();
                 Player target = arguments.getPlayer(CommandArguments.PLAYER);
                 manager.handleCommand(player, target);
+                return true;
+            })
+        );
+
+        // /pets surrender - give up the current duel.
+        rootNode.branch(Commands.literal(SURRENDER)
+            .description(Lang.COMMAND_SURRENDER_DESC)
+            .permission(Perms.COMMAND_DUEL)
+            .playerOnly()
+            .executes((context, arguments) -> {
+                manager.surrender(context.getPlayerOrThrow());
                 return true;
             })
         );

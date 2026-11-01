@@ -2,6 +2,7 @@ package su.nightexpress.combatpets.pet.duel;
 
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.SoundCategory;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -396,6 +397,12 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
                     .replace(GENERIC_TIME, String.valueOf(count)).replace(PLAYER_NAME, second.getName()));
                 Lang.DUEL_COUNTDOWN.message().send(second, replacer -> replacer
                     .replace(GENERIC_TIME, String.valueOf(count)).replace(PLAYER_NAME, first.getName()));
+
+                // Rising pitch: ... 3 = 0.8, 2 = 1.0, 1 = 1.2
+                float pitch = (float) Math.max(0.5D, Math.min(2D, 1.4D - count * 0.2D));
+                playSound(first, Config.PET_DUEL_SOUND_COUNTDOWN.get(), pitch);
+                playSound(second, Config.PET_DUEL_SOUND_COUNTDOWN.get(), pitch);
+
                 duel.setCountdown(count - 1);
                 return;
             }
@@ -405,6 +412,8 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
                 .replace(PET_NAME, duel.getFirstPet().getName()).replace(PLAYER_NAME, second.getName()));
             Lang.DUEL_START.message().send(second, replacer -> replacer
                 .replace(PET_NAME, duel.getSecondPet().getName()).replace(PLAYER_NAME, first.getName()));
+            playSound(first, Config.PET_DUEL_SOUND_START.get(), 2F);
+            playSound(second, Config.PET_DUEL_SOUND_START.get(), 2F);
         }
 
         // Fighting: keep both pets on each other (AI may drop targets, e.g. after losing sight).
@@ -417,6 +426,8 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
             this.stopDuel(duel);
             Lang.DUEL_DRAW.message().send(first);
             Lang.DUEL_DRAW.message().send(second);
+            playSound(first, Config.PET_DUEL_SOUND_DRAW.get(), 1F);
+            playSound(second, Config.PET_DUEL_SOUND_DRAW.get(), 1F);
         }
     }
 
@@ -450,10 +461,12 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
         if (winner != null) {
             Lang.DUEL_WIN.message().send(winner, replacer -> replacer
                 .replace(PET_NAME, winnerPet.getName()).replace(PLAYER_NAME, loserName));
+            playSound(winner, Config.PET_DUEL_SOUND_WIN.get(), 1F);
         }
         if (loser != null) {
             Lang.DUEL_LOSE.message().send(loser, replacer -> replacer
                 .replace(PET_NAME, loserPet.getName()).replace(PLAYER_NAME, winnerName));
+            playSound(loser, Config.PET_DUEL_SOUND_LOSE.get(), 1F);
         }
     }
 
@@ -467,6 +480,62 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
         if (owner != null) {
             PetUser user = this.plugin.getUserManager().getOrFetch(owner);
             this.plugin.getUserManager().save(user);
+        }
+    }
+
+    /**
+     * {@code /pets surrender}: the player gives up their current duel. The opponent wins and it counts as a loss.
+     * The surrendering pet survives unless Pets.Duel.Surrender_Kills_Pet is enabled.
+     */
+    public void surrender(@NonNull Player player) {
+        PetDuel duel = this.getDuel(player);
+        if (duel == null) {
+            Lang.DUEL_ERROR_NOT_IN_DUEL.message().send(player);
+            return;
+        }
+
+        boolean first = duel.getFirstId().equals(player.getUniqueId());
+        ActivePet loserPet = first ? duel.getFirstPet() : duel.getSecondPet();
+
+        if (Config.PET_DUEL_SURRENDER_KILLS_PET.get()) {
+            // Real death: the normal death flow records the result and shows victory / defeat.
+            duel.setState(PetDuel.State.FIGHTING);
+            loserPet.getEntity().setHealth(0D);
+            return;
+        }
+
+        ActivePet winnerPet = first ? duel.getSecondPet() : duel.getFirstPet();
+        Player winner = this.plugin.getServer().getPlayer(first ? duel.getSecondId() : duel.getFirstId());
+
+        this.stopDuel(duel);
+        this.recordResult(winner, winnerPet, true);
+        this.recordResult(player, loserPet, false);
+
+        Lang.DUEL_SURRENDER_LOSE.message().send(player, replacer -> replacer.replace(PLAYER_NAME, winner == null ? "?" : winner.getName()));
+        playSound(player, Config.PET_DUEL_SOUND_LOSE.get(), 1F);
+        if (winner != null) {
+            Lang.DUEL_SURRENDER_WIN.message().send(winner, replacer -> replacer.replace(PLAYER_NAME, player.getName()));
+            playSound(winner, Config.PET_DUEL_SOUND_WIN.get(), 1F);
+        }
+    }
+
+    /**
+     * @return true if healing of this entity should be blocked (it's a pet in a duel and healing is disabled).
+     */
+    public boolean isHealingBlocked(@NonNull LivingEntity entity) {
+        if (!Config.PET_DUEL_DISABLE_HEALING.get()) return false;
+
+        ActivePet pet = this.pets().getPetByMob(entity);
+        return pet != null && this.isInDuel(pet);
+    }
+
+    private static void playSound(@NonNull Player player, @Nullable String sound, float pitch) {
+        if (sound == null || sound.isBlank()) return;
+        try {
+            player.playSound(player.getLocation(), sound.trim(), SoundCategory.PLAYERS, 1F, pitch);
+        }
+        catch (IllegalArgumentException ignored) {
+            // Invalid sound key in config: ignore.
         }
     }
 

@@ -111,6 +111,38 @@ public class Config {
         "Whether players accept duel challenges until they change it with '/pets duels on|off'.",
         "Players who already changed the setting keep their choice.");
 
+    public static final ConfigValue<Boolean> PET_DUEL_DISABLE_HEALING = ConfigValue.create("Pets.Duel.Disable_Healing",
+        true,
+        "Disables all healing of the two pets during a duel (pet regeneration, the Wither's self-heal, etc.).",
+        "Pets are healed to full when the duel starts."
+    );
+
+    public static final ConfigValue<Boolean> PET_DUEL_SURRENDER_KILLS_PET = ConfigValue.create("Pets.Duel.Surrender_Kills_Pet",
+        false,
+        "When false, '/pets surrender' ends the duel as a loss but the surrendering pet survives.",
+        "When true, the surrendering pet dies like it lost the fight."
+    );
+
+    public static final ConfigValue<String> PET_DUEL_SOUND_COUNTDOWN = ConfigValue.create("Pets.Duel.Sounds.Countdown",
+        "minecraft:block.note_block.pling",
+        "Sound played on each countdown number (pitch rises: 3, 2, 1). Leave empty to disable.");
+
+    public static final ConfigValue<String> PET_DUEL_SOUND_START = ConfigValue.create("Pets.Duel.Sounds.Start",
+        "minecraft:block.note_block.pling",
+        "Sound played when the fight starts (high pitch). Leave empty to disable.");
+
+    public static final ConfigValue<String> PET_DUEL_SOUND_WIN = ConfigValue.create("Pets.Duel.Sounds.Win",
+        "minecraft:ui.toast.challenge_complete",
+        "Sound played to the winner. Leave empty to disable.");
+
+    public static final ConfigValue<String> PET_DUEL_SOUND_LOSE = ConfigValue.create("Pets.Duel.Sounds.Lose",
+        "minecraft:block.note_block.didgeridoo",
+        "Sound played to the loser (also when surrendering). Leave empty to disable.");
+
+    public static final ConfigValue<String> PET_DUEL_SOUND_DRAW = ConfigValue.create("Pets.Duel.Sounds.Draw",
+        "minecraft:block.note_block.bell",
+        "Sound played to both players on a draw. Leave empty to disable.");
+
     public static final ConfigValue<Integer> PET_DUEL_REQUEST_TIMEOUT = ConfigValue.create("Pets.Duel.Request_Timeout",
         30,
         "Seconds a duel challenge stays valid.");
@@ -138,6 +170,14 @@ public class Config {
         "Sets whether or not pet's 'Attack Damage' attribute will override damage for ranged (non-melee) attacks.",
         "By default, game does not uses 'Attack Damage' attribute when you (or mob) shoot arrows, fireballs, tridents, etc.",
         "This setting will change that."
+    );
+
+    public static final ConfigValue<Boolean> PET_PROJECTILE_DAMAGE_NOT_BELOW_ORIGINAL = ConfigValue.create("Pets.Projectile_Damage_Not_Below_Original",
+        true,
+        "[ONLY WHEN 'Attack_Damage_For_Projectiles' IS ENABLED]",
+        "When enabled, pet projectiles never deal less than their normal (vanilla) damage.",
+        "Without this, pets with no melee attack (Ghast, Wither, Blaze, ...) have Attack Damage 1,",
+        "so e.g. a Ghast fireball (6 damage) only deals ~2.5."
     );
 
     public static final ConfigValue<Double> PET_ORIGINAL_DAMAGE_FROM_PROJECTILES = ConfigValue.create("Pets.Original_Damage_From_Projectiles",

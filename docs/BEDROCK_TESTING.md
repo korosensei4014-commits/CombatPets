@@ -101,6 +101,9 @@ Mark each line ✅ / ❌ and note anything unexpected.
 - [ ] `/pets duels off` → challenges to you are declined automatically (challenger sees "isn't accepting"), you can't challenge others; pending challenges to you are dropped. `/pets duels on` / `/pets duels` toggle back. Setting survives relog + restart.
 - [ ] Bedrock Pet Settings toggle "Accept Pet Duel Challenges"; Java Pet Menu "Duel Challenges" button; `%combatpets_duels_enabled%` shows On/Off.
 - [ ] Stats in Bedrock Pet Menu/collection, `%combatpets_duel_wins%` etc. with PlaceholderAPI.
+- [ ] Countdown plays a pling on 3, 2, 1 (rising pitch) and a high pling on FIGHT; win/lose/draw sounds play. Empty sound in config → silent, invalid key → no error.
+- [ ] Ghast vs Wither duel: fireballs and wither skulls visibly damage the other pet, neither regenerates, and the duel ends with a winner (not a draw).
+- [ ] `/pets surrender` during countdown and during the fight → surrenderer gets SURRENDERED + loss, opponent gets VICTORY + win, both pets alive. With `Surrender_Kills_Pet: true` the surrendering pet dies. `/pets surrender` outside a duel → "You are not in a pet duel."
 
 ## 5. Mixed / lifecycle
 

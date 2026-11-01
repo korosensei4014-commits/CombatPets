@@ -117,9 +117,11 @@ Players can make their pets fight each other with **`/pets duel <player>`** (per
 
 1. **Challenge:** `/pets duel Steve`. Both players need a summoned pet and must be within `Pets.Duel.Max_Distance` blocks of each other.
 2. **Accept:** Steve gets an **Accept / Decline** screen (a dialog on Java, a form on Bedrock) showing both pets. He can also accept by typing `/pets duel <challenger>`. Challenges expire after `Pets.Duel.Request_Timeout` seconds.
-3. **Countdown:** both pets are healed to full, then a 3… 2… 1… **FIGHT!** title appears.
-4. **Fight:** the pets attack only each other. Nothing else can interfere: players, other pets and mobs can't hurt them, and they can't hurt anything else. Owners can't feed or return their pet during the fight.
+3. **Countdown:** both pets are healed to full, then a 3… 2… 1… **FIGHT!** title appears, with a note-block "pling" on every number (rising pitch) and a high pling at the start.
+4. **Fight:** the pets attack only each other. **No healing** during the fight (pet regeneration and the Wither's self-heal are blocked, `Pets.Duel.Disable_Healing`), so fights between tanky pets actually end. Nothing else can interfere: players, other pets and mobs can't hurt them, and they can't hurt anything else. Owners can't feed or return their pet during the fight.
 5. **Result:** the losing pet **really dies**, using the server's normal pet death rules (revive cost, auto-revive time, `Pets.Permanent_Death`, item drops). The winner gets a **VICTORY** title, the loser **DEFEAT**.
+
+**Surrender:** `/pets surrender` gives up your current duel (countdown or fight). It counts as a **loss** for you and a **win** for your opponent. Your pet **survives** by default; set `Pets.Duel.Surrender_Kills_Pet: true` to make it die like a real loss.
 
 Other endings, all without a winner and without any pet dying:
 - **Time limit:** after `Pets.Duel.Max_Duration` seconds the duel ends in a **draw**.
@@ -168,9 +170,21 @@ Pets:
     Countdown: 3          # seconds
     Max_Duration: 120     # seconds, then draw
     Max_Distance: 24.0    # blocks between players to start; cancelled at 2x between pets
+    Disable_Healing: true # no regeneration / self-heal during the fight
+    Surrender_Kills_Pet: false
+    Sounds:               # any sound key; empty = no sound
+      Countdown: minecraft:block.note_block.pling   # 3, 2, 1 with rising pitch
+      Start: minecraft:block.note_block.pling       # high pitch on FIGHT!
+      Win: minecraft:ui.toast.challenge_complete
+      Lose: minecraft:block.note_block.didgeridoo
+      Draw: minecraft:block.note_block.bell
 ```
 
-Texts are in the language file under `Duel.*` and `Command.Duel.Desc`.
+Texts are in the language file under `Duel.*`, `Command.Duel.Desc` and `Command.Surrender.Desc`.
+
+### Ranged pets (Ghast, Wither, Blaze, …)
+
+With `Pets.Attack_Damage_For_Projectiles: true` (upstream default), a pet's projectile damage is replaced by the pet's **Attack Damage** + 25% of the projectile's normal damage. Pets without a melee attack have Attack Damage **1**, so a Ghast fireball (normally 6+) only did ~2.5, less than the target regenerated. This fork adds `Pets.Projectile_Damage_Not_Below_Original: true`: projectiles never deal **less** than their normal damage. This applies everywhere, not only in duels, so ranged pets are a bit stronger in normal combat too. Set it to `false` for the upstream behaviour.
 
 ## Pet XP: scaled by mob health
 

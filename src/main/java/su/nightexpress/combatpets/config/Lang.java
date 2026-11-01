@@ -428,6 +428,19 @@ public class Lang implements LangContainer {
     public static final MessageLocale DUEL_ERROR_ALREADY_SENT = LangEntry.builder("Duel.Error.AlreadySent").chatMessage(
         SOFT_RED.wrap("You already challenged " + SOFT_YELLOW.wrap(PLAYER_NAME) + ". Wait for an answer."));
 
+    public static final TextLocale COMMAND_SURRENDER_DESC = LangEntry.builder("Command.Surrender.Desc").text("Surrender your current pet duel.");
+
+    public static final MessageLocale DUEL_ERROR_NOT_IN_DUEL = LangEntry.builder("Duel.Error.NotInDuel").chatMessage(
+        SOFT_RED.wrap("You are not in a pet duel."));
+
+    public static final MessageLocale DUEL_SURRENDER_LOSE = LangEntry.builder("Duel.Surrender.Lose").titleMessage(
+        SOFT_RED.wrap(BOLD.wrap("SURRENDERED")),
+        GRAY.wrap("You gave up the duel against " + SOFT_YELLOW.wrap(PLAYER_NAME) + "."));
+
+    public static final MessageLocale DUEL_SURRENDER_WIN = LangEntry.builder("Duel.Surrender.Win").titleMessage(
+        SOFT_GREEN.wrap(BOLD.wrap("VICTORY!")),
+        GRAY.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " surrendered the duel."));
+
     public static final MessageLocale DUEL_ERROR_CANT_DESPAWN = LangEntry.builder("Duel.Error.CantDespawn").chatMessage(
         SOFT_RED.wrap("You can't return your pet during a duel."));
 

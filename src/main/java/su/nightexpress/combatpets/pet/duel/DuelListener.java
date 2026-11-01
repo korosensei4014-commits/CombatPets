@@ -2,6 +2,8 @@ package su.nightexpress.combatpets.pet.duel;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jspecify.annotations.NonNull;
@@ -16,6 +18,14 @@ public class DuelListener extends AbstractListener<PetsPlugin> {
     public DuelListener(@NonNull PetsPlugin plugin, @NonNull DuelManager manager) {
         super(plugin);
         this.manager = manager;
+    }
+
+    // No healing during duels (pet regeneration, Wither self-heal, ...), so fights actually end.
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onDuelPetHeal(EntityRegainHealthEvent event) {
+        if (event.getEntity() instanceof LivingEntity entity && this.manager.isHealingBlocked(entity)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
