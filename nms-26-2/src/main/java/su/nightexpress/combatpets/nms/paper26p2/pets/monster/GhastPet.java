@@ -76,6 +76,43 @@ public class GhastPet extends Ghast implements PetEntity {
             this.ghast.setCharging(false);
         }
 
+        // While fighting, the Ghast keeps this distance (blocks, horizontal) from its target.
+        private static final double FIGHT_DISTANCE = 8D;
+
+        /**
+         * Hover a few blocks away from the target instead of on top of it, so fireballs can reach it.
+         * Ground targets: slightly above them. Flying targets (e.g. a Wither, which always rises above its target):
+         * stay at a fixed height above the owner instead of chasing them upwards.
+         */
+        private void keepFightPosition(LivingEntity target) {
+            // Ghasts use ground navigation, which would overwrite the wanted position with ground-level path points.
+            this.ghast.getNavigation().stop();
+
+            double dx = this.ghast.getX() - target.getX();
+            double dz = this.ghast.getZ() - target.getZ();
+            double length = Math.sqrt(dx * dx + dz * dz);
+            if (length < 0.1D) {
+                dx = 1D;
+                dz = 0D;
+                length = 1D;
+            }
+
+            double x = target.getX() + dx / length * FIGHT_DISTANCE;
+            double z = target.getZ() + dz / length * FIGHT_DISTANCE;
+            double y;
+            if (target.onGround() || target.isInWater()) {
+                y = target.getY() + 3D;
+            }
+            else {
+                org.bukkit.entity.Player owner = this.petHolder.getOwner();
+                y = (owner != null ? owner.getLocation().getY() : target.getY()) + 4D;
+            }
+
+            this.ghast.getMoveControl().setWantedPosition(x, y, z, 1D);
+            this.ghast.getLookControl().setLookAt(target, 30F, 30F);
+            this.ghast.lookAt(target, 30F, 30F);
+        }
+
         @Override
         public boolean requiresUpdateEveryTick() {
             return true;
@@ -85,6 +122,8 @@ public class GhastPet extends Ghast implements PetEntity {
         public void tick() {
             LivingEntity target = this.ghast.getTarget();
             if (target == null) return;
+
+            this.keepFightPosition(target);
 
             if (target.distanceToSqr(this.ghast) < 4096 && this.ghast.hasLineOfSight(target)) {
                 Level world = this.ghast.level();
@@ -134,14 +173,13 @@ public class GhastPet extends Ghast implements PetEntity {
             super(pet);
         }
 
-        // While fighting, the Ghast keeps this distance (blocks, horizontal) from its target.
-        private static final double FIGHT_DISTANCE = 8D;
-
+        // Only follows the owner. While the Ghast has a target, the shooting goal moves it
+        // (both goals use the MOVE flag, so this one must stop or the Ghast never shoots).
         @Override
         public boolean canUse() {
             LivingEntity target = this.pet.getTarget();
             if (target != null && target.isAlive()) {
-                return true;
+                return false;
             }
             //LivingEntity target = this.pet.getTarget();
             //if (target != null && target.isAlive()) return false;
@@ -169,7 +207,8 @@ public class GhastPet extends Ghast implements PetEntity {
 
         @Override
         public boolean canContinueToUse() {
-            return true;
+            LivingEntity target = this.pet.getTarget();
+            return target == null || !target.isAlive();
         }
 
         @Override
@@ -189,7 +228,6 @@ public class GhastPet extends Ghast implements PetEntity {
             LivingEntity follow = this.owner;
             LivingEntity target = this.pet.getTarget();
             if (target != null && target.isAlive()) {
-                this.tickFight(target);
                 return;
             }
 
@@ -206,27 +244,5 @@ public class GhastPet extends Ghast implements PetEntity {
             this.pet.lookAt(follow, 30f, 30f);
         }
 
-        /**
-         * Hover a few blocks away from the target instead of on top of it, so fireballs can reach it.
-         * Ground targets: slightly above them. Flying targets (e.g. a Wither, which always rises above its target):
-         * stay at a fixed height above the owner instead of chasing them upwards.
-         */
-        private void tickFight(LivingEntity target) {
-            double dx = this.pet.getX() - target.getX();
-            double dz = this.pet.getZ() - target.getZ();
-            double length = Math.sqrt(dx * dx + dz * dz);
-            if (length < 0.1D) {
-                dx = 1D;
-                dz = 0D;
-                length = 1D;
-            }
-
-            double x = target.getX() + dx / length * FIGHT_DISTANCE;
-            double z = target.getZ() + dz / length * FIGHT_DISTANCE;
-            double y = target.onGround() || target.isInWater() ? target.getY() + 3D : this.owner.getY() + 4D;
-
-            this.pet.getMoveControl().setWantedPosition(x, y, z, 1D);
-            this.pet.lookAt(target, 30f, 30f);
-        }
     }
 }
