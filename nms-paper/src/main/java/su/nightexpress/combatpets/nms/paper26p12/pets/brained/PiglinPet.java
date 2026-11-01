@@ -41,10 +41,9 @@ public class PiglinPet extends Piglin implements PetEntity {
         return this.sharedData;
     }
 
-    // TODO Crossbow Attack
-
+    // Melee, plus the vanilla crossbow attack when holding a crossbow.
     protected Brain.Provider<Piglin> brainProvider() {
-        return GenericAi.brainProvider(Piglin.class);
+        return GenericAi.crossbowBrainProvider(Piglin.class);
     }
 
     @Override

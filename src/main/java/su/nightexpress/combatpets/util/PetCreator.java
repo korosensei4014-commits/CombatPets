@@ -447,8 +447,30 @@ public class PetCreator {
         return itemStack;
     }
 
+    public static final String DEFAULT_SKIN = "c48d7d177f256ce10002ba9706068b93e337da24c85626c5af832021245f7a02";
+
+    /**
+     * Companion pet configs created before they had their own egg heads use the default (duck) head.
+     * Give them their proper head; custom heads set by the server owner are kept.
+     */
+    public static void fixCompanionEggSkins(@NonNull PetsPlugin plugin, java.util.@NonNull Collection<? extends su.nightexpress.combatpets.api.pet.Template> templates) {
+        for (su.nightexpress.combatpets.api.pet.Template template : templates) {
+            if (!CompanionPets.isCompanion(template.getEntityType())) continue;
+            if (!DEFAULT_SKIN.equals(template.getEggTexture())) continue;
+
+            String skin = getSkinURL(template.getEntityType());
+            if (skin.equals(DEFAULT_SKIN)) continue;
+
+            template.setEggTexture(skin);
+            if (template instanceof PetTemplate petTemplate) {
+                petTemplate.save();
+            }
+            plugin.info("Updated egg head of companion pet: " + template.getId());
+        }
+    }
+
     @NonNull
-    private static String getSkinURL(@NonNull EntityType type) {
+    public static String getSkinURL(@NonNull EntityType type) {
         //        if (Version.isAtLeast(Version.MC_1_21)) {
         //            String raw = BukkitThing.toString(type);
         //
@@ -463,6 +485,11 @@ public class PetCreator {
             case ARMADILLO -> "9852b33ba294f560090752d113fe728cbc7dd042029a38d5382d65a2146068b7";
             case AXOLOTL -> "21c3aa0d539208b47972bf8e72f0505cdcfb8d7796b2fcf85911ce94fd0193d0";
             case BEE -> "cce9edbbc5fdc0d8487ac72eab239d2cacfe408d74288d6384b044111ba4de0f";
+            case CAMEL -> "ba4c95bfa0b61722255389141b505cf1a38bad9b0ef543de619f0cc9221ed974";
+            case CAMEL_HUSK -> "3bd7a92a6f67b7500d16c4e12f28058ec2859311556ba03be2d1f581170f2db6";
+            case COPPER_GOLEM -> "248e0f9eb24a10600729438dd99997839e1a99e276d76e32fd434bdb5f54296c";
+            case PARROT -> "2b94f236c4a642eb2bcdc3589b9c3c4a0b5bd5df9cd5d68f37f8c83f8e3f1";
+            case STRIDER -> "125851a86ee1c54c94fc5bed017823dfb3ba08eddbcab2a914ef45b596c1603";
             case BLAZE -> "b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0";
             case BOGGED -> "a3b9003ba2d05562c75119b8a62185c67130e9282f7acbac4bc2824c21eb95d9";
             case BREEZE -> "a275728af7e6a29c88125b675a39d88ae9919bb61fdc200337fed6ab0c49d65c";
@@ -525,7 +552,7 @@ public class PetCreator {
             case ZOMBIE_HORSE -> "171ce469cba4426c811f69be5d958a09bfb9b1b2bb649d3577a0c2161ad2f524";
             case ZOMBIE_VILLAGER -> "8c7505f224d5164a117d8c69f015f99eff434471c8a2df907096c4242c3524e8";
             case ZOMBIFIED_PIGLIN -> "7eabaecc5fae5a8a49c8863ff4831aaa284198f1a2398890c765e0a8de18da8c";
-            default -> "c48d7d177f256ce10002ba9706068b93e337da24c85626c5af832021245f7a02"; // duck :D
+            default -> DEFAULT_SKIN; // duck :D
         };
     }
 
@@ -538,6 +565,7 @@ public class PetCreator {
             case CAT, OCELOT, FOX, WOLF, POLAR_BEAR, SPIDER, CAVE_SPIDER, RAVAGER, WARDEN -> Lists.newSet(FOOD_RAW_MEAT,
                 FOOD_RAW_FISH);
             case CHICKEN, PARROT -> Lists.newSet(FOOD_WHEAT_SEEDS);
+            case AXOLOTL -> Lists.newSet(FOOD_RAW_FISH);
             case CAMEL -> Lists.newSet(FOOD_WHEAT, FOOD_APPLES);
             case CAMEL_HUSK -> Lists.newSet(FOOD_ROTTEN_FLESH);
             case STRIDER -> Lists.newSet(FOOD_MUSHROOMS);

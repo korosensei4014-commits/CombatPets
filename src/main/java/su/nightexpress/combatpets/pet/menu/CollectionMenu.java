@@ -163,9 +163,7 @@ public class CollectionMenu extends ConfigMenu<PetsPlugin> implements AutoFilled
     protected List<MenuItem> createDefaultItems() {
         List<MenuItem> list = new ArrayList<>();
 
-        ItemStack filler = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-        list.add(new MenuItem(filler).setSlots(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 18, 27, 36, 45, 17, 26, 35, 44, 46, 47, 48,
-            49, 50, 51, 52, 53));
+        list.add(createFiller());
 
         ItemStack backItem = ItemUtil.getSkinHead(SKIN_ARROW_DOWN);
         ItemUtil.editMeta(backItem, meta -> {
@@ -188,8 +186,30 @@ public class CollectionMenu extends ConfigMenu<PetsPlugin> implements AutoFilled
         return list;
     }
 
+    // Upstream bug: the filler had no name, so it was saved with an empty id directly under 'Content' (as
+    // Content.Priority / .Item / .Slots / .Type), which logged "Invalid material 'null'" errors on every start
+    // and the filler panes never showed. It now has a name (with hidden tooltip).
+    @NonNull
+    private static MenuItem createFiller() {
+        ItemStack filler = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        ItemUtil.editMeta(filler, meta -> {
+            meta.setDisplayName("Filler");
+            meta.setHideTooltip(true);
+        });
+        return new MenuItem(filler).setSlots(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 18, 27, 36, 45, 17, 26, 35, 44, 46, 47, 48,
+            49, 50, 51, 52, 53);
+    }
+
     @Override
     protected void loadAdditional() {
+        // Repair menu files written with the old nameless filler.
+        if (this.cfg.contains("Content.Priority") && !this.cfg.isConfigurationSection("Content.Priority")) {
+            for (String key : new String[]{"Priority", "Item", "Slots", "Type"}) {
+                this.cfg.set("Content." + key, null);
+            }
+            this.writeItem(createFiller(), "Content.filler");
+        }
+
         this.petName = ConfigValue.create("Pet.Name",
             LIGHT_YELLOW.enclose(BOLD.enclose(PET_NAME))
         ).read(cfg);

@@ -8,8 +8,9 @@ plugins {
 // Shared configuration for all modules
 allprojects {
     group = "su.nightexpress.combatpets" 
-    // Fork version: upstream version + "-bedrock.N". Bump N for each fork release.
-    version = "2.8.4-bedrock.17"
+    // CombatPets Reforged version: upstream version + "-rN". Bump N for each release.
+    // (Releases up to v2.8.4-bedrock.17 used the old "-bedrock.N" scheme.)
+    version = "2.8.4-r1"
 
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
@@ -97,8 +98,10 @@ tasks.build {
 }
 
 tasks.shadowJar {
-    // Remove the "-all" suffix from the file name
+    // Remove the "-all" suffix from the file name. Jar: CombatPets-Reforged-<version>.jar
+    // (only the file / display name changes; the plugin is still called "CombatPets" on the server).
     archiveClassifier.set("")
+    archiveBaseName.set("CombatPets-Reforged")
 
     mergeServiceFiles()
     filesMatching("META-INF/services/**") {

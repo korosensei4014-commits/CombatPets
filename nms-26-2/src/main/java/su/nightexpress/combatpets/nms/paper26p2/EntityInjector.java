@@ -93,12 +93,12 @@ public final class EntityInjector {
         addCreator(EntityType.COPPER_GOLEM, su.nightexpress.combatpets.nms.paper26p2.pets.companion.CopperGolemPet::new);
         addCreator(EntityType.STRIDER, su.nightexpress.combatpets.nms.paper26p2.pets.companion.StriderPet::new);
         addCreator(EntityType.PARROT, su.nightexpress.combatpets.nms.paper26p2.pets.companion.ParrotPet::new);
+        addCreator(EntityType.FROG, su.nightexpress.combatpets.nms.paper26p2.pets.companion.FrogPet::new);
+        addCreator(EntityType.AXOLOTL, su.nightexpress.combatpets.nms.paper26p2.pets.companion.AxolotlPet::new);
 
         addCreator(EntityType.ALLAY, AllayPet::new);
-        //addCreator(EntityType.AXOLOTL, AxolotlPet::new); TODO Reimplement
         addCreator(EntityType.ARMADILLO, ArmadilloPet::new);
         addCreator(EntityType.BREEZE, BreezePet::new);
-        //addCreator(EntityType.FROG, FrogPet::new); TODO Reimplement
         addCreator(EntityType.GOAT, GoatPet::new);
         addCreator(EntityType.HOGLIN, HoglinPet::new);
         addCreator(EntityType.PIGLIN, PiglinPet::new);

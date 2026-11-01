@@ -1,6 +1,14 @@
-# CombatPets — Bedrock Forms Fork
+# CombatPets Reforged
 
-A fork of [nulli0n/CombatPets](https://github.com/nulli0n/CombatPets) (v2.8.4, `main` branch) that adds **native Bedrock Edition menus** for players who join through [Geyser](https://geysermc.org/).
+A fork of [nulli0n/CombatPets](https://github.com/nulli0n/CombatPets) (v2.8.4, `main` branch) by nulli0n. All credit for the original plugin goes to its author.
+
+**CombatPets Reforged** adds native Bedrock Edition menus, pet duels, region support, restored mob abilities (Warden sonic boom, Evoker vexes, Illusioner illusions, Piglin crossbows, Enderman teleports), companion-only pets, many upstream bug fixes and more. It is a drop-in replacement: the plugin is still named `CombatPets` on the server, so the `plugins/CombatPets/` folder, saved pets, permissions (`combatpets.*`) and placeholders (`%combatpets_...%`) stay the same.
+
+Releases: `CombatPets-Reforged-<version>.jar` (versions `2.8.4-rN`; older releases were named `2.8.4-bedrock.N`).
+
+## Bedrock menus
+
+Adds **native Bedrock Edition menus** for players who join through [Geyser](https://geysermc.org/).
 
 The original chest GUIs rely on left-click, right-click and the Q/Drop key. Bedrock players can't use all of these reliably, and can't use Q at all. This fork shows Bedrock players **Bedrock forms** (buttons, toggles, dropdowns and text inputs) instead. Every action has its own clearly labelled button. Java players keep the original chest GUIs, unchanged.
 
@@ -204,7 +212,7 @@ Upstream Warden pets only punch. They now also use the vanilla **sonic boom** wh
 
 ### Companion-only pets
 
-New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel Husk, Strider, Parrot**.
+New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel Husk, Strider, Parrot, Frog, Axolotl** (the Axolotl never dries out on land). Each has its own egg head.
 
 - Summon, follow, collection, menus, rename, feeding, inventory and Bedrock forms work like any other pet.
 - They never pick a target or attack, whatever the combat mode, and can't be used in duels ("this pet is a companion").
@@ -216,10 +224,15 @@ New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel 
 
 Every pet file has `Capture.Health_Percent`: the max. health (in % of max.) a wild mob of that type may have to be captured. `-1` (default for existing pets) uses the global `Settings.Health_Percent` from the capture config; `100` means no damage needed. Useful for small mobs like Parrots, Rabbits and Chickens.
 
+### Piglin crossbows and Enderman teleports
+
+- **Piglin pets** holding a crossbow now charge and shoot it like vanilla Piglins (upstream had a TODO and they did nothing with a crossbow). Without a crossbow they fight in melee as before.
+- **Enderman pets** teleport next to a target that is more than 16 blocks away, or more than 8 blocks away and can't be reached on foot (every 2 seconds at most). They still dodge-teleport when hit.
+
 ### Evoker Vexes and Illusioner illusions
 
 - **Illusioner pets** now really use their mirror spell (invisibility + illusion copies). Upstream picked the spell by position in Minecraft's code and could get the wrong one.
-- **Evoker pets** can summon Vexes like vanilla (off by default). Summoned Vexes only attack the Evoker's target, follow the Evoker's damage rules (`Pets.PVP_Allowed`, WorldGuard `pet-pvp`, no friendly fire, duels: they can only hit the opponent), vanish when the Evoker is gone and are never saved to the world.
+- **Evoker pets** can summon Vexes like vanilla (off by default). Summoned Vexes only attack the Evoker's target, follow the Evoker's damage rules (`Pets.PVP_Allowed`, WorldGuard `pet-pvp`, no friendly fire, duels: they can only hit the opponent), vanish when the Evoker is gone and are never saved to the world. Kills by its Vexes give the Evoker XP.
 
 ```yaml
 Pets:
