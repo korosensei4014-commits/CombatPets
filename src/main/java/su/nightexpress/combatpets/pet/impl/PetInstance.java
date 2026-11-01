@@ -421,7 +421,9 @@ public final class PetInstance implements ActivePet {
         }
 
         double maxHealth = this.getMaxHealth();
-        double result = Math.max(0, this.entity.getHealth() / maxHealth);
+        // Clamp: the entity stores health as a float, so health can be a tiny bit above a non-float-exact max health
+        // (e.g. 1.00000003), which the boss bar rejects with an exception.
+        double result = maxHealth <= 0D ? 0D : Math.max(0D, Math.min(1D, this.entity.getHealth() / maxHealth));
         String title = this.replacePlaceholders().apply(Config.PET_HEALTHBAR_TITLE.get());
 
         this.healthBar.setProgress(result);
