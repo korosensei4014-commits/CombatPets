@@ -188,7 +188,9 @@ public class CaptureManager extends AbstractManager<PetsPlugin> {
         if (this.plugin.getPetManager().isPetEntity(entity)) return false;
         if (CaptureManager.isEscaped(entity)) return false;
         if (entity instanceof Player) return false;
-        if (entity instanceof Tameable tameable && tameable.isTamed()) return false;
+        // Only mobs owned by someone are protected. Camels (and Camel Husks) always count as "tamed" in vanilla but
+        // have no owner, so checking isTamed() alone made them impossible to capture.
+        if (entity instanceof Tameable tameable && tameable.isTamed() && tameable.getOwnerUniqueId() != null) return false;
         if (Plugins.isLoaded(HookId.MYTHIC_MOBS) && MythicMobsHook.isMythicMob(entity)) return false;
 
         return this.plugin.getPetManager().getTemplate(entity) != null;

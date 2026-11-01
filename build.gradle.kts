@@ -9,7 +9,7 @@ plugins {
 allprojects {
     group = "su.nightexpress.combatpets" 
     // Fork version: upstream version + "-bedrock.N". Bump N for each fork release.
-    version = "2.8.4-bedrock.12"
+    version = "2.8.4-bedrock.13"
 
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")

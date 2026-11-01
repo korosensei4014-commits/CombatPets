@@ -63,7 +63,12 @@ public abstract class AbstractPetFollowOwnerGoal extends Goal {
     public boolean canContinueToUse() {
         if (this.isTargettedToEnemy() || this.owner == null || !this.owner.isAlive()) return false;
         if (this.pet.passengers.contains(this.owner)) return false;
-        if (!this.pet.level().equals(this.owner.level())) return false;
+        // Owner got far away (or changed world) while the pet was following: teleport now. Before, this was only
+        // checked when the goal started, so a pet already following (e.g. a slow Strider) never teleported.
+        if (!this.pet.level().equals(this.owner.level()) || this.pet.distanceTo(this.owner) > 32D) {
+            this.moveToOwner();
+            return false;
+        }
 
         // Keep following until the pet is within the stop distance.
         double stop = this.getStopDistance();
