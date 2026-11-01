@@ -31,7 +31,8 @@ public class IllusionerPet extends Illusioner implements PetEntity {
 
     static {
         //Class<?> blindSpellGoalClass = Illusioner.class.getDeclaredClasses()[0];
-        Class<?> mirrorSpellGoalClass = Illusioner.class.getDeclaredClasses()[1];
+        // By name: getDeclaredClasses() order isn't guaranteed, index [1] could be the blindness spell.
+        Class<?> mirrorSpellGoalClass = Reflex.safeInnerClass(Illusioner.class.getName(), "IllusionerMirrorSpellGoal");
 
         //CONSTRUCT_BLIND_SPELL_GOAL = Reflex.getConstructor(blindSpellGoalClass, Illusioner.class);
         CONSTRUCT_MIRROR_SPELL_GOAL = Reflex.getConstructor(mirrorSpellGoalClass, Illusioner.class);
@@ -48,10 +49,11 @@ public class IllusionerPet extends Illusioner implements PetEntity {
         this.goalSelector.addGoal(2, new PetFollowOwnerGoal(this));
 
         //Goal blindSpellGoal = (Goal) Reflex.invokeConstructor(CONSTRUCT_BLIND_SPELL_GOAL, this);
-        Goal mirrorSpellGoal = (Goal) Reflex.invokeConstructor(CONSTRUCT_MIRROR_SPELL_GOAL, this);
-
         this.goalSelector.addGoal(1, new SpellcasterCastingSpellGoal());
-        this.goalSelector.addGoal(4, mirrorSpellGoal);
+        if (CONSTRUCT_MIRROR_SPELL_GOAL != null) {
+            Goal mirrorSpellGoal = (Goal) Reflex.invokeConstructor(CONSTRUCT_MIRROR_SPELL_GOAL, this);
+            if (mirrorSpellGoal != null) this.goalSelector.addGoal(4, mirrorSpellGoal);
+        }
         //this.goalSelector.addGoal(5, blindSpellGoal);
         this.goalSelector.addGoal(6, new PetBowAttackGoal<>(this, 0.5, 15.0f));
     }

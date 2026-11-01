@@ -114,6 +114,24 @@ public class Config {
         "Explosions from pets never break blocks either way."
     );
 
+    public static final ConfigValue<Boolean> PET_EVOKER_SUMMON_VEXES = ConfigValue.create("Pets.Evoker.Summon_Vexes",
+        false,
+        "When enabled, Evoker pets also use the vanilla Vex summoning spell (they always use the fang spell).",
+        "Summoned Vexes only attack the Evoker's target, follow the same damage rules as the Evoker",
+        "(Pets.PVP_Allowed, WorldGuard pet-pvp, no friendly fire, duels), disappear when the Evoker is gone",
+        "and are never saved to the world."
+    );
+
+    public static final ConfigValue<Integer> PET_EVOKER_MAX_VEXES = ConfigValue.create("Pets.Evoker.Max_Vexes",
+        3,
+        "Max. Vexes alive at once per Evoker pet. One spell summons up to 3 (vanilla)."
+    );
+
+    public static final ConfigValue<Integer> PET_EVOKER_VEX_LIFETIME = ConfigValue.create("Pets.Evoker.Vex_Lifetime",
+        30,
+        "Seconds before a summoned Vex starts dying on its own. Vanilla: 30-120."
+    );
+
     public static final ConfigValue<Boolean> PET_WARDEN_SONIC_BOOM = ConfigValue.create("Pets.Warden.Sonic_Boom",
         true,
         "When enabled, Warden pets use the vanilla sonic boom when they can't hit their target in melee",

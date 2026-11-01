@@ -109,6 +109,8 @@ Mark each line ✅ / ❌ and note anything unexpected.
 - [ ] Wither pet taking damage near blocks → no blocks break. `Pets.Wither.Destroy_Blocks: true` → vanilla breaking.
 - [ ] Warden pet vs a flying pet, or a player pillaring 3+ blocks up: after ~2 s without melee hits, the Warden charges and sonic booms (particles, sound, damage, knockback). While it can punch, it doesn't boom. `Sonic_Boom: false` → never. `Sonic_Boom_Damage` changes the damage.
 - [ ] Sonic boom never hits the owner or the owner's other pets; with `Pets.PVP_Allowed: false` / WorldGuard `pet-pvp: deny` it doesn't hurt players. In a duel it only hits the opponent pet.
+- [ ] Illusioner pet in a fight: turns invisible and shows illusion copies, then keeps shooting.
+- [ ] `Pets.Evoker.Summon_Vexes: true`: Evoker pet casts the summon spell (white particles), up to `Max_Vexes` Vexes appear and attack only the Evoker's target; never the owner or the owner's pets; with PvP off they don't hurt players. In a duel they only hurt the opponent pet. Despawning/returning the Evoker removes them; they don't come back after a restart. Off → fangs only.
 - [ ] `/pets surrender` during countdown and during the fight → surrenderer gets SURRENDERED + loss, opponent gets VICTORY + win, both pets alive. With `Surrender_Kills_Pet: true` the surrendering pet dies. `/pets surrender` outside a duel → "You are not in a pet duel."
 
 ## 5. Mixed / lifecycle

@@ -51,6 +51,8 @@ public class EvokerPet extends Evoker implements PetEntity {
             Goal goalA = (Goal) Reflex.invokeConstructor(CONSTRUCT_ATTACK_SPELL_GOAL, this);
             this.goalSelector.addGoal(5, goalA);
         }
+        this.goalSelector.addGoal(4, new PetSummonVexGoal());
+
         if (CONSTRUCT_CASTING_SPELL_GOAL != null) {
             Goal goalB = (Goal) Reflex.invokeConstructor(CONSTRUCT_CASTING_SPELL_GOAL, this);
             this.goalSelector.addGoal(1, goalB);
@@ -78,5 +80,72 @@ public class EvokerPet extends Evoker implements PetEntity {
     @Override
     public boolean isAlliedTo(@Nullable Team scoreboardteambase) {
         return false;
+    }
+
+    // ------------------------------------------------------------------------------------------
+    // Vex summoning (Pets.Evoker.Summon_Vexes). Same spell timing as vanilla.
+    // ------------------------------------------------------------------------------------------
+
+    private final java.util.List<SummonedVex> summonedVexes = new java.util.ArrayList<>();
+
+    private int countVexes() {
+        this.summonedVexes.removeIf(vex -> vex.isRemoved() || !vex.isAlive());
+        return this.summonedVexes.size();
+    }
+
+    private void summonVexes() {
+        if (!(this.level() instanceof ServerLevel level)) return;
+
+        int amount = Math.min(3, su.nightexpress.combatpets.api.pet.PetAbilitySettings.getEvokerMaxVexes() - this.countVexes());
+        int lifeTicks = 20 * su.nightexpress.combatpets.api.pet.PetAbilitySettings.getEvokerVexLifetime();
+
+        for (int i = 0; i < amount; i++) {
+            net.minecraft.core.BlockPos pos = this.blockPosition().offset(-2 + this.random.nextInt(5), 1, -2 + this.random.nextInt(5));
+            SummonedVex vex = new SummonedVex(level, this);
+            vex.snapTo(pos, 0.0F, 0.0F);
+            vex.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.MOB_SUMMONED, null);
+            vex.setOwner(this);
+            vex.setBoundOrigin(pos);
+            vex.setLimitedLife(lifeTicks);
+            if (level.addFreshEntity(vex, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.SPELL)) {
+                this.summonedVexes.add(vex);
+            }
+        }
+    }
+
+    private class PetSummonVexGoal extends SpellcasterUseSpellGoal {
+
+        @Override
+        public boolean canUse() {
+            if (!su.nightexpress.combatpets.api.pet.PetAbilitySettings.isEvokerVexes()) return false;
+            if (!super.canUse()) return false;
+
+            return countVexes() < su.nightexpress.combatpets.api.pet.PetAbilitySettings.getEvokerMaxVexes();
+        }
+
+        @Override
+        protected int getCastingTime() {
+            return 100;
+        }
+
+        @Override
+        protected int getCastingInterval() {
+            return 340;
+        }
+
+        @Override
+        protected void performSpellCasting() {
+            summonVexes();
+        }
+
+        @Override
+        protected net.minecraft.sounds.SoundEvent getSpellPrepareSound() {
+            return net.minecraft.sounds.SoundEvents.EVOKER_PREPARE_SUMMON;
+        }
+
+        @Override
+        protected IllagerSpell getSpell() {
+            return IllagerSpell.SUMMON_VEX;
+        }
     }
 }

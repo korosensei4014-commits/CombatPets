@@ -114,6 +114,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     protected void onLoad() {
         PetFollowSettings.set(Config.PET_FOLLOW_START_DISTANCE.get(), Config.PET_FOLLOW_STOP_DISTANCE.get());
         PetAbilitySettings.setWarden(Config.PET_WARDEN_SONIC_BOOM.get(), Config.PET_WARDEN_SONIC_BOOM_DAMAGE.get());
+        PetAbilitySettings.setEvoker(Config.PET_EVOKER_SUMMON_VEXES.get(), Config.PET_EVOKER_MAX_VEXES.get(), Config.PET_EVOKER_VEX_LIFETIME.get());
 
         this.loadAttributes();
         this.loadAspects();

@@ -202,9 +202,18 @@ Upstream Warden pets only punch. They now also use the vanilla **sonic boom** wh
 - Like vanilla it goes through blocks and ignores armor and shields.
 - Normal pet damage rules apply: `Pets.PVP_Allowed`, the WorldGuard `pet-pvp` flag, no friendly fire, and in a duel only the opponent can be hit.
 
+### Evoker Vexes and Illusioner illusions
+
+- **Illusioner pets** now really use their mirror spell (invisibility + illusion copies). Upstream picked the spell by position in Minecraft's code and could get the wrong one.
+- **Evoker pets** can summon Vexes like vanilla (off by default). Summoned Vexes only attack the Evoker's target, follow the Evoker's damage rules (`Pets.PVP_Allowed`, WorldGuard `pet-pvp`, no friendly fire, duels: they can only hit the opponent), vanish when the Evoker is gone and are never saved to the world.
+
 ```yaml
 Pets:
   Fireballs_Ignore_Fire_Immunity: true
+  Evoker:
+    Summon_Vexes: false
+    Max_Vexes: 3          # alive at once per Evoker
+    Vex_Lifetime: 30      # seconds
   Wither:
     Destroy_Blocks: false
   Warden:

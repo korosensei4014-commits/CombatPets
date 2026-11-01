@@ -5,6 +5,7 @@ import org.bukkit.damage.DamageType;
 import org.bukkit.entity.LargeFireball;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Vex;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.jspecify.annotations.Nullable;
 import org.bukkit.entity.Entity;
@@ -58,6 +59,11 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
         if (!(event.getEntity() instanceof LivingEntity victim)) return;
         LivingEntity damager = getAttacker(event);
         if (damager == null) return;
+
+        // Vexes summoned by an Evoker pet follow the Evoker's damage rules.
+        if (damager instanceof Vex vex && vex.getOwner() instanceof LivingEntity summoner && this.petManager.getPetByMob(summoner) != null) {
+            damager = summoner;
+        }
 
         if (!this.petManager.canDamage(damager, victim)) {
             event.setCancelled(true);
