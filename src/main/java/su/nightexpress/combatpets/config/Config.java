@@ -132,6 +132,11 @@ public class Config {
         "Seconds before a summoned Vex starts dying on its own. Vanilla: 30-120."
     );
 
+    public static final ConfigValue<Boolean> PET_RAVAGER_DESTROY_BLOCKS = ConfigValue.create("Pets.Ravager.Destroy_Blocks",
+        false,
+        "When disabled, Ravager pets don't break leaves they walk into (vanilla Ravager behaviour)."
+    );
+
     public static final ConfigValue<Boolean> PET_WARDEN_SONIC_BOOM = ConfigValue.create("Pets.Warden.Sonic_Boom",
         true,
         "When enabled, Warden pets use the vanilla sonic boom when they can't hit their target in melee",

@@ -3,6 +3,7 @@ package su.nightexpress.combatpets.pet.listener;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Ravager;
 import org.bukkit.entity.Wither;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -166,15 +167,16 @@ public class PetGenericListener extends AbstractListener<PetsPlugin> {
         }
     }
 
-    // Wither pets break blocks around them after taking damage (vanilla). Off by default.
+    // Wither pets break blocks around them after taking damage, Ravager pets break leaves they walk into (vanilla).
+    // Both off by default.
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPetWitherBreakBlocks(EntityChangeBlockEvent event) {
-        if (Config.PET_WITHER_DESTROY_BLOCKS.get()) return;
-        if (!(event.getEntity() instanceof Wither wither)) return;
-
-        if (this.petManager.isPetEntity(wither)) {
-            event.setCancelled(true);
-        }
+    public void onPetBreakBlocks(EntityChangeBlockEvent event) {
+        boolean blocked = switch (event.getEntity()) {
+            case Wither wither -> !Config.PET_WITHER_DESTROY_BLOCKS.get() && this.petManager.isPetEntity(wither);
+            case Ravager ravager -> !Config.PET_RAVAGER_DESTROY_BLOCKS.get() && this.petManager.isPetEntity(ravager);
+            default -> false;
+        };
+        if (blocked) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
