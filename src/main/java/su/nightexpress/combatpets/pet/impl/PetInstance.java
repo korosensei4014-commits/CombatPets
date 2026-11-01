@@ -8,6 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Phantom;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Sittable;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
@@ -288,7 +289,12 @@ public final class PetInstance implements ActivePet {
         }
         if (this.entity instanceof Tameable tameable) {
             tameable.setTamed(true);
-            tameable.setOwner(this.getOwner());
+            // Wolves, Cats and Parrots (Sittable) with an owner show the owner's scoreboard team prefix/suffix
+            // around their name (vanilla), e.g. a rank plugin's "[RANK] ... suffix". The plugin tracks owners
+            // itself, so only horses (riding) get a vanilla owner.
+            if (!(this.entity instanceof Sittable)) {
+                tameable.setOwner(this.getOwner());
+            }
         }
         if (this.entity instanceof AbstractHorse) {
             this.plugin.getPetNMS().setSaddle(this.entity);
