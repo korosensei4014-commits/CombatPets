@@ -212,7 +212,7 @@ Upstream Warden pets only punch. They now also use the vanilla **sonic boom** wh
 
 ### Companion-only pets
 
-New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel Husk, Strider, Parrot**.
+New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel Husk, Strider, Parrot, Frog, Axolotl** (the Axolotl never dries out on land). Each has its own egg head.
 
 - Summon, follow, collection, menus, rename, feeding, inventory and Bedrock forms work like any other pet.
 - They never pick a target or attack, whatever the combat mode, and can't be used in duels ("this pet is a companion").
@@ -224,10 +224,15 @@ New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel 
 
 Every pet file has `Capture.Health_Percent`: the max. health (in % of max.) a wild mob of that type may have to be captured. `-1` (default for existing pets) uses the global `Settings.Health_Percent` from the capture config; `100` means no damage needed. Useful for small mobs like Parrots, Rabbits and Chickens.
 
+### Piglin crossbows and Enderman teleports
+
+- **Piglin pets** holding a crossbow now charge and shoot it like vanilla Piglins (upstream had a TODO and they did nothing with a crossbow). Without a crossbow they fight in melee as before.
+- **Enderman pets** teleport next to a target that is more than 16 blocks away, or more than 8 blocks away and can't be reached on foot (every 2 seconds at most). They still dodge-teleport when hit.
+
 ### Evoker Vexes and Illusioner illusions
 
 - **Illusioner pets** now really use their mirror spell (invisibility + illusion copies). Upstream picked the spell by position in Minecraft's code and could get the wrong one.
-- **Evoker pets** can summon Vexes like vanilla (off by default). Summoned Vexes only attack the Evoker's target, follow the Evoker's damage rules (`Pets.PVP_Allowed`, WorldGuard `pet-pvp`, no friendly fire, duels: they can only hit the opponent), vanish when the Evoker is gone and are never saved to the world.
+- **Evoker pets** can summon Vexes like vanilla (off by default). Summoned Vexes only attack the Evoker's target, follow the Evoker's damage rules (`Pets.PVP_Allowed`, WorldGuard `pet-pvp`, no friendly fire, duels: they can only hit the opponent), vanish when the Evoker is gone and are never saved to the world. Kills by its Vexes give the Evoker XP.
 
 ```yaml
 Pets:

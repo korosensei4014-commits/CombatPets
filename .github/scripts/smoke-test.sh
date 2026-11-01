@@ -84,7 +84,7 @@ if grep -q 'Failed to run bootstrapper for plugins/nightcore.jar\|Could not load
   echo "::error::The downloaded nightcore jar failed to load (test setup problem, not CombatPets)"; FAIL=1
 fi
 grep -q 'Enabling CombatPets' server.log || { echo "::error::CombatPets was not enabled"; FAIL=1; }
-if grep -nE 'Error occurred while enabling CombatPets|Could not load .*CombatPets|\[CombatPets\].*(ERROR|Exception)|ERROR\]: \[CombatPets\]' server.log; then
+if grep -nE 'Error occurred while enabling CombatPets|Could not load .*CombatPets|\[CombatPets\].*(ERROR|Exception)|ERROR\]: \[CombatPets\]|ERROR\]: \[nightcore\].*plugins/CombatPets/' server.log; then
   echo "::error::CombatPets logged an error"; FAIL=1
 fi
 # Any stack trace that goes through the plugin.
