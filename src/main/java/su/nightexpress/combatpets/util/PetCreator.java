@@ -453,7 +453,7 @@ public class PetCreator {
      * Companion pet configs created before they had their own egg heads use the default (duck) head.
      * Give them their proper head; custom heads set by the server owner are kept.
      */
-    public static void fixCompanionEggSkins(@NonNull PetsPlugin plugin, @NonNull java.util.Collection<? extends su.nightexpress.combatpets.api.pet.Template> templates) {
+    public static void fixCompanionEggSkins(@NonNull PetsPlugin plugin, java.util.@NonNull Collection<? extends su.nightexpress.combatpets.api.pet.Template> templates) {
         for (su.nightexpress.combatpets.api.pet.Template template : templates) {
             if (!CompanionPets.isCompanion(template.getEntityType())) continue;
             if (!DEFAULT_SKIN.equals(template.getEggTexture())) continue;
