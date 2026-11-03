@@ -85,7 +85,7 @@ public final class GenericAi {
      * Like {@link #brainProvider(Class)}, with extra memory types the vanilla mob reads directly.
      */
     public static <E extends PathfinderMob> Brain.Provider<E> brainProvider(Class<E> type, List<? extends MemoryModuleType<?>> memories) {
-        return BrainUtils.brainProvider(memories, pet -> initActivities(type));
+        return BrainUtils.brainProviderWithMemories(memories, pet -> initActivities(type));
     }
 
     public static void updateActivity(PathfinderMob pet) {

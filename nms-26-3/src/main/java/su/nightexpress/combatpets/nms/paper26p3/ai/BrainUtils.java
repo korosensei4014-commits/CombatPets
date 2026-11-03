@@ -36,7 +36,7 @@ public final class BrainUtils {
      * Like {@link #brainProvider(ActivitySupplier)}, plus extra memory types the vanilla mob reads directly
      * (otherwise it throws "Unregistered memory fetched").
      */
-    public static <E extends Mob> Brain.Provider<E> brainProvider(Collection<? extends net.minecraft.world.entity.ai.memory.MemoryModuleType<?>> memories,
+    public static <E extends Mob> Brain.Provider<E> brainProviderWithMemories(Collection<? extends net.minecraft.world.entity.ai.memory.MemoryModuleType<?>> memories,
                                                                   ActivitySupplier<E> supplier) {
         return Brain.provider(memories, defaultSensors(), supplier);
     }
