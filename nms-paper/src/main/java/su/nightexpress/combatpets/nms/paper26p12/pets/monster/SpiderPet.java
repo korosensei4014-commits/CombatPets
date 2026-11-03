@@ -53,4 +53,43 @@ public class SpiderPet extends Spider implements PetEntity {
     public boolean canAttack(net.minecraft.world.entity.LivingEntity target) {
         return super.canAttack(target) || (target instanceof net.minecraft.world.entity.monster.Ghast && target.canBeSeenAsEnemy());
     }
+
+    // ------------------------------------------------------------------------------------------
+    // Riding (Pets.Mounts): the owner steers like on a horse; space jumps.
+    // ------------------------------------------------------------------------------------------
+
+    @Override
+    public net.minecraft.world.entity.@org.jspecify.annotations.Nullable LivingEntity getControllingPassenger() {
+        if (su.nightexpress.combatpets.api.pet.PetMountSettings.isMountEnabled(org.bukkit.entity.EntityType.SPIDER)
+            && this.getFirstPassenger() instanceof net.minecraft.world.entity.player.Player rider) {
+            return rider;
+        }
+        return super.getControllingPassenger();
+    }
+
+    @Override
+    protected void tickRidden(net.minecraft.world.entity.player.Player rider, net.minecraft.world.phys.Vec3 riddenInput) {
+        super.tickRidden(rider, riddenInput);
+        this.setYRot(rider.getYRot());
+        this.yRotO = this.getYRot();
+        this.setXRot(rider.getXRot() * 0.5F);
+        this.yBodyRot = this.getYRot();
+        this.yHeadRot = this.getYRot();
+        if (rider instanceof net.minecraft.server.level.ServerPlayer player && player.getLastClientInput().jump() && this.onGround()) {
+            this.jumpFromGround();
+        }
+    }
+
+    @Override
+    protected net.minecraft.world.phys.Vec3 getRiddenInput(net.minecraft.world.entity.player.Player rider, net.minecraft.world.phys.Vec3 selfInput) {
+        float strafe = rider.xxa * 0.5F;
+        float forward = rider.zza;
+        if (forward <= 0F) forward *= 0.25F;
+        return new net.minecraft.world.phys.Vec3(strafe, 0D, forward);
+    }
+
+    @Override
+    protected float getRiddenSpeed(net.minecraft.world.entity.player.Player rider) {
+        return (float) this.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
+    }
 }

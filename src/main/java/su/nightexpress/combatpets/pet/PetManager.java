@@ -41,6 +41,7 @@ import su.nightexpress.combatpets.api.pet.FoodCategory;
 import su.nightexpress.combatpets.api.pet.FoodItem;
 import su.nightexpress.combatpets.api.pet.PetEntityBridge;
 import su.nightexpress.combatpets.api.pet.PetAbilitySettings;
+import su.nightexpress.combatpets.api.pet.PetMountSettings;
 import su.nightexpress.combatpets.api.pet.PetFollowSettings;
 import su.nightexpress.combatpets.api.pet.Template;
 import su.nightexpress.combatpets.api.pet.Tier;
@@ -117,6 +118,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     protected void onLoad() {
         PetFollowSettings.set(Config.PET_FOLLOW_START_DISTANCE.get(), Config.PET_FOLLOW_STOP_DISTANCE.get());
         PetAbilitySettings.setWarden(Config.PET_WARDEN_SONIC_BOOM.get(), Config.PET_WARDEN_SONIC_BOOM_DAMAGE.get());
+        PetMountSettings.setEnabled(Config.getEnabledMounts());
         PetAbilitySettings.setEvoker(Config.PET_EVOKER_SUMMON_VEXES.get(), Config.PET_EVOKER_MAX_VEXES.get(), Config.PET_EVOKER_VEX_LIFETIME.get());
 
         this.loadAttributes();
@@ -734,7 +736,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
             }
         }
 
-        boolean isRideable = entity instanceof AbstractHorse;
+        boolean isRideable = entity instanceof AbstractHorse || PetMountSettings.isMountEnabled(entity.getType());
         boolean needSneak = Config.PET_SNEAK_TO_OPEN_MENU.get();
         if (isRideable) needSneak = !needSneak;
 
@@ -743,8 +745,13 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         if (isMenu) {
             petHolder.openMenu();
         }
-        else if (entity instanceof AbstractHorse horse) {
-            horse.addPassenger(player);
+        else if (isRideable) {
+            // No riding during a duel: both pets fight on their own.
+            if (duels != null && duels.isInDuel(petHolder)) {
+                Lang.DUEL_ERROR_CANT_RIDE.message().send(player);
+                return true;
+            }
+            entity.addPassenger(player);
         }
         return true;
     }

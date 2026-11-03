@@ -137,6 +137,64 @@ public class Config {
         "When disabled, Ravager pets don't break leaves they walk into (vanilla Ravager behaviour)."
     );
 
+    // ---- Mounts: right-click to ride, shift + right-click opens the menu (like horses). ----
+    public static final ConfigValue<Boolean> PET_MOUNT_RAVAGER = ConfigValue.create("Pets.Mounts.Ravager",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    public static final ConfigValue<Boolean> PET_MOUNT_POLAR_BEAR = ConfigValue.create("Pets.Mounts.Polar_Bear",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    public static final ConfigValue<Boolean> PET_MOUNT_HOGLIN = ConfigValue.create("Pets.Mounts.Hoglin",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    public static final ConfigValue<Boolean> PET_MOUNT_ZOGLIN = ConfigValue.create("Pets.Mounts.Zoglin",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    public static final ConfigValue<Boolean> PET_MOUNT_STRIDER = ConfigValue.create("Pets.Mounts.Strider",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    public static final ConfigValue<Boolean> PET_MOUNT_PIG = ConfigValue.create("Pets.Mounts.Pig",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    public static final ConfigValue<Boolean> PET_MOUNT_SNIFFER = ConfigValue.create("Pets.Mounts.Sniffer",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    public static final ConfigValue<Boolean> PET_MOUNT_SPIDER = ConfigValue.create("Pets.Mounts.Spider",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    public static final ConfigValue<Boolean> PET_MOUNT_IRON_GOLEM = ConfigValue.create("Pets.Mounts.Iron_Golem",
+        true,
+        "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
+
+    /**
+     * @return Pet types that can be ridden according to Pets.Mounts.*.
+     */
+    public static java.util.Set<org.bukkit.entity.EntityType> getEnabledMounts() {
+        java.util.Set<org.bukkit.entity.EntityType> types = new java.util.HashSet<>();
+        java.util.Map.ofEntries(
+            java.util.Map.entry(org.bukkit.entity.EntityType.RAVAGER, PET_MOUNT_RAVAGER),
+            java.util.Map.entry(org.bukkit.entity.EntityType.POLAR_BEAR, PET_MOUNT_POLAR_BEAR),
+            java.util.Map.entry(org.bukkit.entity.EntityType.HOGLIN, PET_MOUNT_HOGLIN),
+            java.util.Map.entry(org.bukkit.entity.EntityType.ZOGLIN, PET_MOUNT_ZOGLIN),
+            java.util.Map.entry(org.bukkit.entity.EntityType.STRIDER, PET_MOUNT_STRIDER),
+            java.util.Map.entry(org.bukkit.entity.EntityType.PIG, PET_MOUNT_PIG),
+            java.util.Map.entry(org.bukkit.entity.EntityType.SNIFFER, PET_MOUNT_SNIFFER),
+            java.util.Map.entry(org.bukkit.entity.EntityType.SPIDER, PET_MOUNT_SPIDER),
+            java.util.Map.entry(org.bukkit.entity.EntityType.IRON_GOLEM, PET_MOUNT_IRON_GOLEM)
+        ).forEach((type, option) -> {
+            if (option.get()) types.add(type);
+        });
+        return types;
+    }
+
     public static final ConfigValue<Boolean> PET_WARDEN_SONIC_BOOM = ConfigValue.create("Pets.Warden.Sonic_Boom",
         true,
         "When enabled, Warden pets use the vanilla sonic boom when they can't hit their target in melee",

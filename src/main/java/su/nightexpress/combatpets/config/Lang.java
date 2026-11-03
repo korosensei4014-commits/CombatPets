@@ -450,6 +450,9 @@ public class Lang implements LangContainer {
     public static final MessageLocale DUEL_ERROR_CANT_DESPAWN = LangEntry.builder("Duel.Error.CantDespawn").chatMessage(
         SOFT_RED.wrap("You can't return your pet during a duel."));
 
+    public static final MessageLocale DUEL_ERROR_CANT_RIDE = LangEntry.builder("Duel.Error.CantRide").chatMessage(
+        SOFT_RED.wrap("You can't ride your pet during a duel."));
+
     public static final MessageLocale DUEL_ERROR_CANT_FEED = LangEntry.builder("Duel.Error.CantFeed").chatMessage(
         SOFT_RED.wrap("You can't feed your pet during a duel."));
 

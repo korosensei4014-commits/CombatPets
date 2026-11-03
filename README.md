@@ -224,6 +224,29 @@ New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel 
 
 Every pet file has `Capture.Health_Percent`: the max. health (in % of max.) a wild mob of that type may have to be captured. `-1` (default for existing pets) uses the global `Settings.Health_Percent` from the capture config; `100` means no damage needed. Useful for small mobs like Parrots, Rabbits and Chickens.
 
+### Rideable pets (mounts)
+
+Besides horse-type pets (Horse, Donkey, Mule, Skeleton/Zombie Horse, Llama, Trader Llama, Camel, Camel Husk), these pets can be ridden: **Ravager, Polar Bear, Hoglin, Zoglin, Strider, Pig, Sniffer, Spider, Iron Golem**.
+
+- **Right-click** your pet (empty hand) to ride it, **shift + right-click** opens its menu (same as horses; `Pets.Sneak_To_Open_Menu` swaps this).
+- Steer with WASD and where you look, **space** jumps; mounts step up full blocks. Spiders climb walls, Striders walk on lava.
+- While ridden, a pet never picks fights on its own: it **attacks what you hit** (normal damage rules apply). When you get off, it fights on its own again.
+- No riding during duels (riders are dismounted when a duel starts). Dismounting happens automatically if the pet dies or is despawned.
+
+```yaml
+Pets:
+  Mounts:          # all on by default
+    Ravager: true
+    Polar_Bear: true
+    Hoglin: true
+    Zoglin: true
+    Strider: true
+    Pig: true
+    Sniffer: true
+    Spider: true
+    Iron_Golem: true
+```
+
 ### Piglin crossbows and Enderman teleports
 
 - **Piglin pets** holding a crossbow now charge and shoot it like vanilla Piglins (upstream had a TODO and they did nothing with a crossbow). Without a crossbow they fight in melee as before.

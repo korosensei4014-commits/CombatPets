@@ -131,6 +131,22 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
     }
 
     /**
+     * Riding a pet: it doesn't pick targets on its own, it attacks what its rider hits.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onRiderHit(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity victim)) return;
+        if (!(getAttacker(event) instanceof org.bukkit.entity.Player rider)) return;
+        if (!(rider.getVehicle() instanceof LivingEntity mount) || mount == victim) return;
+
+        ActivePet pet = this.petManager.getPetByMob(mount);
+        if (pet == null || !pet.getOwner().equals(rider)) return;
+        if (!this.petManager.canDamage(mount, victim)) return;
+
+        this.plugin.getPetNMS().setAttackTarget(mount, victim);
+    }
+
+    /**
      * @return The Evoker pet that summoned this Vex, or null if it's not a Vex summoned by a pet.
      */
     @Nullable

@@ -342,6 +342,9 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
         if (firstPet == null || secondPet == null) return;
 
         // Fair start: both pets at full health, no previous targets.
+        // No riding during a duel.
+        firstPet.getEntity().eject();
+        secondPet.getEntity().eject();
         heal(firstPet);
         heal(secondPet);
         this.plugin.getPetNMS().setAttackTarget(firstPet.getEntity(), null);

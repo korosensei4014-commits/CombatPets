@@ -48,6 +48,9 @@ public final class AIUtils {
     @Nullable
     @Deprecated
     public static LivingEntity findTarget(LivingEntity pet, ActivePet activePet) {
+        // Ridden pets only attack what their rider hits (set by the plugin), never pick targets themselves.
+        if (pet.getFirstPassenger() instanceof Player) return null;
+
         Player owner = ((CraftPlayer) activePet.getOwner()).getHandle();
         CombatMode combatMode = activePet.getCombatMode();
 
@@ -79,6 +82,9 @@ public final class AIUtils {
     }
 
     public static Optional<? extends LivingEntity> findAngerOrAttackerTarget(ServerLevel level, Mob pet) {
+        // Ridden pets only attack what their rider hits (set by the plugin), never pick targets themselves.
+        if (pet.getFirstPassenger() instanceof Player) return Optional.empty();
+
         if (!(pet instanceof PetEntity entity)) return Optional.empty();
 
         CombatMode combatMode = entity.getSharedData().getCombatMode();
