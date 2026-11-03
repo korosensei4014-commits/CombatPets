@@ -70,7 +70,7 @@ public class PetUtils {
     /**
      * Plays a sound (a key like "minecraft:block.note_block.pling") to the player. Empty or invalid keys are ignored.
      */
-    public static void playSound(@NonNull org.bukkit.entity.Player player, @Nullable String sound) {
+    public static void playSound(org.bukkit.entity.@NonNull Player player, @Nullable String sound) {
         if (sound == null || sound.isBlank()) return;
         try {
             player.playSound(player.getLocation(), sound.trim(), org.bukkit.SoundCategory.PLAYERS, 1F, 1F);
