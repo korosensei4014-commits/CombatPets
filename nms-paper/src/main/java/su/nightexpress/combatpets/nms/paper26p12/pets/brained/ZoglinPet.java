@@ -101,11 +101,22 @@ public class ZoglinPet extends Zoglin implements PetEntity {
         }
     }
 
+    // The vanilla client doesn't know this mob can be steered, so it never moves it or sends its movement.
+    // Let the server move it, using the rider's WASD keys (which the client always sends).
+    @Override
+    public boolean isClientAuthoritative() {
+        if (this.getControllingPassenger() instanceof net.minecraft.world.entity.player.Player) return false;
+        return super.isClientAuthoritative();
+    }
+
     @Override
     protected net.minecraft.world.phys.Vec3 getRiddenInput(net.minecraft.world.entity.player.Player rider, net.minecraft.world.phys.Vec3 selfInput) {
-        float strafe = rider.xxa * 0.5F;
-        float forward = rider.zza;
-        if (forward <= 0F) forward *= 0.25F;
+        if (!(rider instanceof net.minecraft.server.level.ServerPlayer player)) return net.minecraft.world.phys.Vec3.ZERO;
+
+        net.minecraft.world.entity.player.Input input = player.getLastClientInput();
+        float forward = (input.forward() ? 1F : 0F) - (input.backward() ? 1F : 0F);
+        float strafe = ((input.left() ? 1F : 0F) - (input.right() ? 1F : 0F)) * 0.5F;
+        if (forward < 0F) forward *= 0.25F; // Slow when walking backwards, like horses.
         return new net.minecraft.world.phys.Vec3(strafe, 0D, forward);
     }
 
