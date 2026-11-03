@@ -1,0 +1,96 @@
+# Sets pet mob type.
+# https://nightexpress.gitbook.io/combatpetsfeatures/pet-types
+Entity_Type: enderman
+# Sets default pet name when obtained.
+Default_Name: Enderman
+# Texture URL value for pet egg item.
+# Get some at http://minecraft-heads.com
+Egg_Skin: 7a59bb0a7a32965b3d90d8eafa899d1835f424509eadd4e6b709ada50b9cf
+# Sets whether or not this pet can have an inventory.
+# Setting this to 'false' will disable inventory for this pet ignoring it's tier inventory option.
+Can_Have_Inventory: true
+# Sets whether or not this pet can wear items in his equipment slots.
+# Setting this to 'false' will disable equipment for this pet ignoring it's tier equipment option.
+Can_Have_Equipment: true
+# Sets whether or not this pet can be captured by a player.
+# Setting this to 'false' will disable capture for this pet ignoring it's tier capture options.
+Catchable: true
+# Sets particle effect for pet spawn.
+Spawn_Particle:
+  Name: CLOUD
+# Sets particle effect for pet despawn.
+Despawn_Particle:
+  Name: ASH
+Saturation:
+  # Sets sound to play when pet ates food item.
+  Eat_Sound: entity.generic.eat;1.0;1.0
+  # Sets amount of saturation to lost on every tick for certain pet state.
+  Exhaust:
+    COMBAT: 0.04
+    IDLE: 0.01
+    WALK: 0.02
+  # List of food categories available to feed this pet.
+  # You can create or edit them in the main plugin config file.
+  # Available categories: [wheat_seeds, eggs, raw_meat, flowers, bread, rotten_flesh, chorus_fruits, cooked_fish, gunpowder, beetroot, mushrooms, bamboo, spider_eyes, wither_roses, raw_fish, sticks, bone_meal, cooked_meat, wheat, carrots, apples]
+  # https://nightexpress.gitbook.io/combatpetsfeatures/pet-food
+  FoodCategories:
+  - chorus_fruits
+Attributes:
+  # Default (initial) attribute values for this pet.
+  # https://nightexpress.gitbook.io/combatpetsfeatures/pet-attributes
+  Default:
+    flying_speed: 0.0
+    scale: 1.0
+    attack_speed: 0.5
+    attack_damage: 7.0
+    water_movement_efficiency: 0.0
+    movement_speed: 0.30000001192092896
+    horse_jump_strength: 0.41999998688697815
+    knockback_resistance: 0.0
+    health_regeneration_speed: 1.0
+    max_health: 20.0
+    safe_fall_distance: 3.0
+    armor: 0.0
+    explosion_knockback_resistance: 0.0
+    attack_knockback: 0.0
+    step_height: 1.0
+    health_regeneration_force: 0.5
+    max_saturation: 30.0
+    gravity: 0.08
+    burning_time: 1.0
+    fall_damage_multiplier: 1.0
+    movement_efficiency: 0.0
+  # Attribute values added per each aspect value.
+  # https://nightexpress.gitbook.io/combatpetsfeatures/pet-attributes
+  # https://nightexpress.gitbook.io/combatpetsfeatures/pet-aspects
+  Per_Aspect:
+    flying_speed: 0.0
+    scale: 0.02
+    attack_speed: 0.02
+    attack_damage: 0.16
+    water_movement_efficiency: 0.0
+    movement_speed: 0.0030000001192092896
+    horse_jump_strength: 0.0
+    knockback_resistance: 0.0
+    health_regeneration_speed: 0.02
+    max_health: 0.8
+    safe_fall_distance: 0.0
+    armor: 0.0
+    explosion_knockback_resistance: 0.0
+    attack_knockback: 0.0
+    step_height: 0.0
+    health_regeneration_force: 0.05
+    max_saturation: 4.0
+    gravity: 0.0
+    burning_time: 0.0
+    fall_damage_multiplier: 0.0
+    movement_efficiency: 0.0
+
+Capture:
+  # Sets the capture chance for this type of pet.
+  Chance: 30.0
+  # Sets the chance to escape capturing for this type of pet.
+  Escape_Chance: 0.5
+  # Max. health (in % of max. health) a mob of this type may have to be captured.
+  # -1 = use 'Settings.Health_Percent' from the capture config. 100 = can be captured at full health.
+  Health_Percent: -1.0

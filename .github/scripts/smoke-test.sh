@@ -43,6 +43,7 @@ curl -fsSL -A "$UA" -o smoke/paper.jar "$PAPER_URL" || { echo "::error::Could no
 
 # Regression: a pet_collection.yml broken by the old nameless filler (flat Priority/Item/Slots/Type under
 # Content) must be repaired on startup without "Invalid material" errors.
+cp -r .github/test-config/CombatPets smoke/plugins/CombatPets
 if false; then
 mkdir -p smoke/plugins/CombatPets/menu
 cat > smoke/plugins/CombatPets/menu/pet_collection.yml <<'YML'

@@ -1,0 +1,180 @@
+Settings:
+  # GUI title.
+  Title: <black>ᴘᴇᴛ ᴍᴇɴᴜ</black>
+  # GUI size. Must be multiply of 9.
+  # Useful for 'CHEST' Inventory Type only.
+  Size: 45
+  # GUI type.
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/inventory/InventoryType.html
+  Inventory_Type: CHEST
+  # Sets GUI auto-refresh interval (in seconds). Set this to 0 to disable.
+  Auto_Refresh: 0
+  PlaceholderAPI:
+    # Sets whether PlaceholderAPI placeholders will be applied on all items from the 'Content' section of this GUI.
+    # [*] Disable if you don't use any PlaceholderAPI placeholders on your items to improve GUI performance.
+    Enabled: false
+# ==================== GUI CONTENT ====================
+# You can freely edit items in this section as you wish (add, remove, modify items).
+# The following values are available as button Types:
+# CLOSE
+# COMBAT_MODE
+# DUEL_TOGGLE
+# PET_ASPECTS
+# PET_EQUIPMENT
+# PET_INVENTORY
+# PET_RENAME
+# PET_RETURN
+# SILENT
+# ==================== ITEM OPTIONS ====================
+# > Item: Item to display. Please check: https://nightexpressdev.com/nightcore/configuration/item-formation/
+# > Priority: Button priority. Better values will override other item(s) in the same slot(s).
+# > Slots: Button slots. From [0] to [Size - 1]. Split with commas.
+# > Click_Commands: Execute custom commands on click. PlaceholderAPI available here.
+#     Available click types: LEFT, RIGHT, SHIFT_LEFT, SHIFT_RIGHT, DROP_KEY, SWAP_KEY, NUMBER_1, NUMBER_2, NUMBER_3, NUMBER_4, NUMBER_5, NUMBER_6, NUMBER_7, NUMBER_8, NUMBER_9
+#     Use prefix 'player:' to run command by a player.
+#     Click_Commands:
+#       LEFT:
+#       - say Hello
+#       - give %player_name% diamond 1
+#       - player: menu open shops
+# ==================================================
+Content:
+  lyellowbstatsblyellow:
+    Priority: 10
+    Item:
+      Material: KNOWLEDGE_BOOK
+      Name: <lyellow>Stats</lyellow>
+      Lore:
+      - '<lyellow>➙ <lgray>Level: </lgray>%pet_level%</lyellow>'
+      - '<lyellow>➙ <lgray>XP: </lgray>%pet_exp%<lgray>/</lgray>%pet_max_exp%</lyellow>'
+      - '<lyellow>➙ <lgray>Saturation: </lgray>%pet_saturation%<lgray>/</lgray>%pet_max_saturation%</lyellow>'
+      - '<lyellow>➙ <lgray>Food: </lgray>%pet_food%</lyellow>'
+      - '<lyellow>➙ <lgray>Duels: </lgray><lgreen>%pet_duel_wins% won</lgreen><lgray> / </lgray><lred>%pet_duel_losses% lost</lred></lyellow>'
+      - ''
+      - <lyellow>Attributes</lyellow>
+      - '<lyellow>➙ <lgray>Damage: </lgray>%pet_attribute_attack_damage%</lyellow>'
+      - '<lyellow>➙ <lgray>Attack Speed: </lgray>%pet_attribute_attack_speed%<lgray>/ sec.</lgray></lyellow>'
+      - '<lyellow>➙ <lgray>Health: </lgray>%pet_attribute_max_health%</lyellow>'
+      - '<lyellow>➙ <lgray>Regen: </lgray>%pet_attribute_health_regeneration_force%<lgray> x </lgray>%pet_attribute_health_regeneration_speed%<lgray> / sec.</lgray></lyellow>'
+      - '<lyellow>➙ <lgray>Defense: </lgray>%pet_attribute_armor%</lyellow>'
+      - '<lyellow>➙ <lgray>Speed: W: </lgray>%pet_attribute_movement_speed%<lgray> / F: </lgray>%pet_attribute_flying_speed%</lyellow>'
+      Display_Name: <lyellow>Stats</lyellow>
+    Slots: '4'
+    Type: default
+  lyellowbreturn_to_collectionblyellow:
+    Priority: 10
+    Item:
+      Material: BARRIER
+      Name: <lyellow>Return to Collection</lyellow>
+      Lore:
+      - <lgray>Return pet to your collection.</lgray>
+      Display_Name: <lyellow>Return to Collection</lyellow>
+    Slots: '40'
+    Type: pet_return
+  lyellowbsilent_modeblyellow:
+    Priority: 10
+    Item:
+      Material: JUKEBOX
+      Name: <lyellow><b>Silent Mode</b></lyellow>
+      Lore:
+      - '<lyellow>▪ <lgray>Status: </lgray>%pet_silent%</lyellow>'
+      - ''
+      - <lgray>Disables pet ambient sounds.</lgray>
+      - ''
+      - <lyellow>➙ </lyellow><lgray>Click to <lyellow>toggle</lyellow>.</lgray>
+      Display_Name: <lyellow><b>Silent Mode</b></lyellow>
+    Slots: '19'
+    Type: silent
+  lyellowbduel_challengesblyellow:
+    Priority: 10
+    Item:
+      Material: GOLDEN_SWORD
+      Name: <lyellow><b>Duel Challenges</b></lyellow>
+      Lore:
+      - '<lyellow>▪ <lgray>Status: </lgray>%duels_status%</lyellow>'
+      - ''
+      - <lgray>When on, other players can challenge</lgray>
+      - <lgray>your pet with <lyellow>/pets duel <player></lyellow>.</lgray>
+      - ''
+      - <lyellow>➙ </lyellow><lgray>Click to <lyellow>toggle</lyellow>.</lgray>
+      Display_Name: <lyellow><b>Duel Challenges</b></lyellow>
+    Slots: '31'
+    Type: duel_toggle
+  lyellowbcombat_modeblyellow:
+    Priority: 10
+    Item:
+      Material: IRON_SWORD
+      Name: <lyellow>Combat Mode</lyellow>
+      Lore:
+      - '<lyellow>➙ <lgray>Current: </lgray>%pet_combat_mode%</lyellow>'
+      - ''
+      - '<lyellow>Passive: </lyellow><lgray>Never attacks.</lgray>'
+      - ''
+      - '<lyellow>Protective: </lyellow><lgray>Defends owner when attacked.</lgray>'
+      - ''
+      - '<lyellow>Supportive: </lyellow><lgray>Supports owner''s attacks.</lgray>'
+      - ''
+      - <lyellow>➙ </lyellow><lgray>Click to <lyellow>toggle</lyellow>.</lgray>
+      Display_Name: <lyellow>Combat Mode</lyellow>
+    Slots: '23'
+    Type: combat_mode
+  lyellowbrenameblyellow:
+    Priority: 10
+    Item:
+      Material: NAME_TAG
+      Name: <lyellow>Rename</lyellow>
+      Lore:
+      - '<lyellow>▪ <lgray>Current: </lgray>%pet_name%</lyellow>'
+      - ''
+      - <lgray>Give new name to your pet.</lgray>
+      - ''
+      - <lyellow>➙ </lyellow><lgray>Click to <lyellow>rename</lyellow>.</lgray>
+      Display_Name: <lyellow>Rename</lyellow>
+    Slots: '21'
+    Type: pet_rename
+  lyellowbaspectsblyellow:
+    Priority: 10
+    Item:
+      Material: ENCHANTED_BOOK
+      Name: <lyellow>Aspects</lyellow>
+      Lore:
+      - '<lyellow>▪ <lgray>Aspect Points: </lgray>%pet_aspect_points%</lyellow>'
+      - ''
+      - <lgray>Improve your pet by <lyellow>upgrading</lyellow></lgray>
+      - <lgray>certain its aspects!</lgray>
+      - ''
+      - <lyellow>➙ </lyellow><lgray>Click to <lyellow>open</lyellow>.</lgray>
+      Display_Name: <lyellow>Aspects</lyellow>
+    Slots: '25'
+    Type: pet_aspects
+  lyellowbequipmentblyellow:
+    Priority: 10
+    Item:
+      Material: IRON_CHESTPLATE
+      Name: <lyellow>Equipment</lyellow>
+      Lore:
+      - '<lyellow>▪ <lgray>Unlocked: </lgray>%pet_equipment_unlocked%</lyellow>'
+      - ''
+      - <lgray>When <lyellow>unlocked</lyellow>, right-click the pet</lgray>
+      - <lgray>with item in hand to equip it.</lgray>
+      - ''
+      - <lyellow>➙ </lyellow><lgray>Left-Click to <lyellow>toggle</lyellow>.</lgray>
+      - <lyellow>➙ </lyellow><lgray>Right-Click to <lyellow>unequip all</lyellow>.</lgray>
+      Display_Name: <lyellow>Equipment</lyellow>
+    Slots: '2'
+    Type: pet_equipment
+  lyellowbinventoryblyellow:
+    Priority: 10
+    Item:
+      Material: CHEST
+      Name: <lyellow>Inventory</lyellow>
+      Lore:
+      - '<lyellow>▪ <lgray>Storage: </lgray>%pet_inventory_filled%<lgray>/</lgray>%pet_tier_inventory_size%</lyellow>'
+      - ''
+      - <lgray>You're making me carry</lgray>
+      - <lgray>the heavy stuff, aren't you?</lgray>
+      - ''
+      - <lyellow>➙ </lyellow><lgray>Click to <lyellow>open</lyellow>.</lgray>
+      Display_Name: <lyellow>Inventory</lyellow>
+    Slots: '6'
+    Type: pet_inventory

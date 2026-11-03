@@ -1,0 +1,33 @@
+EggPrice:
+  Default:
+    common:
+      Price: 1000.0
+      Currency: vault
+    rare:
+      Price: 1000.0
+      Currency: vault
+    unique:
+      Price: 1000.0
+      Currency: vault
+    mythic:
+      Price: 1000.0
+      Currency: vault
+    uncommon:
+      Price: 1000.0
+      Currency: vault
+    epic:
+      Price: 1000.0
+      Currency: vault
+    legendary:
+      Price: 1000.0
+      Currency: vault
+    celestial:
+      Price: 1000.0
+      Currency: vault
+  Custom:
+    common:
+      zombie:
+        Price: 0.0
+    rare:
+      zombie:
+        Price: 0.0

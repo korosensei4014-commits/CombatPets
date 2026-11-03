@@ -1,0 +1,131 @@
+Settings:
+  # Sets whether or not level downgrade is allowed.
+  # This setting will allow XP to go negative and therefore downgrade pet levels.
+  Downgrade_Allowed: true
+  # List of worlds, where pets will not gain or loss XP.
+  Disabled_Worlds:
+  - world_name
+  - another_world
+  # Sets how much XP (in % of max.) will be lost on pet's death.
+  Death_XP_Loss: 5.0
+  # Sets whether or not to use custom XP table - 'XPSources'.
+  # When disabled, uses 'natural' XP amount produced by mob's death.
+  Use_Custom_XP_Table: true
+  # Mobs spawned by one of the following reasons will produce no XP for pets.
+  # https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html
+  Prevent_XP_From:
+  - SPAWNER
+  - BUILD_IRONGOLEM
+  - BUILD_SNOWMAN
+  - SPAWNER_EGG
+  - EGG
+  - DISPENSE_EGG
+  Health_Scaling:
+    # Scales the XP from 'XPSources' with the killed mob's max health, so strong mobs and bosses
+    # give more XP than weak ones. Multiplier = Max Health / Base_Health (never below 1).
+    # Examples with Base_Health 20: zombie (20 HP) x1, iron golem (100) x5, Wither (300) x15, Warden (500) x25.
+    # Only applies when Use_Custom_XP_Table is enabled. XP is still split by the damage the pet dealt.
+    Enabled: true
+    # Max health that gives the normal (x1) XP amount. Mobs with more max health give proportionally more.
+    Base_Health: 20.0
+    # Upper limit for the multiplier (25 = Warden level). Protects against modded / custom mobs with huge health.
+    Max_Multiplier: 25.0
+XPSources:
+  illagers:
+    Amount:
+      Min: 30
+      Max: 70
+    Chance: 70.0
+    Mobs:
+    - pillager
+    - vindicator
+    - illusioner
+    - evoker
+  monsters:
+    Amount:
+      Min: 20
+      Max: 60
+    Chance: 50.0
+    Mobs:
+    - parched
+    - ravager
+    - zoglin
+    - bogged
+    - skeleton
+    - husk
+    - zombified_piglin
+    - blaze
+    - piglin
+    - endermite
+    - silverfish
+    - zombie
+    - giant
+    - drowned
+    - guardian
+    - creaking
+    - stray
+    - vex
+    - wither_skeleton
+    - zombie_villager
+    - piglin_brute
+    - breeze
+    - elder_guardian
+    - cave_spider
+    - warden
+    - witch
+    - spider
+    - wither
+    - creeper
+    - enderman
+  animals:
+    Amount:
+      Min: 5
+      Max: 25
+    Chance: 35.0
+    Mobs:
+    - camel_husk
+    - nautilus
+    - zombie_nautilus
+    - zombie_horse
+    - chicken
+    - panda
+    - sniffer
+    - axolotl
+    - bee
+    - trader_llama
+    - donkey
+    - cow
+    - fox
+    - pig
+    - llama
+    - mule
+    - frog
+    - hoglin
+    - armadillo
+    - camel
+    - cat
+    - rabbit
+    - happy_ghast
+    - sheep
+    - turtle
+    - wolf
+    - skeleton_horse
+    - goat
+    - ocelot
+    - polar_bear
+    - strider
+    - horse
+    - mooshroom
+    - parrot
+  others:
+    Amount:
+      Min: 25
+      Max: 50
+    Chance: 65.0
+    Mobs:
+    - phantom
+    - ender_dragon
+    - shulker
+    - ghast
+    - magma_cube
+    - slime

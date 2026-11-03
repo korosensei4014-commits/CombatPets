@@ -1,0 +1,85 @@
+Customizer:
+  # Sets sound to play when customizer is applied on a pet.
+  Apply_Sound:
+    # Sound name. You can use Spigot sound names, or ones from your resource pack.
+    # Spigot Sounds: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Sound.html
+    Name: item.armor.equip_leather
+    # Sound volume. From 0.0 to 1.0.
+    Volume: 0.8
+    # Sound speed. From 0.5 to 2.0
+    Pitch: 1.0
+  # Sets particle effect to play when customizer is applied on a pet.
+  Apply_Effect:
+    Name: CLOUD
+  # Item used to give and apply pet customizations.
+  Item:
+    Material: FLOWER_BANNER_PATTERN
+    Name: <lyellow><b>Pet Accessory</b></lyellow> <gray>(<white>%type%</white>)</gray>
+    Lore:
+    - <gray>Applies <lyellow>%name% %type%</lyellow></gray>
+    - <gray>accessory on your pet.</gray>
+    - ''
+    - <lgray><lyellow>[▶]</lyellow> Right-Click a pet to <lyellow>apply</lyellow>.</lgray>
+    Enchants:
+      unbreaking: 1
+    Item_Flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_DESTROYS
+    - HIDE_PLACED_ON
+    - HIDE_ADDITIONAL_TOOLTIP
+    - HIDE_DYE
+    - HIDE_ARMOR_TRIM
+    - HIDE_STORED_ENCHANTS
+Variants:
+  age:
+    Enabled: true
+    DisplayName: Age
+    Icon:
+      Material: MAP
+  size:
+    Enabled: true
+    DisplayName: Size
+    Icon:
+      Material: MAP
+  creeper_state:
+    Enabled: true
+    DisplayName: Creeper State
+    Icon:
+      Material: MAP
+  fox_type:
+    Enabled: true
+    DisplayName: Fox Type
+    Icon:
+      Material: MAP
+  llama_color:
+    Enabled: true
+    DisplayName: Llama Color
+    Icon:
+      Material: MAP
+  sheep_color:
+    Enabled: true
+    DisplayName: Sheep Color
+    Icon:
+      Material: MAP
+  horse_style:
+    Enabled: true
+    DisplayName: Horse Style
+    Icon:
+      Material: MAP
+  horse_color:
+    Enabled: true
+    DisplayName: Horse Color
+    Icon:
+      Material: MAP
+  shear_style:
+    Enabled: true
+    DisplayName: Shear Style
+    Icon:
+      Material: MAP
+  rabbit_type:
+    Enabled: true
+    DisplayName: Rabbit Type
+    Icon:
+      Material: MAP

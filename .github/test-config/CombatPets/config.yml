@@ -1,0 +1,599 @@
+General:
+  # When enabled, applies PlaceholderAPI placeholders to GUI title and items.
+  PlaceholderAPI_In_GUI: false
+  # Sets whether Pets Collection GUI should open if no command argument specified.
+  Collection_As_Default_Command: true
+Features:
+  # Sets whether or not Leveling feature is enabled.
+  Leveling: true
+  # Sets whether or not Capture feature is enabled.
+  Capture: true
+  # Sets whether or not Accessories feature is enabled.
+  Accessories: true
+  # Sets whether or not Shop feature is enabled.
+  Shop: true
+Items:
+  # Mystery egg item.
+  Mystery_Egg:
+    Material: DRAGON_EGG
+    Name: <lpurple><b>Mystery Pet Egg</b></lpurple> <gray>(<white>%pet_config_default_name%</white>)</gray>
+    Lore:
+    - <dgray>Hatches into egg with random tier.</dgray>
+    - ''
+    - <lgray><lpurple>[▶]</lpurple> Right-Click to <lpurple>hatch</lpurple>.</lgray>
+Pets:
+  # Egg item.
+  # [*] You should use 'player_head' as item Material to apply pet's egg texture.
+  Egg_Item:
+    Material: PLAYER_HEAD
+    Name: <lyellow><b>Pet Egg</b></lyellow> <gray>(<white>%pet_config_default_name%</white>)</gray>
+    Lore:
+    - '<dgray>Tier: <gray>%pet_tier_name%</gray></dgray>'
+    - ''
+    - <lgray><lyellow>[▶]</lyellow> Right-Click to <lyellow>claim</lyellow>.</lgray>
+  # List of worlds, where pets are disabled completely.
+  Disabled_Worlds:
+  - custom_world
+  Release:
+    # Sets whether or not players can release their pets.
+    Allowed: true
+    # When enabled, spawns similar to pet entity when releasing.
+    Natural: false
+    # List of worlds, where players can not release their pets.
+    BadWorlds:
+    - spawn
+    - other_world
+    # What the Release button (and the Q/Drop key in the collection) does:
+    # STORE  = 'Store in Egg': the pet leaves the collection as an egg item that keeps its name, level, XP,
+    #          aspects, wardrobe and duel stats. Anyone can hatch it into their collection, so pets can be
+    #          given away or traded. Needs the 'combatpets.capsule.pack' permission.
+    # DELETE = the original permanent release.
+    Mode: STORE
+  # Sets whether or not player's pets can attack each other.
+  PVP_Allowed: true
+  # Sets whether or not player should sneak to open pet menu on right click.
+  Sneak_To_Open_Menu: false
+  # Sets whether or not pet's 'Attack Damage' attribute will override damage for ranged (non-melee) attacks.
+  # By default, game does not uses 'Attack Damage' attribute when you (or mob) shoot arrows, fireballs, tridents, etc.
+  # This setting will change that.
+  Attack_Damage_For_Projectiles: true
+  # [ONLY WHEN 'Attack_Damage_For_Projectiles' IS ENABLED]
+  # Sets multiplier for original damage caused by pet's ranged attacks to be added to 'Attack Damage' attribute.
+  # This will help in balancing ranged attacks damage especially for enchanted items, so they inflicts more damage.
+  Original_Damage_From_Projectiles: 0.25
+  # Sets for how many percents a pet should be satiated to be able for natural health regen.
+  Saturation_Percent_To_Regen: 70
+  # Sets natural regeneration cooldown (in seconds) when a pet was damaged.
+  Damage_Regen_Cooldown: 5.0
+  # Sets whether or not pet will be removed from player's collection when pet dies.
+  Permanent_Deaths: false
+  # Sets whether or not pet will drop items from their inventories on death.
+  Drop_Inventory: true
+  # Sets whether or not pet will drop their armors on death.
+  Drop_Equipment: true
+  # Sets whether or not players can reallocate pet's aspects by using the Reallocate Points button in the GUI.
+  Allow_Reallocate_Aspect_Points: false
+  AutoFoodUsage:
+    # Sets whether or not pets will auto use food from their inventories.
+    Enabled: false
+    # Sets saturation percent for a pet to start use food.
+    # Default is 75, so pet will auto-eat when saturation drops to 75% or lower.
+    At_Saturation: 75.0
+  # Sets whether or not captured pets will get vanilla's mob equipment instead of being empty.
+  # This option is useful to make skeleton pets with bows by default, piglins with swords, etc.
+  Populate_Default_Equipment: true
+  Name:
+    # Sets the characters limit for pet names.
+    Max_Length: 16
+    # Sets min characters amount for pet names.
+    Min_Length: 3
+    # A list of words that are forbidden to be in pet names.
+    ForbiddenWords:
+    - ass
+    - dick
+    - bitch
+    - penis
+    - asshole
+    Rename:
+      # Sets whether or not Name tag items can be used on pets to rename them.
+      Allow_NameTags: true
+      # Sets whether or not Rename button in Pet Menu will require Name tag item in player's inventory.
+      Menu_Requires_NameTag: true
+      # When enabled, Java Edition players rename pets in a dialog window (text box + Save/Back buttons).
+      # When disabled, the old chat prompt is used. Bedrock players always get a Bedrock form.
+      Use_Dialog: true
+  Healthbar:
+    # Sets whether or not to use boss bar indicating pet health.
+    Enabled: true
+    # Sets healthbar title.
+    # You can use 'Pet' placeholders: https://nightexpress.gitbook.io/combatpetsutility/placeholders
+    Title: <lyellow>%pet_name%</lyellow>   <gray>Lv. </gray><white>%pet_level%</white>   <lred>%pet_health%</lred><gray>/</gray><lred>%pet_max_health% ❤</lred>
+    # Sets healthbar style.
+    # Available values: SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20
+    Style: SOLID
+    # Sets healthbar color.
+    # Available values: PINK, BLUE, RED, GREEN, YELLOW, PURPLE, WHITE
+    Color: GREEN
+  # Sets how many pets (per each tier) players can have depends on their permission group.
+  # Use 'default' for any groups not listed here.
+  # Use '-1' for unlimited amount.
+  Amount_Per_Rank:
+    # Available values: RANK, PERMISSION
+    # ==================== RANK MODE ====================
+    # Get value by player's permission group. All keys in 'Values' list will represent permission group names.
+    # If player has none of specified groups, the 'Default_Value' setting will be used then
+    #   Values:
+    #     vip: 1 # -> Player must be in 'vip' permission group.
+    #     gold: 2 # -> Player must be in 'gold' permission group.
+    #     emerald: 3 # -> Player must be in 'emerald' permission group.
+    #
+    # ==================== PERMISSION MODE ====================
+    # Get value by player's permissions. All keys in 'Values' list will represent postfixes for the 'Permission_Prefix' setting (see below).
+    # If player has none of specified permissions, the 'Default_Value' setting will be used then
+    #   Permission_Prefix: 'example.prefix.'
+    #   Values:
+    #     vip: 1 # -> Player must have 'example.prefix.vip' permission.
+    #     gold: 2 # -> Player must have 'example.prefix.gold' permission.
+    #     emerald: 3 # -> Player must have 'example.prefix.emerald' permission.
+    Mode: RANK
+    # Sets permission prefix for the 'PERMISSION' mode.
+    Permission_Prefix: pets.amount.
+    Default_Value: -1
+    Values:
+      vip: 20
+      admin: -1
+      default: 10
+  Follow:
+    # Pets only start walking to their owner when they are farther than this many blocks.
+    # Closer than this, the pet stays where it is instead of constantly walking up to you.
+    Start_Distance: 6.0
+    # While following, pets stop once they are this close to their owner (in blocks).
+    # Must be lower than Start_Distance. Big pets keep a little more space automatically.
+    Stop_Distance: 3.0
+  Duel:
+    # Enables pet duels: '/pets duel <player>' challenges another player's summoned pet.
+    # The losing pet really dies (Pets death rules apply) and must be revived.
+    Enabled: true
+    # Whether players accept duel challenges until they change it with '/pets duels on|off'.
+    # Players who already changed the setting keep their choice.
+    Default_Enabled: true
+    # Seconds a duel challenge stays valid.
+    Request_Timeout: 30
+    # Countdown in seconds before the pets start fighting.
+    Countdown: 3
+    # Maximum fight length in seconds. When time runs out the duel ends in a draw (no pet dies).
+    Max_Duration: 120
+    # Players must be within this many blocks of each other to start a duel.
+    # The duel is cancelled (no winner) if the pets get more than twice this far apart.
+    Max_Distance: 24.0
+    # Disables all healing of the two pets during a duel (pet regeneration, the Wither's self-heal, etc.).
+    # Pets are healed to full when the duel starts.
+    Disable_Healing: true
+    # When false, '/pets surrender' ends the duel as a loss but the surrendering pet survives.
+    # When true, the surrendering pet dies like it lost the fight.
+    Surrender_Kills_Pet: false
+    Sounds:
+      # Sound played on each countdown number (pitch rises: 3, 2, 1). Leave empty to disable.
+      Countdown: minecraft:block.note_block.pling
+      # Sound played when the fight starts (high pitch). Leave empty to disable.
+      Start: minecraft:block.note_block.pling
+      # Sound played to the winner. Leave empty to disable.
+      Win: minecraft:ui.toast.challenge_complete
+      # Sound played to the loser (also when surrendering). Leave empty to disable.
+      Lose: minecraft:block.note_block.didgeridoo
+      # Sound played to both players on a draw. Leave empty to disable.
+      Draw: minecraft:block.note_block.bell
+  # When enabled, fireballs shot by pets (Ghast, Blaze) also hurt fire-immune targets they're allowed to attack
+  # (Wither, Warden, Ghast, Blaze, ...). Their hit counts as normal projectile damage instead of fire damage.
+  # Fire immunity still works for everything else (lava, burning, vanilla mobs' fireballs).
+  Fireballs_Ignore_Fire_Immunity: true
+  Wither:
+    # When disabled, Wither pets don't break blocks around them after taking damage (vanilla Wither behaviour).
+    # Explosions from pets never break blocks either way.
+    Destroy_Blocks: false
+  Evoker:
+    # When enabled, Evoker pets also use the vanilla Vex summoning spell (they always use the fang spell).
+    # Summoned Vexes only attack the Evoker's target, follow the same damage rules as the Evoker
+    # (Pets.PVP_Allowed, WorldGuard pet-pvp, no friendly fire, duels), disappear when the Evoker is gone
+    # and are never saved to the world.
+    Summon_Vexes: false
+    # Max. Vexes alive at once per Evoker pet. One spell summons up to 3 (vanilla).
+    Max_Vexes: 3
+    # Seconds before a summoned Vex starts dying on its own. Vanilla: 30-120.
+    Vex_Lifetime: 30
+  Warden:
+    # When enabled, Warden pets use the vanilla sonic boom when they can't hit their target in melee
+    # (e.g. a flying pet, or a player who pillared up). Range: 15 blocks sideways, 20 up/down.
+    # Like vanilla it goes through blocks and ignores armor and shields. Normal pet damage rules still apply
+    # (Pets.PVP_Allowed, WorldGuard pet-pvp, no friendly fire, duels).
+    Sonic_Boom: true
+    # Damage of a Warden pet's sonic boom. Vanilla: 10.
+    Sonic_Boom_Damage: 10.0
+  # [ONLY WHEN 'Attack_Damage_For_Projectiles' IS ENABLED]
+  # When enabled, pet projectiles never deal less than their normal (vanilla) damage.
+  # Without this, pets with no melee attack (Ghast, Wither, Blaze, ...) have Attack Damage 1,
+  # so e.g. a Ghast fireball (6 damage) only deals ~2.5.
+  Projectile_Damage_Not_Below_Original: true
+  Store_Egg:
+    # Currency for the 'Store in Egg' cost.
+    Currency: vault
+    Cost:
+      # Cost to store a level 1 pet in an egg. Set Base and Per_Level to 0 to make it free.
+      Base: 100.0
+      # Extra cost for each level above 1. Example: level 20 = Base + 19 x Per_Level.
+      Per_Level: 25.0
+    # Seconds a player must wait between storing pets in eggs. 0 = no cooldown.
+    # Players with 'combatpets.bypass.store.cooldown' skip it.
+    Cooldown: 30
+    Sounds:
+      # Sound when a pet is stored in an egg. Leave empty to disable.
+      Store: minecraft:block.sniffer_egg.plop
+      # Sound when a stored egg hatches into a collection. Leave empty to disable.
+      Hatch: minecraft:block.sniffer_egg.hatch
+    Item:
+      # Name of a stored pet egg. Pet and tier placeholders work here.
+      Name: <lyellow><b>%pet_name%'s Egg</b></lyellow>
+      # Lore of a stored pet egg. Pet and tier placeholders work here (%pet_aspect_<id>% for each aspect).
+      Lore:
+      - <lgray>%pet_config_name% <lgray>(</lgray>%pet_tier_name%<lgray>)</lgray></lgray>
+      - ''
+      - '<lyellow>▪ <lgray>Level: </lgray>%pet_level%</lyellow>'
+      - '<lyellow>▪ <lgray>XP: </lgray>%pet_exp%<lgray>/</lgray>%pet_max_exp%</lyellow>'
+      - '<lyellow>▪ <lgray>Aspects: </lgray>Str %pet_aspect_strength%<lgray> · </lgray>Vit %pet_aspect_vitality%<lgray> · </lgray>Def %pet_aspect_defense%<lgray> · </lgray>Dex %pet_aspect_dexterity%</lyellow>'
+      - '<lyellow>▪ <lgray>Duels: </lgray><lgreen>%pet_duel_wins% won</lgreen><lgray> / </lgray><lred>%pet_duel_losses% lost</lred></lyellow>'
+      - ''
+      - <lgreen>[▶] </lgreen><lgray>Right-click to hatch it into your collection.</lgray>
+  Ravager:
+    # When disabled, Ravager pets don't break leaves they walk into (vanilla Ravager behaviour).
+    Destroy_Blocks: false
+  Mounts:
+    # Ticks between movement updates sent to players while a mount (Ravager, Pig, ...) is ridden.
+    # 1 = smoothest, 2 = same rate as players, 3 = vanilla mob rate (least network traffic).
+    # Only affects mounts that are being ridden. Horses and Camels are not affected.
+    Sync_Interval: 2
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Ravager: true
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Polar_Bear: true
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Hoglin: true
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Zoglin: true
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Strider: true
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Pig: true
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Sniffer: true
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Spider: true
+    # When enabled, the owner can ride this pet (right-click) and steer it like a horse.
+    Iron_Golem: true
+Attributes:
+  armor:
+    Name: Armor
+  attack_damage:
+    Name: Attack Damage
+  attack_knockback:
+    Name: Attack Knockback
+  attack_speed:
+    Name: Attack Speed
+  flying_speed:
+    Name: Flying Speed
+  health_regeneration_force:
+    Name: Health Regeneration Force
+  health_regeneration_speed:
+    Name: Health Regeneration Speed
+  horse_jump_strength:
+    Name: Horse Jump Strength
+  knockback_resistance:
+    Name: Knockback Resistance
+  max_health:
+    Name: Max Health
+  max_saturation:
+    Name: Max Saturation
+  movement_speed:
+    Name: Movement Speed
+  burning_time:
+    Name: Burning Time
+  explosion_knockback_resistance:
+    Name: Explosion Knockback Resistance
+  fall_damage_multiplier:
+    Name: Fall Damage Multiplier
+  gravity:
+    Name: Gravity
+  movement_efficiency:
+    Name: Movement Efficiency
+  safe_fall_distance:
+    Name: Safe Fall Distance
+  scale:
+    Name: Scale
+  step_height:
+    Name: Step Height
+  water_movement_efficiency:
+    Name: Water Movement Efficiency
+Aspects:
+  vitality:
+    Name: Vitality
+    # Sets aspect icon.
+    # https://nightexpressdev.com/nightcore/configuration/item-formation/
+    Icon:
+      Material: PLAYER_HEAD
+      SkinURL: 1c3cec68769fe9c971291edb7ef96a4e3b60462cfd5fb5baa1cbb3a71513e7b
+    # Sets pet's attributes affected by this aspect.
+    # https://nightexpress.gitbook.io/combatpetsfeatures/pet-attributes
+    # https://nightexpress.gitbook.io/combatpetsfeatures/pet-aspects
+    Attached_Attributes:
+    - health_regeneration_speed
+    - max_health
+    - max_saturation
+  defense:
+    Name: Defense
+    # Sets aspect icon.
+    # https://nightexpressdev.com/nightcore/configuration/item-formation/
+    Icon:
+      Material: PLAYER_HEAD
+      SkinURL: 2328f378f28a9872226f5ce04d6e1dfa111618587f48dfa1fe82d043216a5cf
+    # Sets pet's attributes affected by this aspect.
+    # https://nightexpress.gitbook.io/combatpetsfeatures/pet-attributes
+    # https://nightexpress.gitbook.io/combatpetsfeatures/pet-aspects
+    Attached_Attributes:
+    - armor
+  strength:
+    Name: Strength
+    # Sets aspect icon.
+    # https://nightexpressdev.com/nightcore/configuration/item-formation/
+    Icon:
+      Material: PLAYER_HEAD
+      SkinURL: 41a2c088637fee9ae3a36dd496e876e657f509de55972dd17c18767eae1f3e9
+    # Sets pet's attributes affected by this aspect.
+    # https://nightexpress.gitbook.io/combatpetsfeatures/pet-attributes
+    # https://nightexpress.gitbook.io/combatpetsfeatures/pet-aspects
+    Attached_Attributes:
+    - health_regeneration_force
+    - attack_damage
+  dexterity:
+    Name: Dexterity
+    # Sets aspect icon.
+    # https://nightexpressdev.com/nightcore/configuration/item-formation/
+    Icon:
+      Material: PLAYER_HEAD
+      SkinURL: a4efb34417d95faa94f25769a21676a022d263346c8553eb5525658b34269
+    # Sets pet's attributes affected by this aspect.
+    # https://nightexpress.gitbook.io/combatpetsfeatures/pet-attributes
+    # https://nightexpress.gitbook.io/combatpetsfeatures/pet-aspects
+    Attached_Attributes:
+    - flying_speed
+    - attack_speed
+    - movement_speed
+Food:
+  raw_meat:
+    Name: Raw Meat
+    Items:
+      mutton:
+        Item:
+          Material: MUTTON
+        Saturation: 3.5
+      chicken:
+        Item:
+          Material: CHICKEN
+        Saturation: 2.5
+      rabbit:
+        Item:
+          Material: RABBIT
+        Saturation: 3.0
+      beef:
+        Item:
+          Material: BEEF
+        Saturation: 3.5
+      porkchop:
+        Item:
+          Material: PORKCHOP
+        Saturation: 3.5
+  raw_fish:
+    Name: Raw Fish
+    Items:
+      salmon:
+        Item:
+          Material: SALMON
+        Saturation: 2.5
+      cod:
+        Item:
+          Material: COD
+        Saturation: 2.0
+      tropical_fish:
+        Item:
+          Material: TROPICAL_FISH
+        Saturation: 2.5
+  cooked_meat:
+    Name: Cooked Meat
+    Items:
+      cooked_porkchop:
+        Item:
+          Material: COOKED_PORKCHOP
+        Saturation: 3.0
+      cooked_rabbit:
+        Item:
+          Material: COOKED_RABBIT
+        Saturation: 4.0
+      cooked_chicken:
+        Item:
+          Material: COOKED_CHICKEN
+        Saturation: 3.0
+      cooked_mutton:
+        Item:
+          Material: COOKED_MUTTON
+        Saturation: 3.0
+      cooked_beef:
+        Item:
+          Material: COOKED_BEEF
+        Saturation: 5.0
+  cooked_fish:
+    Name: Cooked Fish
+    Items:
+      cooked_cod:
+        Item:
+          Material: COOKED_COD
+        Saturation: 3.0
+      cooked_salmon:
+        Item:
+          Material: COOKED_SALMON
+        Saturation: 3.0
+  flowers:
+    Name: Flowers
+    Items:
+      oxeye_daisy:
+        Item:
+          Material: OXEYE_DAISY
+        Saturation: 2.0
+  wheat_seeds:
+    Name: Wheat Seeds
+    Items:
+      wheat_seeds:
+        Item:
+          Material: WHEAT_SEEDS
+        Saturation: 2.0
+  wheat:
+    Name: Wheat
+    Items:
+      wheat:
+        Item:
+          Material: WHEAT
+        Saturation: 3.0
+  apples:
+    Name: Apples
+    Items:
+      apple:
+        Item:
+          Material: APPLE
+        Saturation: 3.0
+  carrots:
+    Name: Carrots
+    Items:
+      carrot:
+        Item:
+          Material: CARROT
+        Saturation: 3.0
+  bread:
+    Name: Bread
+    Items:
+      bread:
+        Item:
+          Material: BREAD
+        Saturation: 2.25
+  beetroot:
+    Name: Beetroot
+    Items:
+      beetroot:
+        Item:
+          Material: BEETROOT
+        Saturation: 2.25
+  mushrooms:
+    Name: Mushrooms
+    Items:
+      red_mushroom:
+        Item:
+          Material: RED_MUSHROOM
+        Saturation: 2.5
+      brown_mushroom:
+        Item:
+          Material: BROWN_MUSHROOM
+        Saturation: 2.5
+  bamboo:
+    Name: Bamboo
+    Items:
+      bamboo:
+        Item:
+          Material: BAMBOO
+        Saturation: 3.0
+  eggs:
+    Name: Eggs
+    Items:
+      egg:
+        Item:
+          Material: EGG
+        Saturation: 3.0
+  spider_eyes:
+    Name: Spider Eyes
+    Items:
+      spider_eye:
+        Item:
+          Material: SPIDER_EYE
+        Saturation: 3.0
+  gunpowder:
+    Name: Gunpowder
+    Items:
+      gunpowder:
+        Item:
+          Material: GUNPOWDER
+        Saturation: 5.0
+  rotten_flesh:
+    Name: Rotten Flesh
+    Items:
+      rotten_flesh:
+        Item:
+          Material: ROTTEN_FLESH
+        Saturation: 5.0
+  chorus_fruits:
+    Name: Chorus Fruits
+    Items:
+      popped_chorus_fruit:
+        Item:
+          Material: POPPED_CHORUS_FRUIT
+        Saturation: 5.0
+  bone_meal:
+    Name: Bone Meal
+    Items:
+      bone_meal:
+        Item:
+          Material: BONE_MEAL
+        Saturation: 4.0
+  wither_roses:
+    Name: Wither Roses
+    Items:
+      wither_rose:
+        Item:
+          Material: WITHER_ROSE
+        Saturation: 3.0
+  sticks:
+    Name: Sticks
+    Items:
+      stick:
+        Item:
+          Material: STICK
+        Saturation: 2.0
+Bedrock:
+  # When enabled, Bedrock Edition players (joining through Geyser) get native Bedrock forms
+  # instead of the chest GUIs. Java Edition players are not affected.
+  # Requires Floodgate (recommended) or Geyser-Spigot installed on THIS server.
+  # If neither is installed, this option does nothing and everyone gets the chest GUIs.
+  Enabled: true
+  # Which API is used to detect Bedrock players and send them forms.
+  # Available values: auto, floodgate, geyser
+  # 'auto' prefers Floodgate, then Geyser.
+  # Behind a Velocity/BungeeCord proxy, install Floodgate on BOTH the proxy and this server.
+  Provider: auto
+  # Maximum number of pets / eggs listed on a single page of a Bedrock form.
+  Page_Size: 10
+  # Minimal time (in milliseconds) between two form submissions of a player.
+  # Protects against accidental double submissions on laggy connections. Set to 0 to disable.
+  Submit_Cooldown_Millis: 300
+  Icons:
+    # Sets whether form buttons show icons. Icons are Bedrock texture paths (e.g. 'textures/items/lead')
+    # or full image URLs starting with 'http'. Leave an icon empty to hide it.
+    Enabled: true
+    Tier: textures/items/egg
+    Pet: textures/items/name_tag
+    Summon: textures/items/lead
+    Despawn: textures/items/ender_pearl
+    Revive: textures/items/totem
+    Release: textures/items/feather
+    Manage: textures/items/book_writable
+    Inventory: textures/blocks/chest_front
+    Unequip: textures/items/iron_chestplate
+    Aspects: textures/items/experience_bottle
+    Reallocate: textures/items/clock_item
+    Rename: textures/items/name_tag
+    Settings: textures/items/redstone_dust
+    Egg: textures/items/egg
+    Navigation: ''
