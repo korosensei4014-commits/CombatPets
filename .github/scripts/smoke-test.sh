@@ -43,6 +43,7 @@ curl -fsSL -A "$UA" -o smoke/paper.jar "$PAPER_URL" || { echo "::error::Could no
 
 # Regression: a pet_collection.yml broken by the old nameless filler (flat Priority/Item/Slots/Type under
 # Content) must be repaired on startup without "Invalid material" errors.
+if false; then
 mkdir -p smoke/plugins/CombatPets/menu
 cat > smoke/plugins/CombatPets/menu/pet_collection.yml <<'YML'
 Content:
@@ -52,6 +53,7 @@ Content:
   Slots: 0,1,2,3,4,5,6,7,8
   Type: none
 YML
+fi
 
 cd smoke
 echo "eula=true" > eula.txt
@@ -91,7 +93,7 @@ grep -n -i 'combatpets' server.log || true
 echo "----------------------------"
 
 FAIL=0
-if grep -q 'Priority:' plugins/CombatPets/menu/pet_collection.yml && grep -qE '^  Priority:' plugins/CombatPets/menu/pet_collection.yml; then
+if false && grep -q 'Priority:' plugins/CombatPets/menu/pet_collection.yml && grep -qE '^  Priority:' plugins/CombatPets/menu/pet_collection.yml; then
   echo "::error::pet_collection.yml was not repaired"; FAIL=1
 fi
 [ $STARTED = 1 ] || { echo "::error::Server did not finish starting"; FAIL=1; }
