@@ -86,5 +86,24 @@ public class ReleaseMenu extends ConfirmMenu {
         )).read(cfg);
 
         this.iconSlot = ConfigValue.create("PetIcon.Slot", 4).read(cfg);
+
+        // 'Store in Egg' mode (Pets.Release.Mode: STORE) uses its own title and text.
+        String storeTitle = ConfigValue.create("Store_In_Egg.Title",
+            BLACK.enclose("Store the pet in an egg?"),
+            "Title when Pets.Release.Mode is STORE."
+        ).read(cfg);
+        List<String> storeLore = ConfigValue.create("Store_In_Egg.PetIcon.Lore", Lists.newList(
+            LIGHT_GRAY.enclose("Store this pet in an egg item."),
+            LIGHT_GRAY.enclose("It keeps its name, level, aspects and stats,"),
+            LIGHT_GRAY.enclose("and anyone can hatch it into their collection."),
+            LIGHT_GRAY.enclose("Its inventory and equipment drop at your feet."),
+            "",
+            LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Cost: ") + PET_STORE_COST)
+        ), "Pet icon text when Pets.Release.Mode is STORE.").read(cfg);
+
+        if (Config.isReleaseStoreMode()) {
+            this.getOptions().setTitle(su.nightexpress.nightcore.util.text.NightMessage.asLegacy(storeTitle));
+            this.iconLore = storeLore;
+        }
     }
 }

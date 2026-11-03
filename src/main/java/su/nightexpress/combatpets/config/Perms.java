@@ -46,6 +46,8 @@ public class Perms {
     public static final UniPermission COMMAND_ASPECT_POINTS_REWARD  = new UniPermission(PREFIX_COMMAND + "aspectpoints.reward");
     public static final UniPermission COMMAND_ASPECT_POINTS_PENALTY = new UniPermission(PREFIX_COMMAND + "aspectpoints.penalty");
 
+    public static final UniPermission STORE_IN_EGG = new UniPermission(PREFIX + "capsule.pack");
+
     public static final UniPermission BYPASS_RELEASE_DISABLED = new UniPermission(PREFIX_BYPASS + "release.disallow");
     public static final UniPermission BYPASS_NAME_LENGTH      = new UniPermission(PREFIX_BYPASS + "name.length");
     public static final UniPermission BYPASS_NAME_WORDS       = new UniPermission(PREFIX_BYPASS + "name.words");

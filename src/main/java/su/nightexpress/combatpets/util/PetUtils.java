@@ -67,6 +67,18 @@ public class PetUtils {
         return seconds < 0 ? -1L : System.currentTimeMillis() + seconds * 1000L;
     }
 
+    /**
+     * Plays a sound (a key like "minecraft:block.note_block.pling") to the player. Empty or invalid keys are ignored.
+     */
+    public static void playSound(@NonNull org.bukkit.entity.Player player, @Nullable String sound) {
+        if (sound == null || sound.isBlank()) return;
+        try {
+            player.playSound(player.getLocation(), sound.trim(), org.bukkit.SoundCategory.PLAYERS, 1F, 1F);
+        }
+        catch (IllegalArgumentException ignored) {
+        }
+    }
+
     @NonNull
     public static ItemStack getRawEggItem(@NonNull Template template) {
         ItemStack item = new ItemStack(Config.PET_EGG_ITEM.get());

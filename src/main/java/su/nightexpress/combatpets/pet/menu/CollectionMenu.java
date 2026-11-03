@@ -296,6 +296,17 @@ public class CollectionMenu extends ConfigMenu<PetsPlugin> implements AutoFilled
                 ".")
         )).read(cfg);
 
+        // 'Store in Egg' mode (Pets.Release.Mode: STORE): same as Pet.Status.Inactive, with the store hint.
+        List<String> inactiveStore = ConfigValue.create("Pet.Status.Inactive_Store_Mode", Lists.newList(
+            LIGHT_GRAY.enclose("Status: " + LIGHT_YELLOW.enclose(BOLD.enclose("Idle"))),
+            "",
+            LIGHT_YELLOW.enclose("[▶] ") + LIGHT_GRAY.enclose("Left-Click to " + LIGHT_YELLOW.enclose("summon") + "."),
+            LIGHT_YELLOW.enclose("[▶] ") + LIGHT_GRAY.enclose("[Q/Drop] key to " + LIGHT_YELLOW.enclose("store in egg") + ".")
+        ), "Used instead of Pet.Status.Inactive when Pets.Release.Mode is STORE.").read(cfg);
+        if (Config.isReleaseStoreMode()) {
+            this.petStatusInactive = inactiveStore;
+        }
+
         this.petSlots = ConfigValue.create("Pets.Slots",
             new int[]{10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43}
         ).read(cfg);

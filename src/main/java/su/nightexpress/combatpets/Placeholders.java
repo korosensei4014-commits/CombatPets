@@ -3,6 +3,7 @@ package su.nightexpress.combatpets;
 import org.jspecify.annotations.NonNull;
 import su.nightexpress.combatpets.api.pet.FoodCategory;
 import su.nightexpress.combatpets.api.pet.Stat;
+import su.nightexpress.combatpets.config.Config;
 import su.nightexpress.combatpets.config.Lang;
 import su.nightexpress.combatpets.data.impl.PetData;
 import su.nightexpress.combatpets.pet.AttributeRegistry;
@@ -73,6 +74,7 @@ public class Placeholders extends su.nightexpress.nightcore.util.Placeholders {
     public static final String PET_OWNER_NAME         = "%pet_owner_name%";
     public static final String PET_DUEL_WINS          = "%pet_duel_wins%";
     public static final String PET_DUEL_LOSSES        = "%pet_duel_losses%";
+    public static final String PET_STORE_COST         = "%pet_store_cost%";
     /** On/Off state of the viewing player's duel setting (used in the Pet Menu). */
     public static final String DUELS_STATUS           = "%duels_status%";
 
@@ -116,7 +118,13 @@ public class Placeholders extends su.nightexpress.nightcore.util.Placeholders {
             .add(PET_ASPECT_POINTS, () -> NumberUtil.format(data.getAspectPoints()))
             .add(PET_COMBAT_MODE, () -> Lang.COMBAT_MODE.getLocalized(data.getCombatMode()))
             .add(PET_DUEL_WINS, () -> NumberUtil.format(data.getDuelWins()))
-            .add(PET_DUEL_LOSSES, () -> NumberUtil.format(data.getDuelLosses()));
+            .add(PET_DUEL_LOSSES, () -> NumberUtil.format(data.getDuelLosses()))
+            .add(PET_STORE_COST, () -> {
+                double cost = Config.getStoreCost(data.getLevel());
+                if (cost <= 0D) return "Free";
+                var currency = su.nightexpress.nightcore.integration.currency.EconomyBridge.api().getCurrency(Config.PET_STORE_CURRENCY.get());
+                return currency == null ? NumberUtil.format(cost) : currency.format(cost);
+            });
 
         for (String aspect : data.getTier().getAspectsMax().keySet()) {
             placeholderMap.add(PET_ASPECT.apply(aspect), () -> NumberUtil.format(data.getAspect(aspect)));

@@ -651,6 +651,11 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         Template template = petData.getTemplate();
         Tier tier = petData.getTier();
 
+        // 'Store in Egg' mode: checked before the release event so a refused store doesn't count as a release.
+        if (Config.isReleaseStoreMode()) {
+            return this.storeInEgg(player, petData);
+        }
+
         PetReleaseEvent event = new PetReleaseEvent(player, tier, template);
         this.plugin.getPluginManager().callEvent(event);
         if (event.isCancelled()) return false;
@@ -680,6 +685,63 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
         this.removeFromCollection(plugin.getUserManager().getOrFetch(player), tier, template);
         Lang.PET_RELEASE_SUCCESS.message().send(player, replacer -> replacer.replace(petData.replacePlaceholders()));
+        return true;
+    }
+
+    /**
+     * 'Store in Egg': turns the pet into an egg item that keeps its name, level, XP, aspects, wardrobe and duel
+     * stats. Its inventory and equipment are dropped at the owner's feet. Costs Pets.Store_Egg.Cost.
+     */
+    public boolean storeInEgg(@NonNull Player player, @NonNull PetData petData) {
+        if (!player.hasPermission(Perms.STORE_IN_EGG)) {
+            CoreLang.ERROR_NO_PERMISSION.withPrefix(this.plugin).send(player);
+            return false;
+        }
+        if (this.isSummoned(player, petData)) return false; // Must be in the collection (not summoned / dueling).
+        if (!petData.isAlive()) {
+            Lang.PET_STORE_ERROR_DEAD.message().send(player, replacer -> replacer.replace(Placeholders.PET_NAME, petData.getName()));
+            return false;
+        }
+
+        PetUser user = this.plugin.getUserManager().getOrFetch(player);
+        if (!user.isLoaded() || !user.hasPet(petData.getTemplate(), petData.getTier())) return false;
+
+        double cost = Config.getStoreCost(petData.getLevel());
+        Currency currency = EconomyBridge.api().getCurrency(Config.PET_STORE_CURRENCY.get());
+        if (cost > 0D) {
+            if (currency == null) {
+                this.plugin.error("Invalid currency '" + Config.PET_STORE_CURRENCY.get() + "' for Pets.Store_Egg.Currency.");
+                return false;
+            }
+            if (currency.queryBalance(player) < cost) {
+                Lang.PET_STORE_ERROR_NOT_ENOUGH_FUNDS.message().send(player, replacer -> replacer
+                    .replace(Placeholders.PET_NAME, petData.getName())
+                    .replace(Placeholders.GENERIC_AMOUNT, currency.format(cost)));
+                return false;
+            }
+        }
+
+        // Inventory and equipment never go into the egg (no item duplication through eggs): drop them.
+        Location location = player.getLocation();
+        List<ItemStack> drops = new ArrayList<>(petData.getInventory());
+        drops.addAll(petData.getEquipment().values());
+        drops.forEach(item -> {
+            if (item != null && !item.getType().isAir()) player.getWorld().dropItemNaturally(location, item);
+        });
+        petData.setInventory(new ArrayList<>());
+        petData.setEquipment(new HashMap<>());
+
+        ItemStack egg = this.plugin.getItemManager().createStoredEgg(petData);
+        if (cost > 0D && currency != null) currency.withdrawAsync(player.getUniqueId(), cost);
+
+        this.removeFromCollection(user, petData.getTier(), petData.getTemplate());
+        Players.addItem(player, egg);
+
+        String paid = cost > 0D && currency != null ? currency.format(cost) : "free";
+        Lang.PET_STORE_SUCCESS.message().send(player, replacer -> replacer
+            .replace(Placeholders.PET_NAME, petData.getName())
+            .replace(Placeholders.GENERIC_AMOUNT, paid));
+        PetUtils.playSound(player, Config.PET_STORE_SOUND.get());
         return true;
     }
 

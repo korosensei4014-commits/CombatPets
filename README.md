@@ -224,6 +224,35 @@ New pet types that **follow you but never fight**: **Copper Golem, Camel, Camel 
 
 Every pet file has `Capture.Health_Percent`: the max. health (in % of max.) a wild mob of that type may have to be captured. `-1` (default for existing pets) uses the global `Settings.Health_Percent` from the capture config; `100` means no damage needed. Useful for small mobs like Parrots, Rabbits and Chickens.
 
+### Store in Egg (give or trade pets)
+
+By default the **Release** button (and the Q/Drop key in the collection) is replaced by **Store in Egg**: the pet leaves your collection as an egg item named after it (e.g. "Doggo's Egg") that keeps its **name, level, XP, aspects, wardrobe and duel stats**. Anyone can right-click the egg to hatch the pet into their collection, so pets can be given away, traded or sold.
+
+- Needs the permission **`combatpets.capsule.pack`** (op by default; give it to the ranks that may store pets). Hatching needs no permission.
+- Costs money, scaling with level: `Base + (level - 1) x Per_Level`.
+- The pet must be in the collection (not summoned, so not in a duel) and alive. Its **inventory and equipment drop at the owner's feet**; they never go into the egg.
+- **Anti-duplication:** every egg has a unique id kept in `plugins/CombatPets/stored_eggs.txt`. An egg hatches only once; a duplicated copy (or one that already hatched) is refused and logged.
+- An egg can't hatch if the player already has that pet type in that tier, or reached their pet limit.
+- Sound and action-bar message when storing and hatching.
+- `Pets.Release.Mode: DELETE` restores the original permanent release.
+
+```yaml
+Pets:
+  Release:
+    Mode: STORE        # STORE = Store in Egg, DELETE = original release
+  Store_Egg:
+    Currency: vault
+    Cost:
+      Base: 100.0      # level 1
+      Per_Level: 25.0  # added per level above 1
+    Sounds:
+      Store: minecraft:block.sniffer_egg.plop
+      Hatch: minecraft:block.sniffer_egg.hatch
+    Item:
+      Name: ...        # "%pet_name%'s Egg"
+      Lore: [...]      # pet and tier placeholders, %pet_aspect_<id>%
+```
+
 ### Rideable pets (mounts)
 
 Besides horse-type pets (Horse, Donkey, Mule, Skeleton/Zombie Horse, Llama, Trader Llama, Camel, Camel Husk), these pets can be ridden: **Ravager, Polar Bear, Hoglin, Zoglin, Strider, Pig, Sniffer, Spider, Iron Golem**.

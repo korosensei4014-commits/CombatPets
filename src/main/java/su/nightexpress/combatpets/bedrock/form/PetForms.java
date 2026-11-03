@@ -169,7 +169,7 @@ public class PetForms extends FormSupport {
 
         boolean releaseHint = false;
         if (petManager.canOpenRelease(player, petData)) {
-            buttons.add(this.button(this.text(player, BedrockLang.PET_BUTTON_RELEASE), Config.BEDROCK_ICON_RELEASE,
+            buttons.add(this.button(this.text(player, Config.isReleaseStoreMode() ? BedrockLang.PET_BUTTON_STORE : BedrockLang.PET_BUTTON_RELEASE), Config.BEDROCK_ICON_RELEASE,
                 () -> this.openReleaseConfirm(player, petData, () -> this.openCollection(player, tier, page), backToPet)));
         }
         else if (petManager.isReleaseAllowed(player) && summoned) {
@@ -227,9 +227,10 @@ public class PetForms extends FormSupport {
      */
     public boolean openReleaseConfirm(@NonNull Player player, @NonNull PetData petData, @NonNull Runnable afterRelease, @NonNull Runnable onCancel) {
         return this.manager.sendConfirm(player,
-            this.text(player, BedrockLang.RELEASE_TITLE),
-            this.text(player, BedrockLang.RELEASE_CONTENT, petData.replacePlaceholders(), petData.getTier().replacePlaceholders()),
-            this.text(player, BedrockLang.RELEASE_BUTTON),
+            this.text(player, Config.isReleaseStoreMode() ? BedrockLang.STORE_TITLE : BedrockLang.RELEASE_TITLE),
+            this.text(player, Config.isReleaseStoreMode() ? BedrockLang.STORE_CONTENT : BedrockLang.RELEASE_CONTENT,
+                petData.replacePlaceholders(), petData.getTier().replacePlaceholders()),
+            this.text(player, Config.isReleaseStoreMode() ? BedrockLang.STORE_BUTTON : BedrockLang.RELEASE_BUTTON),
             this.text(player, BedrockLang.BUTTON_CANCEL),
             () -> {
                 if (!this.isOwned(player, petData)) {

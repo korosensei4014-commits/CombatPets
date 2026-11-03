@@ -9,6 +9,7 @@ import su.nightexpress.combatpets.util.PetCreator;
 import su.nightexpress.nightcore.config.ConfigValue;
 import su.nightexpress.nightcore.util.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,6 +76,63 @@ public class Config {
         true,
         "Sets whether or not players can release their pets."
     );
+
+    public static final ConfigValue<String> PET_RELEASE_MODE = ConfigValue.create("Pets.Release.Mode",
+        "STORE",
+        "What the Release button (and the Q/Drop key in the collection) does:",
+        "STORE  = 'Store in Egg': the pet leaves the collection as an egg item that keeps its name, level, XP,",
+        "         aspects, wardrobe and duel stats. Anyone can hatch it into their collection, so pets can be",
+        "         given away or traded. Needs the 'combatpets.capsule.pack' permission.",
+        "DELETE = the original permanent release.");
+
+    public static final ConfigValue<String> PET_STORE_CURRENCY = ConfigValue.create("Pets.Store_Egg.Currency",
+        "vault",
+        "Currency for the 'Store in Egg' cost.");
+
+    public static final ConfigValue<Double> PET_STORE_COST_BASE = ConfigValue.create("Pets.Store_Egg.Cost.Base",
+        100D,
+        "Cost to store a level 1 pet in an egg. Set Base and Per_Level to 0 to make it free.");
+
+    public static final ConfigValue<Double> PET_STORE_COST_PER_LEVEL = ConfigValue.create("Pets.Store_Egg.Cost.Per_Level",
+        25D,
+        "Extra cost for each level above 1. Example: level 20 = Base + 19 x Per_Level.");
+
+    public static final ConfigValue<String> PET_STORE_SOUND = ConfigValue.create("Pets.Store_Egg.Sounds.Store",
+        "minecraft:block.sniffer_egg.plop",
+        "Sound when a pet is stored in an egg. Leave empty to disable.");
+
+    public static final ConfigValue<String> PET_HATCH_SOUND = ConfigValue.create("Pets.Store_Egg.Sounds.Hatch",
+        "minecraft:block.sniffer_egg.hatch",
+        "Sound when a stored egg hatches into a collection. Leave empty to disable.");
+
+    public static final ConfigValue<String> PET_STORED_EGG_NAME = ConfigValue.create("Pets.Store_Egg.Item.Name",
+        LIGHT_YELLOW.enclose(BOLD.enclose(PET_NAME + "'s Egg")),
+        "Name of a stored pet egg. Pet and tier placeholders work here.");
+
+    public static final ConfigValue<List<String>> PET_STORED_EGG_LORE = ConfigValue.create("Pets.Store_Egg.Item.Lore",
+        Lists.newList(
+            LIGHT_GRAY.enclose(TEMPLATE_NAME + " " + LIGHT_GRAY.enclose("(") + TIER_NAME + LIGHT_GRAY.enclose(")")),
+            "",
+            LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Level: ") + PET_LEVEL),
+            LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("XP: ") + PET_XP + LIGHT_GRAY.enclose("/") + PET_REQUIRED_XP),
+            LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Aspects: ") + "Str " + PET_ASPECT.apply("strength")
+                + LIGHT_GRAY.enclose(" · ") + "Vit " + PET_ASPECT.apply("vitality")
+                + LIGHT_GRAY.enclose(" · ") + "Def " + PET_ASPECT.apply("defense")
+                + LIGHT_GRAY.enclose(" · ") + "Dex " + PET_ASPECT.apply("dexterity")),
+            LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Duels: ") + LIGHT_GREEN.enclose(PET_DUEL_WINS + " won")
+                + LIGHT_GRAY.enclose(" / ") + LIGHT_RED.enclose(PET_DUEL_LOSSES + " lost")),
+            "",
+            LIGHT_GREEN.enclose("[▶] ") + LIGHT_GRAY.enclose("Right-click to hatch it into your collection.")
+        ),
+        "Lore of a stored pet egg. Pet and tier placeholders work here (%pet_aspect_<id>% for each aspect).");
+
+    public static double getStoreCost(int level) {
+        return Math.max(0D, PET_STORE_COST_BASE.get() + PET_STORE_COST_PER_LEVEL.get() * Math.max(0, level - 1));
+    }
+
+    public static boolean isReleaseStoreMode() {
+        return !"DELETE".equalsIgnoreCase(PET_RELEASE_MODE.get().trim());
+    }
 
     public static final ConfigValue<Boolean> PET_RELEASE_NATURAL = ConfigValue.create("Pets.Release.Natural",
         true,

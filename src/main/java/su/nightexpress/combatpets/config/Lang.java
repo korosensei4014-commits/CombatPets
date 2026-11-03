@@ -518,6 +518,24 @@ public class Lang implements LangContainer {
     public static final TextLocale DUEL_PET_INFO = LangEntry.builder("Duel.PetInfo").text(
         PET_NAME + GRAY.wrap(" (Lv. " + PET_LEVEL + ", " + TIER_NAME + GRAY.wrap(", ") + GENERIC_AMOUNT + GRAY.wrap(" HP)")));
 
+    public static final MessageLocale PET_STORE_SUCCESS = LangEntry.builder("Pet.Store.Success").actionBarMessage(
+        SOFT_GREEN.wrap("Stored " + SOFT_YELLOW.wrap(PET_NAME) + " in an egg") + GRAY.wrap(" (" + GENERIC_AMOUNT + ")"));
+
+    public static final MessageLocale PET_STORE_ERROR_NOT_ENOUGH_FUNDS = LangEntry.builder("Pet.Store.Error.NotEnoughFunds").chatMessage(
+        SOFT_RED.wrap("You need " + SOFT_YELLOW.wrap(GENERIC_AMOUNT) + " to store " + SOFT_YELLOW.wrap(PET_NAME) + " in an egg."));
+
+    public static final MessageLocale PET_STORE_ERROR_DEAD = LangEntry.builder("Pet.Store.Error.Dead").chatMessage(
+        SOFT_RED.wrap("Revive " + SOFT_YELLOW.wrap(PET_NAME) + " before storing it in an egg."));
+
+    public static final MessageLocale PET_STORED_EGG_HATCH = LangEntry.builder("Pet.StoredEgg.Hatch").actionBarMessage(
+        SOFT_GREEN.wrap(SOFT_YELLOW.wrap(PET_NAME) + " hatched into your collection!"));
+
+    public static final MessageLocale PET_STORED_EGG_ERROR_USED = LangEntry.builder("Pet.StoredEgg.Error.Used").chatMessage(
+        SOFT_RED.wrap("This egg has already hatched or isn't valid."));
+
+    public static final MessageLocale PET_STORED_EGG_ERROR_INVALID = LangEntry.builder("Pet.StoredEgg.Error.Invalid").chatMessage(
+        SOFT_RED.wrap("This pet's type or tier doesn't exist on this server anymore."));
+
     public static final MessageLocale PET_RELEASE_SUCCESS = LangEntry.builder("Pet.Release.Success").chatMessage(
         GRAY.wrap("You released " + SOFT_YELLOW.wrap(PET_NAME) + "!")
     );

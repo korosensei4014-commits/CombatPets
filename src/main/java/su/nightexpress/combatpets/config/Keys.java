@@ -11,6 +11,9 @@ public class Keys {
     public static NamespacedKey eggPetId;
     public static NamespacedKey eggTierId;
 
+    public static NamespacedKey storedPet;   // Stored egg: the pet's data (JSON).
+    public static NamespacedKey storedEggId; // Stored egg: unique id (anti-duplication).
+
     public static NamespacedKey captureItem;
     public static NamespacedKey captureEscaped;
     public static NamespacedKey captureProgress;
@@ -28,6 +31,9 @@ public class Keys {
 
         eggPetId = new NamespacedKey(plugin, "item.config_id");
         eggTierId = new NamespacedKey(plugin, "item.tier_id");
+
+        storedPet = new NamespacedKey(plugin, "item.stored_pet");
+        storedEggId = new NamespacedKey(plugin, "item.stored_egg_id");
 
         captureItem = new NamespacedKey(plugin, "capture.item");
         captureEscaped = new NamespacedKey(plugin, "capture.escaped");
