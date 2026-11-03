@@ -48,6 +48,23 @@ public class Lang implements LangContainer {
     public static final TextLocale COMMAND_ADMIN_DESC          = LangEntry.builder("Command.Admin.Desc").text("Admin commands.");
     public static final TextLocale COMMAND_EGG_HUB_DESC        = LangEntry.builder("Command.EggHub.Desc").text("Pet egg tools.");
     public static final TextLocale COMMAND_EGG_REVALIDATE_DESC = LangEntry.builder("Command.Egg.Revalidate.Desc").text("Make the stored pet egg in your hand hatchable again.");
+    public static final TextLocale COMMAND_LIST_DESC            = LangEntry.builder("Command.List.Desc").text("List a player's pets.");
+    public static final TextLocale COMMAND_INFO_DESC            = LangEntry.builder("Command.Info.Desc").text("Show details of a player's pet.");
+    public static final TextLocale COMMAND_TRANSFER_DESC        = LangEntry.builder("Command.Transfer.Desc").text("Move a pet to another player.");
+    public static final TextLocale COMMAND_HEAL_DESC            = LangEntry.builder("Command.Heal.Desc").text("Fully heal a player's summoned pet.");
+    public static final TextLocale COMMAND_DESPAWN_DESC         = LangEntry.builder("Command.Despawn.Desc").text("Send a player's summoned pet back to their collection.");
+    public static final TextLocale COMMAND_ADMIN_DUEL_DESC      = LangEntry.builder("Command.AdminDuel.Desc").text("Duel tools.");
+    public static final TextLocale COMMAND_DUEL_STOP_DESC       = LangEntry.builder("Command.AdminDuel.Stop.Desc").text("End a player's duel with no winner.");
+    public static final TextLocale COMMAND_DUEL_RESETSTATS_DESC = LangEntry.builder("Command.AdminDuel.ResetStats.Desc").text("Clear a pet's duel wins and losses.");
+    public static final TextLocale COMMAND_EGG_STORE_DESC       = LangEntry.builder("Command.Egg.Store.Desc").text("Turn a player's pet into a stored egg for you.");
+    public static final TextLocale COMMAND_COOLDOWN_DESC        = LangEntry.builder("Command.Cooldown.Desc").text("Cooldown tools.");
+    public static final TextLocale COMMAND_COOLDOWN_RESET_DESC  = LangEntry.builder("Command.Cooldown.Reset.Desc").text("Clear a player's Store in Egg cooldown.");
+    public static final TextLocale COMMAND_LEVEL_DESC           = LangEntry.builder("Command.Level.Desc").text("Pet level tools.");
+    public static final TextLocale COMMAND_LEVEL_SET_DESC       = LangEntry.builder("Command.Level.Set.Desc").text("Set a player's pet to a level.");
+    public static final TextLocale COMMAND_LIST_STATUS_SUMMONED = LangEntry.builder("Command.List.Status.Summoned").text(GREEN.wrap("summoned"));
+    public static final TextLocale COMMAND_LIST_STATUS_DEAD     = LangEntry.builder("Command.List.Status.Dead").text(RED.wrap("dead"));
+    public static final TextLocale COMMAND_LIST_STATUS_RESTING  = LangEntry.builder("Command.List.Status.Resting").text(GRAY.wrap("in collection"));
+    public static final TextLocale DUEL_CANCEL_ADMIN            = LangEntry.builder("Duel.CancelReason.Admin").text("an admin stopped it");
     public static final TextLocale COMMAND_MYSTERY_EGG_DESC = LangEntry.builder("Command.MysteryEgg.Desc").text("Give mystery egg.");
     public static final TextLocale COMMAND_RENAME_DESC                = LangEntry.builder("Command.Rename.Desc").text("Rename player's pet.");
     public static final TextLocale COMMAND_REVIVE_DESC                = LangEntry.builder("Command.Revive.Desc").text("Revive player's pet.");
@@ -544,6 +561,69 @@ public class Lang implements LangContainer {
 
     public static final MessageLocale COMMAND_EGG_REVALIDATE_NOT_EGG = LangEntry.builder("Command.Egg.Revalidate.NotEgg").chatMessage(
         SOFT_RED.wrap("Hold a stored pet egg in your main hand."));
+
+    public static final MessageLocale COMMAND_LIST_HEADER = LangEntry.builder("Command.List.Header").chatMessage(
+        GRAY.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + "'s pets (" + SOFT_YELLOW.wrap(GENERIC_AMOUNT) + "):"));
+
+    public static final MessageLocale COMMAND_LIST_ENTRY = LangEntry.builder("Command.List.Entry").chatMessage(
+        GRAY.wrap("- " + TIER_NAME + " " + WHITE.wrap(TEMPLATE_NAME) + " " + SOFT_YELLOW.wrap(PET_NAME) + " Lv " + WHITE.wrap(PET_LEVEL) + " (" + GENERIC_TYPE + GRAY.wrap(")")));
+
+    public static final MessageLocale COMMAND_LIST_EMPTY = LangEntry.builder("Command.List.Empty").chatMessage(
+        GRAY.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " has no pets."));
+
+    public static final MessageLocale COMMAND_INFO = LangEntry.builder("Command.Info.Info").chatMessage(
+        GRAY.wrap(SOFT_YELLOW.wrap(PET_NAME) + " (" + TIER_NAME + " " + WHITE.wrap(TEMPLATE_NAME) + GRAY.wrap(") owned by ") + SOFT_YELLOW.wrap(PLAYER_NAME)),
+        GRAY.wrap("Status: " + GENERIC_TYPE),
+        GRAY.wrap("Level: " + WHITE.wrap(PET_LEVEL) + " (" + WHITE.wrap(PET_XP + "/" + PET_REQUIRED_XP) + " XP)"),
+        GRAY.wrap("Health: " + WHITE.wrap(PET_HEALTH) + ", food: " + WHITE.wrap(PET_SATURATION + "/" + PET_MAX_SATURATION)),
+        GRAY.wrap("Aspect points: " + WHITE.wrap(PET_ASPECT_POINTS) + " unspent, " + WHITE.wrap(GENERIC_TOTAL) + " spent"),
+        GRAY.wrap("Duels: " + GREEN.wrap(PET_DUEL_WINS) + " wins, " + RED.wrap(PET_DUEL_LOSSES) + " losses"),
+        GRAY.wrap("Items: " + WHITE.wrap(GENERIC_ITEM) + " in inventory, " + WHITE.wrap(GENERIC_AMOUNT) + " equipped"));
+
+    public static final MessageLocale COMMAND_TRANSFER_DONE = LangEntry.builder("Command.Transfer.Done").chatMessage(
+        GRAY.wrap("Moved " + SOFT_YELLOW.wrap(PET_NAME) + " (" + TIER_NAME + " " + WHITE.wrap(TEMPLATE_NAME) + GRAY.wrap(") from ") + SOFT_YELLOW.wrap(GENERIC_ITEM) + " to " + SOFT_YELLOW.wrap(PLAYER_NAME) + "."));
+
+    public static final MessageLocale COMMAND_TRANSFER_ERROR_SAME = LangEntry.builder("Command.Transfer.Error.Same").chatMessage(
+        SOFT_RED.wrap("Pick two different players."));
+
+    public static final MessageLocale COMMAND_TRANSFER_ERROR_HAS = LangEntry.builder("Command.Transfer.Error.Has").chatMessage(
+        SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " already has a " + TIER_NAME + " " + TEMPLATE_NAME + "."));
+
+    public static final MessageLocale COMMAND_TRANSFER_ERROR_DUEL = LangEntry.builder("Command.Transfer.Error.Duel").chatMessage(
+        SOFT_RED.wrap("That pet is in a duel. Stop it first with " + SOFT_YELLOW.wrap("/pets admin duel stop " + PLAYER_NAME) + "."));
+
+    public static final MessageLocale COMMAND_ERROR_NO_ACTIVE_PET = LangEntry.builder("Command.Error.NoActivePet").chatMessage(
+        SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " has no summoned pet."));
+
+    public static final MessageLocale COMMAND_HEAL_DONE = LangEntry.builder("Command.Heal.Done").chatMessage(
+        GRAY.wrap("Healed " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s " + SOFT_YELLOW.wrap(PET_NAME) + "."));
+
+    public static final MessageLocale COMMAND_DESPAWN_DONE = LangEntry.builder("Command.Despawn.Done").chatMessage(
+        GRAY.wrap("Sent " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s " + SOFT_YELLOW.wrap(PET_NAME) + " back to their collection."));
+
+    public static final MessageLocale COMMAND_DUEL_STOP_DONE = LangEntry.builder("Command.AdminDuel.Stop.Done").chatMessage(
+        GRAY.wrap("Stopped " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s duel. No winner, no stat changes."));
+
+    public static final MessageLocale COMMAND_DUEL_STOP_NONE = LangEntry.builder("Command.AdminDuel.Stop.None").chatMessage(
+        SOFT_RED.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " isn't in a duel."));
+
+    public static final MessageLocale COMMAND_DUEL_RESETSTATS_DONE = LangEntry.builder("Command.AdminDuel.ResetStats.Done").chatMessage(
+        GRAY.wrap("Reset duel wins and losses of " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s " + SOFT_YELLOW.wrap(PET_NAME) + "."));
+
+    public static final MessageLocale COMMAND_EGG_STORE_DONE = LangEntry.builder("Command.Egg.Store.Done").chatMessage(
+        GRAY.wrap("Stored " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s " + SOFT_YELLOW.wrap(PET_NAME) + " in an egg for you (plus " + SOFT_YELLOW.wrap(GENERIC_AMOUNT) + " of its items)."));
+
+    public static final MessageLocale COMMAND_COOLDOWN_RESET_DONE = LangEntry.builder("Command.Cooldown.Reset.Done").chatMessage(
+        GRAY.wrap("Cleared " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s Store in Egg cooldown."));
+
+    public static final MessageLocale COMMAND_COOLDOWN_RESET_NONE = LangEntry.builder("Command.Cooldown.Reset.None").chatMessage(
+        GRAY.wrap(SOFT_YELLOW.wrap(PLAYER_NAME) + " has no Store in Egg cooldown."));
+
+    public static final MessageLocale COMMAND_LEVEL_SET_DONE = LangEntry.builder("Command.Level.Set.Done").chatMessage(
+        GRAY.wrap("Set " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s " + SOFT_YELLOW.wrap(PET_NAME) + " to level " + SOFT_YELLOW.wrap(PET_LEVEL) + "."));
+
+    public static final MessageLocale COMMAND_LEVEL_SET_DONE_RESET = LangEntry.builder("Command.Level.Set.DoneReset").chatMessage(
+        GRAY.wrap("Set " + SOFT_YELLOW.wrap(PLAYER_NAME) + "'s " + SOFT_YELLOW.wrap(PET_NAME) + " to level " + SOFT_YELLOW.wrap(PET_LEVEL) + ". Its aspects were reset (" + SOFT_YELLOW.wrap(PET_ASPECT_POINTS) + " points to spend)."));
 
     public static final MessageLocale PET_STORED_EGG_HATCH = LangEntry.builder("Pet.StoredEgg.Hatch").actionBarMessage(
         SOFT_GREEN.wrap(SOFT_YELLOW.wrap(PET_NAME) + " hatched into your collection!"));

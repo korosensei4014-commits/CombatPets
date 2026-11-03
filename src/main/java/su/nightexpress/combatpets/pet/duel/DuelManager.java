@@ -592,6 +592,18 @@ public class DuelManager extends AbstractManager<PetsPlugin> {
         }
     }
 
+    /**
+     * Admin stop: ends the player's duel with no winner, loser or stat change.
+     * @return true if the player was in a duel.
+     */
+    public boolean adminStop(@NonNull Player player) {
+        PetDuel duel = this.getDuel(player);
+        if (duel == null) return false;
+
+        this.cancel(duel, Lang.DUEL_CANCEL_ADMIN.text());
+        return true;
+    }
+
     public void handleQuit(@NonNull Player player) {
         this.requests.removeIf(request -> request.challengerId().equals(player.getUniqueId()) || request.targetId().equals(player.getUniqueId()));
 

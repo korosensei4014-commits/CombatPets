@@ -691,6 +691,14 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     }
 
     /**
+     * @return true if the player had a running Store in Egg cooldown.
+     */
+    public boolean resetStoreCooldown(@NonNull UUID playerId) {
+        Long end = this.storeCooldowns.remove(playerId);
+        return end != null && end > System.currentTimeMillis();
+    }
+
+    /**
      * 'Store in Egg': turns the pet into an egg item that keeps its name, level, XP, aspects, wardrobe and duel
      * stats. The pet's inventory and equipment must be empty first. Costs Pets.Store_Egg.Cost.
      */

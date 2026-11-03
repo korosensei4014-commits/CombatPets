@@ -11,6 +11,7 @@ import su.nightexpress.combatpets.bedrock.bridge.BedrockBridge;
 import su.nightexpress.combatpets.bedrock.bridge.BedrockBridges;
 import su.nightexpress.combatpets.capture.CaptureManager;
 import su.nightexpress.combatpets.capture.command.CaptureCommands;
+import su.nightexpress.combatpets.command.impl.AdminCommands;
 import su.nightexpress.combatpets.command.impl.AspectPointsCommands;
 import su.nightexpress.combatpets.command.impl.BaseCommands;
 import su.nightexpress.combatpets.config.Config;
@@ -203,6 +204,7 @@ public class PetsPlugin extends NightPlugin {
                 .permission(Perms.COMMAND_ADMIN);
 
             BaseCommands.load(this, builder, admin);
+            AdminCommands.load(this, admin);
             AspectPointsCommands.load(this, admin);
 
             if (this.captureManager != null) {

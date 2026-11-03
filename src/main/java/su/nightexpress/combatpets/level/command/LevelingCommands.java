@@ -47,6 +47,24 @@ public class LevelingCommands {
             .branch(Commands.literal("penalty", builder -> builderXPReward(plugin, builder, Mode.REMOVE)))
         );
 
+        // /pets admin level set <level> <tier> <pet> [player]
+        rootNode.branch(Commands.hub("level")
+            .description(Lang.COMMAND_LEVEL_DESC)
+            .branch(Commands.literal("set")
+                .description(Lang.COMMAND_LEVEL_SET_DESC)
+                .permission(Perms.COMMAND_LEVEL)
+                .withArguments(
+                    Arguments.integer(CommandArguments.AMOUNT, 1)
+                        .localized(CoreLang.COMMAND_ARGUMENT_NAME_AMOUNT)
+                        .suggestions((reader, context) -> Lists.newList("1", "10", "25", "50")),
+                    CommandArguments.tierArgument(plugin),
+                    CommandArguments.templateArgument(plugin),
+                    Arguments.playerName(CommandArguments.PLAYER).optional()
+                )
+                .executes((context, arguments) -> setLevel(plugin, context, arguments))
+            )
+        );
+
         rootNode.branch(Commands.literal(RESET_PROGRESS)
             .description(Lang.COMMAND_RESET_PROGRESS_DESC)
             .permission(Perms.COMMAND_RESET_PROGRESS)
@@ -107,6 +125,59 @@ public class LevelingCommands {
                 Arguments.player(CommandArguments.PLAYER).optional()
             )
             .executes((context, arguments) -> rewardXP(plugin, context, arguments, mode));
+    }
+
+    /**
+     * Sets the pet straight to a level (capped at the tier's max) with 0 XP towards the next one.
+     * Raising adds the aspect points of the gained levels and keeps the build; lowering resets the aspects and
+     * gives the points a fresh pet of that level would have, so its power matches its level.
+     */
+    public static boolean setLevel(@NonNull PetsPlugin plugin, @NonNull CommandContext context,
+                                   @NonNull ParsedArguments arguments) {
+        plugin.getUserManager().manageUserSynchronized(arguments.getString(CommandArguments.PLAYER, context.getSender().getName()),
+            user -> {
+                if (user == null) {
+                    context.errorBadPlayer();
+                    return;
+                }
+                if (!user.isLoaded()) return;
+
+                Tier tier = arguments.get(CommandArguments.TIER, Tier.class);
+                Template template = arguments.get(CommandArguments.PET, Template.class);
+                PetData data = user.getPet(template, tier);
+                if (data == null) {
+                    Lang.PET_USER_ERROR_NOT_COLLECTED.message().send(context.getSender());
+                    return;
+                }
+
+                int oldLevel = data.getLevel();
+                int newLevel = Math.max(1, Math.min(arguments.getInt(CommandArguments.AMOUNT), data.getMaxLevel()));
+                boolean lowered = newLevel < oldLevel;
+
+                data.setLevel(newLevel);
+                data.setXP(0);
+                if (newLevel > oldLevel) {
+                    data.addAspectPoints((newLevel - oldLevel) * tier.getAspectPointsPerLevel());
+                }
+                else if (lowered) {
+                    data.setAspects(new java.util.HashMap<>());
+                    data.setAspectPoints(tier.getStartAspectPoints() + (newLevel - 1) * tier.getAspectPointsPerLevel());
+                }
+
+                Player player = user.getPlayer();
+                ActivePet activePet = player == null ? null : plugin.getPetManager().getPlayerPet(player);
+                if (activePet != null && activePet.getTier() == tier && activePet.getTemplate() == template) {
+                    activePet.update(); // New stats, health bar and name.
+                }
+
+                plugin.getUserManager().save(user);
+
+                MessageLocale message = lowered ? Lang.COMMAND_LEVEL_SET_DONE_RESET : Lang.COMMAND_LEVEL_SET_DONE;
+                message.message().send(context.getSender(), replacer -> replacer
+                    .replace(data.replacePlaceholders())
+                    .replace(Placeholders.PLAYER_NAME, user.getName()));
+            });
+        return true;
     }
 
     public static boolean changeXP(@NonNull PetsPlugin plugin, @NonNull CommandContext context,

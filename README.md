@@ -397,6 +397,16 @@ All form texts are in the language file under the new **`Bedrock.*`** section (t
 | Command | Permission |
 |---|---|
 | `/pets admin reload` | `combatpets.command.reload` |
+| `/pets admin list <player>` | `combatpets.command.list` |
+| `/pets admin info <player> <tier> <pet>` | `combatpets.command.info` |
+| `/pets admin transfer <from> <to> <tier> <pet>` | `combatpets.command.transfer` |
+| `/pets admin heal <player>` | `combatpets.command.heal` |
+| `/pets admin despawn <player>` | `combatpets.command.despawn` |
+| `/pets admin duel stop <player>` | `combatpets.command.duel.stop` |
+| `/pets admin duel resetstats <player> <tier> <pet>` | `combatpets.command.duel.resetstats` |
+| `/pets admin level set <level> <tier> <pet> [player]` | `combatpets.command.level` |
+| `/pets admin egg store <player> <tier> <pet>` | `combatpets.command.egg.store` |
+| `/pets admin cooldown reset <player>` | `combatpets.command.cooldown.reset` |
 | `/pets admin add\|remove <tier> <pet> [player]` | `combatpets.command.add` / `.remove` |
 | `/pets admin addall\|removeall <tier> [player]` | `combatpets.command.addall` / `.removeall` |
 | `/pets admin egg give <tier> <pet> [player]` | `combatpets.command.egg` |
@@ -409,6 +419,13 @@ All form texts are in the language file under the new **`Bedrock.*`** section (t
 | `/pets admin resetprogress <tier> <pet> [player]` | `combatpets.command.resetprogress` |
 | `/pets admin captureitem [amount] [player]` | `combatpets.command.captureitem` |
 | `/pets admin accessory <type> <name> [amount] [player]` | `combatpets.command.accessory` |
+
+Notes on the support commands:
+- **list / info / transfer / resetstats / level set / egg store** also work for offline players.
+- **transfer** keeps everything (level, aspects, items, wardrobe, duel stats), ignores the receiver's pet limit, and refuses if the receiver already has that pet or the pet is in a duel.
+- **level set** caps at the tier's max level and sets XP to 0. Raising adds the aspect points of the new levels and keeps the build; **lowering resets the pet's aspects** and gives the points a pet of that level would have.
+- **egg store** gives you the egg and the pet's items, free and with no cooldown.
+- **despawn** and **egg store** end a duel the pet is in with no winner.
 
 Staff who were given only some admin permissions also need `combatpets.command.admin` now. `/pets collection`, `/pets menu` and `/pets shop`, and right-clicking or sneak-right-clicking your pet, open forms for Bedrock players automatically.
 

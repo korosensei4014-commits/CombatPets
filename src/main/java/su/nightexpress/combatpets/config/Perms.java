@@ -33,6 +33,16 @@ public class Perms {
     public static final UniPermission COMMAND_CLEAR_INVENTORY       = new UniPermission(PREFIX_COMMAND + "clearinventory");
     public static final UniPermission COMMAND_ADMIN                 = new UniPermission(PREFIX_COMMAND + "admin");
     public static final UniPermission COMMAND_EGG_REVALIDATE        = new UniPermission(PREFIX_COMMAND + "egg.revalidate");
+    public static final UniPermission COMMAND_LIST                  = new UniPermission(PREFIX_COMMAND + "list");
+    public static final UniPermission COMMAND_INFO                  = new UniPermission(PREFIX_COMMAND + "info");
+    public static final UniPermission COMMAND_TRANSFER              = new UniPermission(PREFIX_COMMAND + "transfer");
+    public static final UniPermission COMMAND_HEAL                  = new UniPermission(PREFIX_COMMAND + "heal");
+    public static final UniPermission COMMAND_DESPAWN               = new UniPermission(PREFIX_COMMAND + "despawn");
+    public static final UniPermission COMMAND_DUEL_STOP             = new UniPermission(PREFIX_COMMAND + "duel.stop");
+    public static final UniPermission COMMAND_DUEL_RESETSTATS       = new UniPermission(PREFIX_COMMAND + "duel.resetstats");
+    public static final UniPermission COMMAND_EGG_STORE             = new UniPermission(PREFIX_COMMAND + "egg.store");
+    public static final UniPermission COMMAND_COOLDOWN_RESET        = new UniPermission(PREFIX_COMMAND + "cooldown.reset");
+    public static final UniPermission COMMAND_LEVEL                 = new UniPermission(PREFIX_COMMAND + "level");
     public static final UniPermission COMMAND_RELOAD                = new UniPermission(PREFIX_COMMAND + "reload");
     public static final UniPermission COMMAND_RESET_PROGRESS        = new UniPermission(PREFIX_COMMAND + "resetprogress");
     public static final UniPermission COMMAND_XP                    = new UniPermission(PREFIX_COMMAND + "xp");
@@ -61,6 +71,16 @@ public class Perms {
         COMMAND.addChildren(
             COMMAND_ADMIN,
             COMMAND_EGG_REVALIDATE,
+            COMMAND_LIST,
+            COMMAND_INFO,
+            COMMAND_TRANSFER,
+            COMMAND_HEAL,
+            COMMAND_DESPAWN,
+            COMMAND_DUEL_STOP,
+            COMMAND_DUEL_RESETSTATS,
+            COMMAND_EGG_STORE,
+            COMMAND_COOLDOWN_RESET,
+            COMMAND_LEVEL,
             COMMAND_ADD,
             COMMAND_ADD_ALL,
             COMMAND_REMOVE,

@@ -96,6 +96,17 @@ public class BaseCommands {
                 )
                 .executes((context, arguments) -> addEgg(plugin, context, arguments))
             )
+            .branch(Commands.literal("store")
+                .description(Lang.COMMAND_EGG_STORE_DESC)
+                .permission(Perms.COMMAND_EGG_STORE)
+                .playerOnly()
+                .withArguments(
+                    Arguments.playerName(CommandArguments.PLAYER),
+                    CommandArguments.tierArgument(plugin),
+                    CommandArguments.templateArgument(plugin)
+                )
+                .executes((context, arguments) -> AdminCommands.storeEgg(plugin, context, arguments))
+            )
             .branch(Commands.literal("revalidate")
                 .description(Lang.COMMAND_EGG_REVALIDATE_DESC)
                 .permission(Perms.COMMAND_EGG_REVALIDATE)
