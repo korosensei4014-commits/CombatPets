@@ -43,7 +43,7 @@ public class AxolotlPet extends Axolotl implements PetEntity {
 
     @Override
     protected Brain<Axolotl> makeBrain(Brain.Packed dynamic) {
-        return GenericAi.companionBrainProvider(Axolotl.class).makeBrain(this, dynamic);
+        return GenericAi.aquaticCompanionBrainProvider(Axolotl.class).makeBrain(this, dynamic);
     }
 
     @Override

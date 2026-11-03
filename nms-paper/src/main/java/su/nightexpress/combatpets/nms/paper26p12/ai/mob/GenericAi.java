@@ -31,6 +31,22 @@ public final class GenericAi {
         return BrainUtils.brainProvider(pet -> List.of(initCoreActivity(type), initCompanionIdleActivity(type)));
     }
 
+    /**
+     * Companion brain for water mobs (Axolotl, Frog): without the "float" behaviour, which makes land mobs paddle
+     * at the surface and made Axolotls keep jumping out of the water instead of swimming.
+     */
+    public static <E extends PathfinderMob> Brain.Provider<E> aquaticCompanionBrainProvider(Class<E> type) {
+        return BrainUtils.brainProvider(pet -> List.of(initAquaticCoreActivity(type), initCompanionIdleActivity(type)));
+    }
+
+    private static <E extends PathfinderMob> ActivityData<E> initAquaticCoreActivity(Class<E> type) {
+        return ActivityBuilder.init(Activity.CORE, type)
+            .goal(CoreActivities.lookAtLookTarget())
+            .goal(CoreActivities.tryReachWalkTargetOrAbandon())
+            .goal(CoreActivities.stopAngerIfTargetDead())
+            .build();
+    }
+
     public static void updateCompanionActivity(PathfinderMob pet) {
         pet.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.IDLE));
         pet.setAggressive(false);

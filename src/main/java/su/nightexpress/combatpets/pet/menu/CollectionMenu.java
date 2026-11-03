@@ -206,10 +206,10 @@ public class CollectionMenu extends ConfigMenu<PetsPlugin> implements AutoFilled
      * under 'Content', where nightcore reads them as four broken items.
      */
     private void repairOldFiller() {
+        // No real item is named like these, so any of them directly under 'Content' is a leftover.
         boolean broken = false;
-        for (String key : new String[]{"Priority", "Slots", "Type"}) {
-            String path = "Content." + key;
-            if (this.cfg.contains(path) && !this.cfg.isConfigurationSection(path)) {
+        for (String key : new String[]{"Priority", "Item", "Slots", "Type"}) {
+            if (this.cfg.contains("Content." + key)) {
                 broken = true;
                 break;
             }

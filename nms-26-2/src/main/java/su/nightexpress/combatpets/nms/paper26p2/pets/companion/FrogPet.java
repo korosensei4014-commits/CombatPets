@@ -43,7 +43,7 @@ public class FrogPet extends Frog implements PetEntity {
 
     @Override
     protected Brain<Frog> makeBrain(Brain.Packed dynamic) {
-        return GenericAi.companionBrainProvider(Frog.class).makeBrain(this, dynamic);
+        return GenericAi.aquaticCompanionBrainProvider(Frog.class).makeBrain(this, dynamic);
     }
 
     @Override
