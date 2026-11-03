@@ -56,13 +56,15 @@ jobs:
           path: smoke/server.log
           if-no-files-found: ignore
 
-      - name: Upload fresh plugin folder
+      - name: Push fresh plugin folder
         if: always()
-        uses: actions/upload-artifact@v5
-        with:
-          name: fresh-combatpets-folder
-          path: smoke/plugins/CombatPets
-          include-hidden-files: true
+        run: |
+          mkdir -p /tmp/out && cp -r smoke/plugins/CombatPets /tmp/out/
+          cd /tmp/out
+          git init -q -b tmp-defaults-out
+          git -c user.name=korosensei4014-commits -c user.email=237936073+korosensei4014-commits@users.noreply.github.com add -A
+          git -c user.name=korosensei4014-commits -c user.email=237936073+korosensei4014-commits@users.noreply.github.com commit -qm "fresh defaults"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" tmp-defaults-out
 
       # A release is published automatically for every new version in build.gradle.kts:
       # bump `version`, push, and the build creates tag v<version> + a Release with the JAR.
