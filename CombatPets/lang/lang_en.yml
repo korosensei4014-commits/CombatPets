@@ -1,0 +1,590 @@
+PetVariant:
+  AgeType:
+    ADULT: Adult
+    BABY: Baby
+  CreeperPower:
+    DEFAULT: Default
+    POWERED: Powered
+  DyeColor:
+    WHITE: White
+    LIGHT_BLUE: Light Blue
+    RED: Red
+    YELLOW: Yellow
+    BROWN: Brown
+    PINK: Pink
+    PURPLE: Purple
+    ORANGE: Orange
+    CYAN: Cyan
+    GREEN: Green
+    BLACK: Black
+    BLUE: Blue
+    MAGENTA: Magenta
+    LIME: Lime
+    GRAY: Gray
+    LIGHT_GRAY: Light Gray
+  FoxType:
+    RED: Red
+    SNOW: Snow
+    NONE: None
+    WHITE: White
+    WHITEFIELD: Whitefield
+    WHITE_DOTS: White Dots
+    BLACK_DOTS: Black Dots
+  HorseColor:
+    CREAMY: Creamy
+    BLACK: Black
+    CHESTNUT: Chestnut
+    BROWN: Brown
+    WHITE: White
+    DARK_BROWN: Dark Brown
+    GRAY: Gray
+  LlamaColor:
+    BROWN: Brown
+    GRAY: Gray
+    WHITE: White
+    CREAMY: Creamy
+  SheepShear:
+    SHEARED: Sheared
+    NORMAL: Normal
+  RabbitType:
+    BLACK: Black
+    BLACK_AND_WHITE: Black And White
+    THE_KILLER_BUNNY: The Killer Bunny
+    WHITE: White
+    BROWN: Brown
+    GOLD: Gold
+    SALT_AND_PEPPER: Salt And Pepper
+  HorseStyle:
+    BLACK_DOTS: Black Dots
+    WHITEFIELD: Whitefield
+    WHITE_DOTS: White Dots
+    NONE: None
+    WHITE: White
+CombatMode:
+  PROTECTIVE_AND_SUPPORTIVE: Protective And Supportive
+  PROTECTIVE: Protective
+  PASSIVE: Passive
+  SUPPORTIVE: Supportive
+Command:
+  Argument:
+    Name:
+      Tier: tier
+      Pet: pet
+  Collection:
+    Desc: List of pets you have claimed.
+  AddAll:
+    Desc: Add all pets to collection.
+    Done: <gray>Added all <soft_yellow>%pet_tier_name%</soft_yellow> pets to <soft_yellow>%player_name%</soft_yellow>'s collection!</gray>
+  Add:
+    Desc: Add pet to collection.
+    Done: <gray>Added <soft_yellow>%pet_tier_name% %pet_config_name%</soft_yellow> to <soft_yellow>%player_name%</soft_yellow>'s collection!</gray>
+  Remove:
+    Desc: Remove pet from collection.
+    Done: <gray>Removed <soft_yellow>%pet_tier_name% %pet_config_name%</soft_yellow> from <soft_yellow>%player_name%</soft_yellow>'s collection!</gray>
+  RemoveAll:
+    Desc: Remove all pets from collection.
+    Done: <gray>Removed all <soft_yellow>%pet_tier_name%</soft_yellow> pets from <soft_yellow>%player_name%</soft_yellow>'s collection!</gray>
+  CatchItem:
+    Desc: Give capture item.
+    Done: <gray>Given <soft_yellow>x%amount% %item%</soft_yellow> to <soft_yellow>%player_name%</soft_yellow>!</gray>
+  Food:
+    Desc: Give food item.
+    Done: <gray>Given <soft_yellow>x%amount% %item%</soft_yellow> to <soft_yellow>%player_name%</soft_yellow>!</gray>
+  Egg:
+    Desc: Give pet egg.
+    Done: <gray>Given <soft_yellow>%pet_tier_name% %pet_config_name%</soft_yellow> pet egg to <soft_yellow>%player_name%</soft_yellow>.</gray>
+    Revalidate:
+      Desc: Make the stored pet egg in your hand hatchable again.
+      Done: <soft_green>This egg (<soft_yellow>%pet_name%</soft_yellow>) can hatch again. Make sure no other copy of it is around.</soft_green>
+      Already: <soft_yellow>This egg is already valid and can hatch.</soft_yellow>
+      NotEgg: <soft_red>Hold a stored pet egg in your main hand.</soft_red>
+    Store:
+      Desc: Turn a player's pet into a stored egg for you.
+      Done: <gray>Stored <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> in an egg for you (plus <soft_yellow>%amount%</soft_yellow> of its items).</gray>
+  MysteryEgg:
+    Desc: Give mystery egg.
+    Done: <gray>Given <soft_yellow>%pet_config_name%</soft_yellow> mystery egg to <soft_yellow>%player_name%</soft_yellow>.</gray>
+  Rename:
+    Desc: Rename player's pet.
+    Done: <gray>Renamed <soft_yellow>%player_name%</soft_yellow>'s pet to <soft_yellow>%pet_name%</soft_yellow>.</gray>
+  Revive:
+    Desc: Revive player's pet.
+    Error:
+      Alive: <gray><soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet is not dead!</gray>
+    Done: <gray>Revived <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+  ClearInventory:
+    Desc: Clear player's pet inventory.
+    Done: <gray>Cleared <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet inventory.</gray>
+  Menu:
+    Desc: Open pet menu.
+  Shop:
+    Desc: Open shop.
+  Accessory:
+    Desc: Give accessory item.
+    Done: <gray>Given <soft_yellow>%amount% x %name%</soft_yellow> to <soft_yellow>%player_display_name%</soft_yellow>.</gray>
+  ResetProgress:
+    Desc: Reset leveling for player's pet.
+    Done: <gray>Reset leveling progress for <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+  XP:
+    Desc: XP commands.
+    Add:
+      Desc: Add XP to a pet.
+      Done: <gray>Added <soft_yellow>%amount%</soft_yellow> XP to <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+    Set:
+      Desc: Set XP for a pet.
+      Done: <gray>Set <soft_yellow>%amount%</soft_yellow> XP for <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+    Remove:
+      Desc: Remove XP off a pet.
+      Done: <gray>Removed <soft_yellow>%amount%</soft_yellow> XP off <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+    Reward:
+      Desc: Add XP to a player's active pet.
+      Done: <gray>Added <soft_yellow>%amount%</soft_yellow> XP to <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+    Penalty:
+      Desc: Remove XP off a player's active pet.
+      Done: <gray>Removed <soft_yellow>%amount%</soft_yellow> XP off <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+  AspectPoints:
+    Desc: Aspect Points commands.
+    Add:
+      Desc: Add Aspect Points to a pet.
+      Done: <gray>Added <soft_yellow>%amount%</soft_yellow> Aspect Points to <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+    Set:
+      Desc: Set Aspect Points for a pet.
+      Done: <gray>Set <soft_yellow>%amount%</soft_yellow> Aspect Points for <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+    Remove:
+      Desc: Remove Aspect Points off a pet.
+      Done: <gray>Removed <soft_yellow>%amount%</soft_yellow> Aspect Points off <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+    Reward:
+      Desc: Add Aspect Points to a player's active pet.
+      Done: <gray>Added <soft_yellow>%amount%</soft_yellow> Aspect Points to <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+    Penalty:
+      Desc: Remove Aspect Points off a player's active pet.
+      Done: <gray>Removed <soft_yellow>%amount%</soft_yellow> Aspect Points off <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> pet.</gray>
+  Syntax:
+    InvalidTier: <gray><soft_red>%input%</soft_red> is not a valid tier!</gray>
+    InvalidPet: <gray><soft_red>%input%</soft_red> is not a valid pet!</gray>
+    InvalidFoodCategory: <gray><soft_red>%input%</soft_red> is not a valid food category!</gray>
+    InvalidFoodItem: <gray><soft_red>%input%</soft_red> is not a valid food item!</gray>
+    InvalidCustomization: <gray><soft_red>%input%</soft_red> is not a valid customization type!</gray>
+  Duel:
+    Desc: Challenge a player's pet to a duel.
+  Duels:
+    Desc: Turn pet duel challenges on or off.
+  Surrender:
+    Desc: Surrender your current pet duel.
+  Admin:
+    Desc: Admin commands.
+  EggHub:
+    Desc: Pet egg tools.
+  List:
+    Desc: List a player's pets.
+    Status:
+      Summoned: <green>summoned</green>
+      Dead: <red>dead</red>
+      Resting: <gray>in collection</gray>
+    Header: <gray><soft_yellow>%player_name%</soft_yellow>'s pets (<soft_yellow>%amount%</soft_yellow>):</gray>
+    Entry: <gray>- %pet_tier_name% <white>%pet_config_name%</white> <soft_yellow>%pet_name%</soft_yellow> Lv <white>%pet_level%</white> (%type%<gray>)</gray></gray>
+    Empty: <gray><soft_yellow>%player_name%</soft_yellow> has no pets.</gray>
+  Info:
+    Desc: Show details of a player's pet.
+    Info:
+    - ''
+    - <gray><soft_yellow>%pet_name%</soft_yellow> (%pet_tier_name% <white>%pet_config_name%</white><gray>) owned by </gray><soft_yellow>%player_name%</soft_yellow></gray>
+    - '<gray>Status: %type%</gray>'
+    - '<gray>Level: <white>%pet_level%</white> (<white>%pet_exp%/%pet_max_exp%</white> XP)</gray>'
+    - '<gray>Health: <white>%pet_health%</white>, food: <white>%pet_saturation%/%pet_max_saturation%</white></gray>'
+    - '<gray>Aspect points: <white>%pet_aspect_points%</white> unspent, <white>%total%</white> spent</gray>'
+    - '<gray>Duels: <green>%pet_duel_wins%</green> wins, <red>%pet_duel_losses%</red> losses</gray>'
+    - '<gray>Items: <white>%item%</white> in inventory, <white>%amount%</white> equipped</gray>'
+  Transfer:
+    Desc: Move a pet to another player.
+    Done: <gray>Moved <soft_yellow>%pet_name%</soft_yellow> (%pet_tier_name% <white>%pet_config_name%</white><gray>) from </gray><soft_yellow>%item%</soft_yellow> to <soft_yellow>%player_name%</soft_yellow>.</gray>
+    Error:
+      Same: <soft_red>Pick two different players.</soft_red>
+      Has: <soft_red><soft_yellow>%player_name%</soft_yellow> already has a %pet_tier_name% %pet_config_name%.</soft_red>
+      Duel: <soft_red>That pet is in a duel. Stop it first with <soft_yellow>/pets admin duel stop %player_name%</soft_yellow>.</soft_red>
+  Heal:
+    Desc: Fully heal a player's summoned pet.
+    Done: <gray>Healed <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow>.</gray>
+  Despawn:
+    Desc: Send a player's summoned pet back to their collection.
+    Done: <gray>Sent <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> back to their collection.</gray>
+  AdminDuel:
+    Desc: Duel tools.
+    Stop:
+      Desc: End a player's duel with no winner.
+      Done: <gray>Stopped <soft_yellow>%player_name%</soft_yellow>'s duel. No winner, no stat changes.</gray>
+      None: <soft_red><soft_yellow>%player_name%</soft_yellow> isn't in a duel.</soft_red>
+    ResetStats:
+      Desc: Clear a pet's duel wins and losses.
+      Done: <gray>Reset duel wins and losses of <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow>.</gray>
+  Cooldown:
+    Desc: Cooldown tools.
+    Reset:
+      Desc: Clear a player's Store in Egg cooldown.
+      Done: <gray>Cleared <soft_yellow>%player_name%</soft_yellow>'s Store in Egg cooldown.</gray>
+      None: <gray><soft_yellow>%player_name%</soft_yellow> has no Store in Egg cooldown.</gray>
+  Level:
+    Desc: Pet level tools.
+    Set:
+      Desc: Set a player's pet to a level.
+      Done: <gray>Set <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> to level <soft_yellow>%pet_level%</soft_yellow>.</gray>
+      DoneReset: <gray>Set <soft_yellow>%player_name%</soft_yellow>'s <soft_yellow>%pet_name%</soft_yellow> to level <soft_yellow>%pet_level%</soft_yellow>. Its aspects were reset (<soft_yellow>%pet_aspect_points%</soft_yellow> points to spend).</gray>
+  Error:
+    NoActivePet: <soft_red><soft_yellow>%player_name%</soft_yellow> has no summoned pet.</soft_red>
+Pet:
+  Despawn:
+    Death:
+    - '[title_times="20:60:20",sound="minecraft:entity.generic.death;0.8;1.0",type="title"]'
+    - <soft_red><b>Your Pet Died!</b></soft_red>
+    - <gray>Revive it in your collection.</gray>
+    Default: <gray>Pet despawned.</gray>
+  Claim:
+    Error:
+      AlreadyHave: <soft_red>You already have this pet!</soft_red>
+      ReachedLimit: <soft_red>You can not claim more than <orange>%amount%</orange> %pet_tier_name% pets!</soft_red>
+    Success:
+    - '[title_times="20:60:20",sound="minecraft:entity.player.levelup;0.8;1.0",type="title"]'
+    - <soft_green><b>Pet Claimed!</b></soft_green>
+    - '<gray>Check out your collection: <soft_green>/pet collection</soft_green></gray>'
+  MysteryEgg:
+    Hatch: '[sound="minecraft:entity.evoker.prepare_attack;0.8;1.0"]<gray>You hatched <light_purple>Mystery Egg</light_purple> into <light_purple>%pet_tier_name% %pet_config_default_name%</light_purple> !</gray>'
+  Catch:
+    Process:
+      Progress:
+      - '[title_times="0:20:0",type="title"]'
+      - <soft_yellow><b>Capturing...</b></soft_yellow>
+      - <gray><green><b>Success </b></green>→ <green>%success%% </green>| <red>%failure%% </red>← <red><b>Failure</b></red></gray>
+      Success:
+      - '[title_times="0:50:0",sound="minecraft:entity.player.levelup;0.8;1.0",type="title"]'
+      - <soft_green><b>Mob Captured!</b></soft_green>
+      - <gray>You captured <soft_green>%pet_config_default_name%</soft_green> <gray>(<white>%pet_tier_name%</white>)</gray></gray>
+      Escaped:
+      - '[title_times="0:50:0",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <orange><b>Mob Escaped!</b></orange>
+      - <gray>You have to look for another one...</gray>
+      Failure:
+      - '[title_times="0:50:0",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Capture Failed!</b></soft_red>
+      - <gray>You were unlucky. Give it another try!</gray>
+      TooFarAway:
+      - '[title_times="0:50:0",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Capture Failed!</b></soft_red>
+      - <gray>Stay closer next time!</gray>
+    Error:
+      NotCatchable: <gray>This <soft_red>%name%</soft_red> can not be captured.</gray>
+      NotPermitted: <gray>You don't have permissions to capture <soft_red>%name%</soft_red>.</gray>
+      Conditions: <gray><soft_red>%name%</soft_red> is not ready for capture.</gray>
+  Leveling:
+    LevelUp:
+    - '[title_times="20:60:20",sound="minecraft:entity.player.levelup;0.8;1.0",type="title"]'
+    - <soft_green><b>Pet Level Up!</b></soft_green>
+    - <gray><soft_green>%pet_name%</soft_green> is now level <soft_green>%pet_level%</soft_green>!</gray>
+    LevelDown:
+    - '[title_times="20:60:20",sound="minecraft:entity.blaze.death;0.8;1.0",type="title"]'
+    - <soft_red><b>Pet Level Down!</b></soft_red>
+    - <gray><soft_red>%pet_name%</soft_red> is now level <soft_red>%pet_level%</soft_red> :(</gray>
+  XP:
+    Lose:
+      ByDeath: <soft_red>[!] Your pet lost %amount% XP for death.</soft_red>
+    Gain:
+      ByMob: '[type="action_bar"]<soft_yellow>%pet_name%: </soft_yellow><orange>+%amount% XP</orange>'
+  Rename:
+    Prompt:
+    - '[title_times="20:60:20",sound="minecraft:block.lava.pop;0.8;1.0",type="title"]'
+    - <soft_yellow><b>Renaming</b></soft_yellow>
+    - <gray>Enter new pet name.</gray>
+    Error:
+      NoNametag:
+      - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Unable to Rename!</b></soft_red>
+      - <gray>You need a <soft_red>Name Tag</soft_red> item.</gray>
+      TooLong:
+      - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Name Too Long!</b></soft_red>
+      - <gray>Max name length is <soft_red>%amount%</soft_red> characters!</gray>
+      TooShort:
+      - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Name Too Short!</b></soft_red>
+      - <gray>Min name length is <soft_red>%amount%</soft_red> characters!</gray>
+      Forbidden:
+      - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Unacceptable Name!</b></soft_red>
+      - <gray>Name contains <soft_red>forbidden</soft_red> characters!</gray>
+      Empty: <soft_red>Please enter a name.</soft_red>
+    Success:
+    - '[title_times="20:60:20",sound="minecraft:block.note_block.bell;0.8;1.0",type="title"]'
+    - <soft_green><b>Pet Renamed!</b></soft_green>
+    - <gray>You renamed your pet to <soft_green>%pet_name%</soft_green></gray>
+    Dialog:
+      Title: <yellow><b>RENAME PET</b></yellow><dark_gray> » </dark_gray><white>%pet_name%</white>
+      Body: '<gray>Enter a <green>new name</green> for <white>%pet_name%</white>.</gray><br><gray>Length: <white>%amount% - %max%</white> characters.</gray>'
+      Body_NameTag: <yellow>Renaming costs 1 Name Tag, taken when you press Save.</yellow>
+      Input: New Name
+      Save:
+        Label: <green>✔</green> Save
+        Width: 150
+      Back:
+        Label: <soft_yellow>←</soft_yellow> Go Back
+        Width: 150
+  Revive:
+    Error:
+      NotEnoughFunds:
+      - '[title_times="20:60:20",sound="minecraft:block.anvil.place;0.8;1.0",type="title"]'
+      - <soft_red><b>Not Enough Funds!</b></soft_red>
+      - <gray>You need <soft_red>%amount%</soft_red> to revive <soft_red>%pet_name%</soft_red>.</gray>
+    Success:
+    - '[title_times="20:60:20",sound="minecraft:item.totem.use;0.8;1.0",type="title"]'
+    - <soft_green><b>Pet Revived!</b></soft_green>
+    - <gray>You revived <soft_green>%pet_name%</soft_green> for <soft_green>%amount%</soft_green>.</gray>
+  Error:
+    NoActivePet:
+    - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+    - <soft_red><b>No Active Pet!</b></soft_red>
+    - <gray>You have to summon a pet to do that.</gray>
+    NotYour: '[sound="minecraft:entity.villager.no;0.8;1.0"]<soft_red>You''re not owning this pet!</soft_red>'
+    BadWorld: <soft_red>Pets are disabled in this world.</soft_red>
+    AlreadyCollected: <soft_red>%player_name% already have %pet_tier_name% %pet_config_name%!</soft_red>
+    NotCollected: <soft_red>Player does not have such pet in his collection!</soft_red>
+    NotSummoned: <soft_red>Player does not have a pet summoned!</soft_red>
+    RegionSummon: <soft_red>Pets are not allowed in this area.</soft_red>
+  Spawn:
+    Error:
+      Dead:
+      - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Pet is Dead!</b></soft_red>
+      - <gray>You have to revive it before summon!</gray>
+      Already:
+      - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Already Summoned!</b></soft_red>
+      - <gray>You can have only one summoned pet.</gray>
+      BadPlace:
+      - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Bad Place!</b></soft_red>
+      - <gray>There is not enough space for a pet.</gray>
+  Release:
+    Success: <gray>You released <soft_yellow>%pet_name%</soft_yellow>!</gray>
+    Error:
+      BadWorld: <soft_red>You can not release pets in this world!</soft_red>
+      ProtectedArea: <soft_red>You can't release pets here!</soft_red>
+      Active: <soft_red>Return <soft_yellow>%pet_name%</soft_yellow> to your collection before releasing it!</soft_red>
+  Store:
+    Success: '[type="action_bar"]<soft_green>Stored <soft_yellow>%pet_name%</soft_yellow> in an egg</soft_green><gray> (%amount%)</gray>'
+    Error:
+      NotEnoughFunds: <soft_red>You need <soft_yellow>%amount%</soft_yellow> to store <soft_yellow>%pet_name%</soft_yellow> in an egg.</soft_red>
+      Dead: <soft_red>Revive <soft_yellow>%pet_name%</soft_yellow> before storing it in an egg.</soft_red>
+      NotEmpty: <soft_red>Take everything out of <soft_yellow>%pet_name%</soft_yellow>'s inventory and equipment before storing it in an egg.</soft_red>
+      Cooldown: <soft_red>You can store another pet in an egg in <soft_yellow>%time%</soft_yellow>.</soft_red>
+  StoredEgg:
+    Hatch: '[type="action_bar"]<soft_green><soft_yellow>%pet_name%</soft_yellow> hatched into your collection!</soft_green>'
+    Error:
+      Used: <soft_red>This egg has already hatched or isn't valid.</soft_red>
+      Invalid: <soft_red>This pet's type or tier doesn't exist on this server anymore.</soft_red>
+Shop:
+  Purchase:
+    Error:
+      NotEnoughFunds:
+      - '[title_times="20:60:20",sound="minecraft:entity.villager.no;0.8;1.0",type="title"]'
+      - <soft_red><b>Not Enough Funds!</b></soft_red>
+      - <gray>You need <soft_red>%price%</soft_red> to purchase <soft_red>%pet_config_default_name%</soft_red>.</gray>
+    Success:
+    - '[title_times="20:60:20",sound="minecraft:block.note_block.bell;0.8;1.0",type="title"]'
+    - <soft_green><b>Successful Purchase!</b></soft_green>
+    - <gray>You bought <soft_green>%pet_config_default_name%</soft_green> egg for <soft_green>%price%</soft_green>.</gray>
+Customizer:
+  Interact:
+    Pet:
+      Error:
+        NotYour: <soft_red>You can't customize other player pets!</soft_red>
+        WrongType: <soft_red>This accessory is not applicable to this pet!</soft_red>
+        AlreadyHas: <soft_red>This accessory is already applied to this pet!</soft_red>
+Duel:
+  Status:
+    'On': 'On'
+    'Off': 'Off'
+  Toggle:
+    'On': '<gray>Pet duels <soft_green>on</soft_green>: other players can challenge your pet.</gray>'
+    'Off': '<gray>Pet duels <soft_red>off</soft_red>: all challenges are declined automatically.</gray>'
+  Error:
+    SelfDisabled: <soft_red>Your pet duels are turned off. Turn them on with <soft_yellow>/pets duels on</soft_yellow> first.</soft_red>
+    TargetDisabled: <soft_red><soft_yellow>%player_name%</soft_yellow> isn't accepting pet duels.</soft_red>
+    Self: <soft_red>You can't duel yourself.</soft_red>
+    NoPet: <soft_red>You need a summoned pet to duel.</soft_red>
+    TargetNoPet: <soft_red><soft_yellow>%player_name%</soft_yellow> doesn't have a summoned pet.</soft_red>
+    InDuel: <soft_red>You are already in a pet duel.</soft_red>
+    TargetInDuel: <soft_red><soft_yellow>%player_name%</soft_yellow> is already in a pet duel.</soft_red>
+    TooFar: <soft_red><soft_yellow>%player_name%</soft_yellow> is too far away. Get within <soft_yellow>%amount%</soft_yellow> blocks.</soft_red>
+    AlreadySent: <soft_red>You already challenged <soft_yellow>%player_name%</soft_yellow>. Wait for an answer.</soft_red>
+    CantDespawn: <soft_red>You can't return your pet during a duel.</soft_red>
+    CantFeed: <soft_red>You can't feed your pet during a duel.</soft_red>
+    Companion: <soft_red>Your pet is a companion and can't fight in duels.</soft_red>
+    TargetCompanion: <soft_red><soft_yellow>%player_name%</soft_yellow>'s pet is a companion and can't fight in duels.</soft_red>
+    NotInDuel: <soft_red>You are not in a pet duel.</soft_red>
+    CantRide: <soft_red>You can't ride your pet during a duel.</soft_red>
+  Request:
+    Sent: <gray>Duel challenge sent to <soft_yellow>%player_name%</soft_yellow>. It expires in <soft_yellow>%amount%</soft_yellow> seconds.</gray>
+    Received:
+    - ''
+    - <gray><soft_yellow>%player_name%</soft_yellow> challenged your pet to a duel! Type <soft_yellow>/pets duel %player_name%</soft_yellow> to accept.</gray>
+    - <soft_red>The losing pet dies and must be revived.</soft_red>
+    Expired: <gray>The pet duel challenge between you and <soft_yellow>%player_name%</soft_yellow> expired.</gray>
+    Declined: <gray><soft_yellow>%player_name%</soft_yellow> declined the pet duel.</gray>
+  Countdown:
+  - '[title_times="0:25:0",type="title"]'
+  - <soft_yellow><b>%time%</b></soft_yellow>
+  - <gray>Pet duel vs <soft_yellow>%player_name%</soft_yellow></gray>
+  Start:
+  - '[title_times="0:30:0",type="title"]'
+  - <soft_red><b>FIGHT!</b></soft_red>
+  - <gray><soft_yellow>%pet_name%</soft_yellow> vs <soft_yellow>%player_name%</soft_yellow>'s pet</gray>
+  Win:
+  - '[title_times="20:60:20",type="title"]'
+  - <soft_green><b>VICTORY!</b></soft_green>
+  - <gray><soft_green>%pet_name%</soft_green> defeated <soft_yellow>%player_name%</soft_yellow>'s pet!</gray>
+  Lose:
+  - '[title_times="20:60:20",type="title"]'
+  - <soft_red><b>DEFEAT</b></soft_red>
+  - <gray><soft_red>%pet_name%</soft_red> was defeated by <soft_yellow>%player_name%</soft_yellow>'s pet.</gray>
+  Draw:
+  - '[title_times="20:60:20",type="title"]'
+  - <soft_yellow><b>DRAW</b></soft_yellow>
+  - <gray>Time is up! Both pets survived.</gray>
+  Cancelled: '<gray>The pet duel with <soft_yellow>%player_name%</soft_yellow> was cancelled: <soft_red>%type%</soft_red></gray>'
+  CancelReason:
+    Left: a player left
+    PetGone: a pet is no longer summoned
+    OwnerDied: a player died
+    TooFar: the pets got too far apart
+    Admin: an admin stopped it
+  Dialog:
+    Title: <yellow><b>PET DUEL</b></yellow><dark_gray> » </dark_gray><white>%player_name%</white>
+    Body: '<soft_yellow>%player_name%</soft_yellow><gray> challenges your pet to a duel!</gray><br><br><gray>Their pet: </gray><white>%name%</white><br><gray>Your pet: </gray><white>%pet_name%</white><br><br><soft_red>The losing pet dies and must be revived.</soft_red>'
+    Accept:
+      Label: <green>✔</green> Accept
+      Width: 150
+    Decline:
+      Label: <red>✘</red> Decline
+      Width: 150
+  PetInfo: '%pet_name%<gray> (Lv. %pet_level%, %pet_tier_name%<gray>, </gray>%amount%<gray> HP)</gray></gray>'
+  Surrender:
+    Lose:
+    - '[title_times="20:60:20",type="title"]'
+    - <soft_red><b>SURRENDERED</b></soft_red>
+    - <gray>You gave up the duel against <soft_yellow>%player_name%</soft_yellow>.</gray>
+    Win:
+    - '[title_times="20:60:20",type="title"]'
+    - <soft_green><b>VICTORY!</b></soft_green>
+    - <gray><soft_yellow>%player_name%</soft_yellow> surrendered the duel.</gray>
+Bedrock:
+  Button:
+    Back: <dark_gray>« Back</dark_gray>
+    PreviousPage: <dark_gray>« Previous Page</dark_gray>
+    NextPage: <dark_gray>Next Page »</dark_gray>
+    Confirm: Confirm
+    Cancel: Cancel
+  Tiers:
+    Title: Pet Collection
+    Content: <gray>Choose a tier to browse the pets you own.</gray>
+    Button: '%pet_tier_name%<br><dark_gray>%amount% pet(s)</dark_gray>'
+  Collection:
+    Title: '%pet_tier_name% Pets (%page%/%pages%)'
+    Content: <gray>Tap a pet to summon, despawn, revive or release it.</gray>
+    Content_Empty: <gray>You don't have any pets of this tier yet.</gray>
+    Button: <black>%pet_name%</black><dark_gray> (Lv. %pet_level%)</dark_gray><br>%type%
+    Status:
+      Summoned: <dark_green>Summoned</dark_green>
+      Idle: <dark_gray>Idle</dark_gray>
+      Dead: <dark_red>Dead</dark_red>
+      Dead_Auto: <dark_red>Dead - revives in %time%</dark_red>
+  Pet:
+    Title: '%pet_name%'
+    Content: '<gray>Tier: </gray>%pet_tier_name%<br><gray>Status: </gray>%type%<br><br><yellow><b>STATS</b></yellow><br><gray>Level: </gray><white>%pet_level%</white><br><gray>XP: </gray><white>%pet_exp%/%pet_max_exp%</white><br><gray>Saturation: </gray><white>%pet_saturation%/%pet_max_saturation%</white><br><gray>Food: </gray><white>%pet_food%</white><br><br><yellow><b>ATTRIBUTES</b></yellow><br><gray>Damage: </gray><white>%pet_attribute_attack_damage%</white><br><gray>Attack Speed: </gray><white>%pet_attribute_attack_speed%/sec.</white><br><gray>Health:
+      </gray><white>%pet_attribute_max_health%</white><br><gray>Regen: </gray><white>%pet_attribute_health_regeneration_force% x %pet_attribute_health_regeneration_speed%/sec.</white><br><gray>Defense: </gray><white>%pet_attribute_armor%</white><br><gray>Speed: </gray><white>W: %pet_attribute_movement_speed% / F: %pet_attribute_flying_speed%</white>'
+    Content_Duels: '<gray>Duels: </gray><dark_green>%pet_duel_wins% won</dark_green><gray> / </gray><dark_red>%pet_duel_losses% lost</dark_red>'
+    Hint:
+      Release_Active: <gray>Return this pet to your collection to be able to release it.</gray>
+    Button:
+      Summon: <dark_green>Summon Pet</dark_green>
+      Despawn: Return to Collection
+      Manage: Open Pet Menu
+      Revive: '<dark_green>Revive Pet</dark_green><br><dark_gray>Cost: %pet_tier_death_revive_cost%</dark_gray>'
+      Release: <dark_red>Release Pet</dark_red>
+      Store: <gold>Store in Egg</gold>
+  Revive:
+    Title: Revive the pet?
+    Content: <gray>Revive <white>%pet_name%</white> (%pet_tier_name%<gray>)?</gray></gray><br><br><gray>It will cost you <white>%pet_tier_death_revive_cost%</white>.</gray>
+    Button: Revive
+  Release:
+    Title: Release the pet?
+    Content: <gray>Release <white>%pet_name%</white> (%pet_tier_name%<gray>) into the wild?</gray></gray><br><br><red><b>The pet and all its progress will be lost forever!</b></red>
+    Button: Release
+  Menu:
+    Title: '%pet_name%'
+    Content: '<yellow><b>STATS</b></yellow><br><gray>Level: </gray><white>%pet_level%</white><br><gray>XP: </gray><white>%pet_exp%/%pet_max_exp%</white><br><gray>Saturation: </gray><white>%pet_saturation%/%pet_max_saturation%</white><br><gray>Food: </gray><white>%pet_food%</white><br><br><yellow><b>ATTRIBUTES</b></yellow><br><gray>Damage: </gray><white>%pet_attribute_attack_damage%</white><br><gray>Attack Speed: </gray><white>%pet_attribute_attack_speed%/sec.</white><br><gray>Health: </gray><white>%pet_attribute_max_health%</white><br><gray>Regen:
+      </gray><white>%pet_attribute_health_regeneration_force% x %pet_attribute_health_regeneration_speed%/sec.</white><br><gray>Defense: </gray><white>%pet_attribute_armor%</white><br><gray>Speed: </gray><white>W: %pet_attribute_movement_speed% / F: %pet_attribute_flying_speed%</white><br><br><yellow><b>SETTINGS</b></yellow><br><gray>Combat Mode: </gray><white>%pet_combat_mode%</white><br><gray>Silent Mode: </gray><white>%pet_silent%</white>'
+    Content_Duels: '<gray>Duels: </gray><white>%pet_duel_wins% won / %pet_duel_losses% lost</white>'
+    Content_Equipment: '<gray>Equipment Unlocked: </gray><white>%pet_equipment_unlocked%</white><br><gray>When unlocked, interact with the pet while holding an item to equip it.</gray>'
+    Button:
+      Inventory: Pet Inventory<br><dark_gray>%pet_inventory_filled%/%pet_tier_inventory_size% slots used</dark_gray>
+      Unequip: Unequip All Items
+      Aspects: Aspects<br><dark_gray>%pet_aspect_points% point(s) available</dark_gray>
+      Settings: Pet Settings<br><dark_gray>Combat mode, silent mode, equipment</dark_gray>
+      Rename: Rename Pet
+      Despawn: Return to Collection
+  Settings:
+    Title: Pet Settings
+    Label: '<yellow>Passive: </yellow><gray>Never attacks.</gray><br><yellow>Protective: </yellow><gray>Defends owner when attacked.</gray><br><yellow>Supportive: </yellow><gray>Supports owner''s attacks.</gray>'
+    CombatMode: Combat Mode
+    Silent: Silent Mode (disables pet sounds)
+    Equipment: Equipment Unlocked
+    Duels: Accept Pet Duel Challenges
+    Saved: <gray>Pet settings saved.</gray>
+  Rename:
+    Title: Rename Pet
+    Label: '<gray>Current name: </gray><white>%pet_name%</white><br><gray>Name length: </gray><white>%amount% - %max%</white><gray> characters.</gray>'
+    Label_NameTag: <yellow>Renaming costs 1 Name Tag from your inventory.</yellow>
+    Input: New name
+    Input_Placeholder: Type a new name...
+  Aspects:
+    Title: Pet Aspects
+    Content: '<gray>Aspect Points: </gray><white>%pet_aspect_points%</white><br><br><gray>Tap an aspect to see its bonuses and upgrade it.</gray>'
+    Aspect_Button: '%aspect_name%<dark_gray> (%value%/%max%)</dark_gray><br>%type%'
+    State:
+      Upgrade: <dark_green>Can be upgraded</dark_green>
+      Max: <dark_gray>Max level</dark_gray>
+      NoPoints: <dark_gray>No points available</dark_gray>
+    Reallocate_Button: <dark_red>Reallocate Points</dark_red><br><dark_gray>Reset all aspects & refund points</dark_gray>
+  Aspect:
+    Title: '%aspect_name%'
+    Content: '<gray>Level: </gray><white>%value%/%max%</white><br><gray>Aspect Points: </gray><white>%pet_aspect_points%</white><br><br><yellow><b>BONUSES PER LEVEL</b></yellow><br>%type%'
+    Attribute: '<gray>%name%: </gray><white>+%value%</white><gray> (total: %total%)</gray>'
+    Button:
+      Upgrade: <dark_green>Upgrade (+1)</dark_green><br><dark_gray>Costs 1 aspect point</dark_gray>
+  Reallocate:
+    Title: Reallocate points?
+    Content: <gray>All aspects of <white>%pet_name%</white> will be reset</gray><br><gray>and the spent points will be refunded.</gray>
+    Button: Reallocate
+  Shop:
+    Tiers:
+      Title: Egg Shop
+      Content: <gray>Select a tier to see the available pet eggs.</gray>
+      Button: '%pet_tier_name%'
+    Eggs:
+      Title: '%pet_tier_name% Eggs (%page%/%pages%)'
+      Content: <gray>Tap an egg to see its details and buy it.</gray>
+      Content_Empty: <gray>There are no eggs for sale in this tier.</gray>
+      Button: '%pet_config_default_name%<br><dark_green>%price%</dark_green>'
+    Confirm:
+      Title: Buy this egg?
+      Content: '<gray>Pet: </gray><white>%pet_config_default_name%</white><br><gray>Tier: </gray>%pet_tier_name%<br><gray>Price: </gray><green>%price%</green><br><br><yellow><b>TIER BONUSES</b></yellow><br><gray>Inventory: </gray><white>%pet_tier_inventory_has%</white><gray> (%pet_tier_inventory_size% slots)</gray><br><gray>Equipment: </gray><white>%pet_tier_equipment_has%</white><br><br><yellow><b>BASE STATS</b></yellow><br><gray>Max. Saturation: </gray><white>%pet_config_attribute_start_max_saturation%</white><br><gray>Damage:
+        </gray><white>%pet_config_attribute_start_attack_damage%</white><br><gray>Health: </gray><white>%pet_config_attribute_start_max_health%</white><br><gray>Defense: </gray><white>%pet_config_attribute_start_armor%</white><br><gray>Speed: </gray><white>%pet_config_attribute_start_movement_speed%</white>'
+      Button: Buy
+  Error:
+    InputEmpty: <red>Please enter a value.</red>
+    PetGone: <red>That pet is no longer available.</red>
+  Store:
+    Title: Store the pet in an egg?
+    Content: |-
+      <gray>Store <white>%pet_name%</white> (%pet_tier_name%<gray>) in an egg item? It keeps its name, level, aspects and stats, and anyone can hatch it. Empty its inventory and equipment first.</gray>
+
+      <gray>Cost: </gray><white>%pet_store_cost%</white></gray>
+    Button: Store in Egg

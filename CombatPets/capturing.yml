@@ -1,0 +1,22 @@
+Settings:
+  # Sets capture item format.
+  Item:
+    Material: minecraft:lead
+    Display_Name: <lpurple><b>Capture Lead</b></lpurple>
+    Lore:
+    - <gray>Special lead used to capture mobs.</gray>
+    - ''
+    - <lgray><lpurple>➙</lpurple> Right-Click a mob to <lpurple>capture</lpurple>.</lgray>
+  # Sets whether or not to consume capture item on use.
+  Consume_Item: true
+  # Sets whether or not mobs can escape from capturing making them immune to any next captures.
+  Escape_Allowed: true
+  # Sets min. amount (in percent of max.) of mob health to allow capturing them.
+  # If mob health % is greater than this value, it can not be captured.
+  Health_Percent: 20.0
+  # When 'true' saves success progress to the mob if catching failed.
+  # On next catch attempt, it will have that saved success value.
+  Save_Progress: true
+  # Sets max. distance between a player and a mob while capturing.
+  # If distance is greater than this value, capture task will be cancelled.
+  Max_Distance: 5

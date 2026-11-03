@@ -1,0 +1,55 @@
+# Sets tier display name.
+Name: <lpurple>Epic</lpurple>
+# Sets tier icon.
+# Available options: https://nightexpressdev.com/nightcore/configuration/item-formation/
+Icon:
+  Material: PURPLE_CANDLE
+# Sets name format for pets of this tier.
+# You can use 'Pet' and 'Tier' placeholders: https://nightexpress.gitbook.io/combatpetsutility/placeholders
+Name_Format: <gray>%pet_name%</gray> <lyellow>Lv. <lorange>%pet_level%</lorange></lyellow>
+# Sets tier weight value.
+# Weight determines the chance for the tier to be selected on capturing and tier display order in GUIs.
+Weight: 15.0
+Inventory:
+  # When 'true', allows pets with this tier to have an inventory.
+  Enabled: false
+  # Sets the inventory size. Allowed values: [9, 18, 27, 36, 45, 54]
+  Size: 27
+Equipment:
+  # When enabled, allows pets with this tier to have an equipment (pets can wear armor and weapon).
+  Enabled: true
+Death:
+  # Sets auto-respawn time (in seconds) for dead pets with this tier.
+  # Set this to -1 to disable auto-respawn.
+  Auto_Respawn_Time: 21600
+  # Sets price for a player to (force) revive a pet with this tier.
+  Revive_Cost: 3000.0
+  # Sets chance for the entire pet's inventory drop on death.
+  # Make sure you have enabled pet inventory drop in config.yml.
+  Inventory_Drop_Chance: 0.0
+  # Sets chance for the entire pet's equipment drop on death.
+  # Make sure you have enabled pet equipment drop in config.yml.
+  Equipment_Drop_Chance: 0.0
+  # Sets currency for pet revive.
+  # Available currencies: [xp_level, emerald, gold, custom_diamond]
+  Revive_Currency: vault
+Catching:
+  # When 'true', allows to capture pets with this tier.
+  Enabled: true
+Leveling:
+  # Sets initial XP amount required for next level.
+  Start_Exp: 720
+  # Sets modifier for XP amount required for next level.
+  XPModifier: 0.193
+  # Sets the max. level for pets with this tier.
+  Max_Level: 70
+  # How much aspect points a pet will receive on level up?
+  Aspect_Points_Per_Level: 1
+  # Sets how many Aspect Points a pet with this tier will have when obtained.
+  Start_Aspect_Points: 0
+Aspects:
+  Max:
+    dexterity: 15
+    strength: 30
+    defense: 10
+    vitality: 15
