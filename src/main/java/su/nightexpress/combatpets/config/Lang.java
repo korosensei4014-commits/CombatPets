@@ -373,9 +373,10 @@ public class Lang implements LangContainer {
         Sound.ENTITY_VILLAGER_NO
     );
 
-    public static final MessageLocale PET_ERROR_NOT_YOUR = LangEntry.builder("Pet.Error.NotYour").chatMessage(
+    // Shown when right-clicking someone else's pet. (New key, so existing lang files get the new text.)
+    public static final MessageLocale PET_ERROR_NOT_YOUR = LangEntry.builder("Pet.Error.BelongsTo").chatMessage(
         Sound.ENTITY_VILLAGER_NO,
-        SOFT_RED.wrap("You're not owning this pet!")
+        SOFT_RED.wrap("This pet belongs to " + SOFT_YELLOW.wrap(PET_OWNER_NAME) + ".")
     );
 
     public static final MessageLocale PET_SPAWN_ERROR_DEAD = LangEntry.builder("Pet.Spawn.Error.Dead").titleMessage(

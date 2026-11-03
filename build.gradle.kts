@@ -10,7 +10,7 @@ allprojects {
     group = "su.nightexpress.combatpets" 
     // CombatPets Reforged version: upstream version + "-rN". Bump N for each release.
     // (Releases up to v2.8.4-bedrock.17 used the old "-bedrock.N" scheme.)
-    version = "2.8.4-r14"
+    version = "2.8.4-r15"
 
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")

@@ -777,7 +777,9 @@ public class PetManager extends AbstractManager<PetsPlugin> {
         if (petHolder == null) return false;
 
         if (!petHolder.isOwner(player)) {
-            Lang.PET_ERROR_NOT_YOUR.message().send(player);
+            Lang.PET_ERROR_NOT_YOUR.message().send(player, replacer -> replacer
+                .replace(Placeholders.PET_OWNER_NAME, petHolder.getOwner().getName())
+                .replace(Placeholders.PET_NAME, petHolder.getName()));
             return true;
         }
 
