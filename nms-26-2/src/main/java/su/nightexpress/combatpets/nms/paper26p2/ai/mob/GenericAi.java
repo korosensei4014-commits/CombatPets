@@ -81,6 +81,13 @@ public final class GenericAi {
             .build();
     }
 
+    /**
+     * Like {@link #brainProvider(Class)}, with extra memory types the vanilla mob reads directly.
+     */
+    public static <E extends PathfinderMob> Brain.Provider<E> brainProvider(Class<E> type, List<? extends MemoryModuleType<?>> memories) {
+        return BrainUtils.brainProvider(memories, pet -> initActivities(type));
+    }
+
     public static void updateActivity(PathfinderMob pet) {
         pet.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
         pet.setAggressive(pet.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET));

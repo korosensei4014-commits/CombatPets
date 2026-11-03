@@ -42,7 +42,12 @@ public class AllayPet extends Allay implements PetEntity {
     }
 
     protected Brain.Provider<Allay> brainProvider() {
-        return GenericAi.brainProvider(Allay.class);
+        // Allays read LIKED_PLAYER directly (when hit, and when a player is nearby); without it registered they
+        // threw "Unregistered memory fetched: liked_player" and disappeared right after being summoned.
+        return GenericAi.brainProvider(Allay.class, java.util.List.of(
+            net.minecraft.world.entity.ai.memory.MemoryModuleType.LIKED_PLAYER,
+            net.minecraft.world.entity.ai.memory.MemoryModuleType.LIKED_NOTEBLOCK_POSITION,
+            net.minecraft.world.entity.ai.memory.MemoryModuleType.LIKED_NOTEBLOCK_COOLDOWN_TICKS));
     }
 
     @Override
@@ -53,6 +58,10 @@ public class AllayPet extends Allay implements PetEntity {
     @Override
     protected void customServerAiStep(ServerLevel level) {
         ProfilerFiller filler = Profiler.get();
+        // Like a vanilla Allay given an item by its player: the owner is its liked player (it never hurts them).
+        if (!this.getBrain().hasMemoryValue(net.minecraft.world.entity.ai.memory.MemoryModuleType.LIKED_PLAYER)) {
+            this.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.LIKED_PLAYER, this.getSharedData().getOwnerId());
+        }
         filler.push("allayBrain");
         this.getBrain().tick(level, this);
         filler.pop();

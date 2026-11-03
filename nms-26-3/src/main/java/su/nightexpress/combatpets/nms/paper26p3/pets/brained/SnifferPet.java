@@ -40,7 +40,9 @@ public class SnifferPet extends Sniffer implements PetEntity {
     }
 
     protected Brain.Provider<Sniffer> brainProvider() {
-        return GenericAi.brainProvider(Sniffer.class);
+        return GenericAi.brainProvider(Sniffer.class, java.util.List.of(
+            net.minecraft.world.entity.ai.memory.MemoryModuleType.IS_TEMPTED,
+            net.minecraft.world.entity.ai.memory.MemoryModuleType.SNIFFER_EXPLORED_POSITIONS));
     }
 
     @Override
