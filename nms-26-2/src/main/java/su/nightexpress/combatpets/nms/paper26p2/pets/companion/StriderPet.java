@@ -32,7 +32,14 @@ public class StriderPet extends Strider implements PetEntity {
 
     @Override
     public void setGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
+        // Float only in water (so it doesn't sink and get hurt). Striders stand on lava by themselves; floating
+        // there made them jump up and down non-stop.
+        this.goalSelector.addGoal(0, new FloatGoal(this) {
+            @Override
+            public boolean canUse() {
+                return StriderPet.this.isInWater() && super.canUse();
+            }
+        });
         this.goalSelector.addGoal(2, new PetFollowOwnerGoal(this));
     }
 
