@@ -27,8 +27,12 @@ import java.util.Collections;
 
 public class BaseCommands {
 
-    public static void load(@NonNull PetsPlugin plugin, @NonNull HubNodeBuilder rootNode) {
-        rootNode.branch(Commands.literal("reload")
+    /**
+     * @param rootNode  /pets (player commands)
+     * @param adminNode /pets admin (admin commands)
+     */
+    public static void load(@NonNull PetsPlugin plugin, @NonNull HubNodeBuilder rootNode, @NonNull HubNodeBuilder adminNode) {
+        adminNode.branch(Commands.literal("reload")
             .description(CoreLang.COMMAND_RELOAD_DESC)
             .permission(Perms.COMMAND_RELOAD)
             .executes((context, arguments) -> {
@@ -37,7 +41,7 @@ public class BaseCommands {
             })
         );
 
-        rootNode.branch(Commands.literal("add")
+        adminNode.branch(Commands.literal("add")
             .description(Lang.COMMAND_ADD_DESC)
             .permission(Perms.COMMAND_ADD)
             .withArguments(
@@ -48,7 +52,7 @@ public class BaseCommands {
             .executes((context, arguments) -> addOrRemovePet(plugin, context, arguments, true))
         );
 
-        rootNode.branch(Commands.literal("remove")
+        adminNode.branch(Commands.literal("remove")
             .description(Lang.COMMAND_REMOVE_DESC)
             .permission(Perms.COMMAND_REMOVE)
             .withArguments(
@@ -59,7 +63,7 @@ public class BaseCommands {
             .executes((context, arguments) -> addOrRemovePet(plugin, context, arguments, false))
         );
 
-        rootNode.branch(Commands.literal("addall")
+        adminNode.branch(Commands.literal("addall")
             .description(Lang.COMMAND_ADD_ALL_DESC)
             .permission(Perms.COMMAND_ADD_ALL)
             .withArguments(
@@ -69,7 +73,7 @@ public class BaseCommands {
             .executes((context, arguments) -> addOrRemoveAll(plugin, context, arguments, true))
         );
 
-        rootNode.branch(Commands.literal("removeall")
+        adminNode.branch(Commands.literal("removeall")
             .description(Lang.COMMAND_REMOVE_ALL_DESC)
             .permission(Perms.COMMAND_REMOVE_ALL)
             .withArguments(
@@ -79,18 +83,31 @@ public class BaseCommands {
             .executes((context, arguments) -> addOrRemoveAll(plugin, context, arguments, false))
         );
 
-        rootNode.branch(Commands.literal("egg")
-            .description(Lang.COMMAND_EGG_DESC)
-            .permission(Perms.COMMAND_EGG)
-            .withArguments(
-                CommandArguments.tierArgument(plugin),
-                CommandArguments.templateArgument(plugin),
-                Arguments.player(CommandArguments.PLAYER).optional()
+        // /pets admin egg give <tier> <pet> [player] | /pets admin egg revalidate
+        adminNode.branch(Commands.hub("egg")
+            .description(Lang.COMMAND_EGG_HUB_DESC)
+            .branch(Commands.literal("give")
+                .description(Lang.COMMAND_EGG_DESC)
+                .permission(Perms.COMMAND_EGG)
+                .withArguments(
+                    CommandArguments.tierArgument(plugin),
+                    CommandArguments.templateArgument(plugin),
+                    Arguments.player(CommandArguments.PLAYER).optional()
+                )
+                .executes((context, arguments) -> addEgg(plugin, context, arguments))
             )
-            .executes((context, arguments) -> addEgg(plugin, context, arguments))
+            .branch(Commands.literal("revalidate")
+                .description(Lang.COMMAND_EGG_REVALIDATE_DESC)
+                .permission(Perms.COMMAND_EGG_REVALIDATE)
+                .playerOnly()
+                .executes((context, arguments) -> {
+                    plugin.getItemManager().revalidateStoredEgg(context.getPlayerOrThrow());
+                    return true;
+                })
+            )
         );
 
-        rootNode.branch(Commands.literal("mysteryegg")
+        adminNode.branch(Commands.literal("mysteryegg")
             .description(Lang.COMMAND_MYSTERY_EGG_DESC)
             .permission(Perms.COMMAND_MYSTERY_EGG)
             .withArguments(
@@ -100,7 +117,7 @@ public class BaseCommands {
             .executes((context, arguments) -> addMysteryEgg(plugin, context, arguments))
         );
 
-        rootNode.branch(Commands.literal("food")
+        adminNode.branch(Commands.literal("food")
             .description(Lang.COMMAND_FOOD_DESC)
             .permission(Perms.COMMAND_FOOD)
             .withArguments(
@@ -140,7 +157,7 @@ public class BaseCommands {
             .executes((context, arguments) -> openPetMenu(plugin, context, arguments))
         );
 
-        rootNode.branch(Commands.literal("rename")
+        adminNode.branch(Commands.literal("rename")
             .description(Lang.COMMAND_RENAME_DESC)
             .permission(Perms.COMMAND_RENAME)
             .withArguments(
@@ -152,7 +169,7 @@ public class BaseCommands {
             .executes((context, arguments) -> renamePet(plugin, context, arguments))
         );
 
-        rootNode.branch(Commands.literal("revive")
+        adminNode.branch(Commands.literal("revive")
             .description(Lang.COMMAND_REVIVE_DESC)
             .permission(Perms.COMMAND_REVIVE)
             .withArguments(
@@ -163,7 +180,7 @@ public class BaseCommands {
             .executes((context, arguments) -> revivePet(plugin, context, arguments))
         );
 
-        rootNode.branch(Commands.literal("clearinventory")
+        adminNode.branch(Commands.literal("clearinventory")
             .description(Lang.COMMAND_CLEAR_INVENTORY_DESC)
             .permission(Perms.COMMAND_CLEAR_INVENTORY)
             .withArguments(

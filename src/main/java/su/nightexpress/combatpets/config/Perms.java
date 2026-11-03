@@ -31,6 +31,8 @@ public class Perms {
     public static final UniPermission COMMAND_RENAME                = new UniPermission(PREFIX_COMMAND + "rename");
     public static final UniPermission COMMAND_REVIVE                = new UniPermission(PREFIX_COMMAND + "revive");
     public static final UniPermission COMMAND_CLEAR_INVENTORY       = new UniPermission(PREFIX_COMMAND + "clearinventory");
+    public static final UniPermission COMMAND_ADMIN                 = new UniPermission(PREFIX_COMMAND + "admin");
+    public static final UniPermission COMMAND_EGG_REVALIDATE        = new UniPermission(PREFIX_COMMAND + "egg.revalidate");
     public static final UniPermission COMMAND_RELOAD                = new UniPermission(PREFIX_COMMAND + "reload");
     public static final UniPermission COMMAND_RESET_PROGRESS        = new UniPermission(PREFIX_COMMAND + "resetprogress");
     public static final UniPermission COMMAND_XP                    = new UniPermission(PREFIX_COMMAND + "xp");
@@ -50,12 +52,15 @@ public class Perms {
 
     public static final UniPermission BYPASS_RELEASE_DISABLED = new UniPermission(PREFIX_BYPASS + "release.disallow");
     public static final UniPermission BYPASS_NAME_LENGTH      = new UniPermission(PREFIX_BYPASS + "name.length");
+    public static final UniPermission BYPASS_STORE_COOLDOWN   = new UniPermission(PREFIX_BYPASS + "store.cooldown");
     public static final UniPermission BYPASS_NAME_WORDS       = new UniPermission(PREFIX_BYPASS + "name.words");
 
     static {
         PLUGIN.addChildren(COMMAND, BYPASS, CAPTURE);
 
         COMMAND.addChildren(
+            COMMAND_ADMIN,
+            COMMAND_EGG_REVALIDATE,
             COMMAND_ADD,
             COMMAND_ADD_ALL,
             COMMAND_REMOVE,
@@ -91,7 +96,8 @@ public class Perms {
         BYPASS.addChildren(
             BYPASS_RELEASE_DISABLED,
             BYPASS_NAME_LENGTH,
-            BYPASS_NAME_WORDS
+            BYPASS_NAME_WORDS,
+            BYPASS_STORE_COOLDOWN
         );
     }
 }

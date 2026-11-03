@@ -34,6 +34,8 @@ import su.nightexpress.combatpets.shop.ShopManager;
 import su.nightexpress.combatpets.shop.command.ShopCommands;
 import su.nightexpress.combatpets.wardrobe.WardrobeManager;
 import su.nightexpress.combatpets.wardrobe.command.WardrobeCommands;
+import su.nightexpress.nightcore.commands.Commands;
+import su.nightexpress.nightcore.commands.builder.HubNodeBuilder;
 import su.nightexpress.nightcore.NightPlugin;
 import su.nightexpress.nightcore.commands.command.NightCommand;
 import su.nightexpress.nightcore.config.PluginDetails;
@@ -195,14 +197,19 @@ public class PetsPlugin extends NightPlugin {
 
     private void loadCommands() {
         this.rootCommand = NightCommand.forPlugin(this, builder -> {
-            BaseCommands.load(this, builder);
-            AspectPointsCommands.load(this, builder);
+            // Admin commands live under /pets admin; player commands stay at /pets.
+            HubNodeBuilder admin = Commands.hub("admin")
+                .description(Lang.COMMAND_ADMIN_DESC)
+                .permission(Perms.COMMAND_ADMIN);
+
+            BaseCommands.load(this, builder, admin);
+            AspectPointsCommands.load(this, admin);
 
             if (this.captureManager != null) {
-                CaptureCommands.load(this, this.captureManager, builder);
+                CaptureCommands.load(this, this.captureManager, admin);
             }
             if (this.levelingManager != null) {
-                LevelingCommands.load(this, builder);
+                LevelingCommands.load(this, admin);
             }
             if (this.shopManager != null) {
                 ShopCommands.load(this, this.shopManager, builder);
@@ -211,8 +218,10 @@ public class PetsPlugin extends NightPlugin {
                 DuelCommands.load(this, this.duelManager, builder);
             }
             if (this.wardrobeManager != null) {
-                WardrobeCommands.load(this, this.wardrobeManager, builder);
+                WardrobeCommands.load(this, this.wardrobeManager, admin);
             }
+
+            builder.branch(admin); // Built here, after all admin commands were added.
         });
     }
 

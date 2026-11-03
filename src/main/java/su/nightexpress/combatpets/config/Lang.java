@@ -45,6 +45,9 @@ public class Lang implements LangContainer {
     public static final TextLocale COMMAND_CAPTURE_ITEM_DESC          = LangEntry.builder("Command.CatchItem.Desc").text("Give capture item.");
     public static final TextLocale COMMAND_FOOD_DESC        = LangEntry.builder("Command.Food.Desc").text("Give food item.");
     public static final TextLocale COMMAND_EGG_DESC         = LangEntry.builder("Command.Egg.Desc").text("Give pet egg.");
+    public static final TextLocale COMMAND_ADMIN_DESC          = LangEntry.builder("Command.Admin.Desc").text("Admin commands.");
+    public static final TextLocale COMMAND_EGG_HUB_DESC        = LangEntry.builder("Command.EggHub.Desc").text("Pet egg tools.");
+    public static final TextLocale COMMAND_EGG_REVALIDATE_DESC = LangEntry.builder("Command.Egg.Revalidate.Desc").text("Make the stored pet egg in your hand hatchable again.");
     public static final TextLocale COMMAND_MYSTERY_EGG_DESC = LangEntry.builder("Command.MysteryEgg.Desc").text("Give mystery egg.");
     public static final TextLocale COMMAND_RENAME_DESC                = LangEntry.builder("Command.Rename.Desc").text("Rename player's pet.");
     public static final TextLocale COMMAND_REVIVE_DESC                = LangEntry.builder("Command.Revive.Desc").text("Revive player's pet.");
@@ -529,6 +532,18 @@ public class Lang implements LangContainer {
 
     public static final MessageLocale PET_STORE_ERROR_NOT_EMPTY = LangEntry.builder("Pet.Store.Error.NotEmpty").chatMessage(
         SOFT_RED.wrap("Take everything out of " + SOFT_YELLOW.wrap(PET_NAME) + "'s inventory and equipment before storing it in an egg."));
+
+    public static final MessageLocale PET_STORE_ERROR_COOLDOWN = LangEntry.builder("Pet.Store.Error.Cooldown").chatMessage(
+        SOFT_RED.wrap("You can store another pet in an egg in " + SOFT_YELLOW.wrap(GENERIC_TIME) + "."));
+
+    public static final MessageLocale COMMAND_EGG_REVALIDATE_DONE = LangEntry.builder("Command.Egg.Revalidate.Done").chatMessage(
+        SOFT_GREEN.wrap("This egg (" + SOFT_YELLOW.wrap(PET_NAME) + ") can hatch again. Make sure no other copy of it is around."));
+
+    public static final MessageLocale COMMAND_EGG_REVALIDATE_ALREADY = LangEntry.builder("Command.Egg.Revalidate.Already").chatMessage(
+        SOFT_YELLOW.wrap("This egg is already valid and can hatch."));
+
+    public static final MessageLocale COMMAND_EGG_REVALIDATE_NOT_EGG = LangEntry.builder("Command.Egg.Revalidate.NotEgg").chatMessage(
+        SOFT_RED.wrap("Hold a stored pet egg in your main hand."));
 
     public static final MessageLocale PET_STORED_EGG_HATCH = LangEntry.builder("Pet.StoredEgg.Hatch").actionBarMessage(
         SOFT_GREEN.wrap(SOFT_YELLOW.wrap(PET_NAME) + " hatched into your collection!"));

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Location;
@@ -97,6 +98,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     private final Map<EntityType, Template> templateByType; // Fast lookup for getTemplate(LivingEntity).
     private final Map<String, Aspect>       aspectMap;
     private final Map<String, FoodCategory> foodMap;
+    private final Map<UUID, Long>           storeCooldowns = new HashMap<>(); // Player -> time the cooldown ends.
 
     private TiersMenu      tiersMenu;
     private CollectionMenu collectionMenu;
@@ -697,6 +699,15 @@ public class PetManager extends AbstractManager<PetsPlugin> {
             CoreLang.ERROR_NO_PERMISSION.withPrefix(this.plugin).send(player);
             return false;
         }
+
+        long cooldownEnd = this.storeCooldowns.getOrDefault(player.getUniqueId(), 0L);
+        long now = System.currentTimeMillis();
+        if (cooldownEnd > now && !player.hasPermission(Perms.BYPASS_STORE_COOLDOWN)) {
+            long secondsLeft = (cooldownEnd - now + 999L) / 1000L;
+            Lang.PET_STORE_ERROR_COOLDOWN.message().send(player, replacer -> replacer.replace(Placeholders.GENERIC_TIME, secondsLeft + "s"));
+            return false;
+        }
+
         if (this.isSummoned(player, petData)) return false; // Must be in the collection (not summoned / dueling).
         if (!petData.isAlive()) {
             Lang.PET_STORE_ERROR_DEAD.message().send(player, replacer -> replacer.replace(Placeholders.PET_NAME, petData.getName()));
@@ -738,6 +749,12 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
         this.removeFromCollection(user, petData.getTier(), petData.getTemplate());
         Players.addItem(player, egg);
+
+        int cooldown = Config.PET_STORE_COOLDOWN.get();
+        if (cooldown > 0) {
+            this.storeCooldowns.values().removeIf(end -> end <= now); // Keep the map small.
+            this.storeCooldowns.put(player.getUniqueId(), now + cooldown * 1000L);
+        }
 
         String paid = cost > 0D && currency != null ? currency.format(cost) : "free";
         Lang.PET_STORE_SUCCESS.message().send(player, replacer -> replacer

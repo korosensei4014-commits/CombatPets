@@ -71,6 +71,38 @@ public class ItemManager extends AbstractManager<PetsPlugin> {
         return item;
     }
 
+    /**
+     * Admin tool: makes the stored pet egg in the player's main hand hatchable again (e.g. after stored_eggs.txt
+     * was lost). The admin has to make sure no other copy of the egg exists.
+     */
+    public void revalidateStoredEgg(@NonNull Player player) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        String id = item.getType().isAir() ? null : PDCUtil.getString(item, Keys.storedEggId).orElse(null);
+        String json = item.getType().isAir() ? null : PDCUtil.getString(item, Keys.storedPet).orElse(null);
+        if (id == null || json == null) {
+            Lang.COMMAND_EGG_REVALIDATE_NOT_EGG.message().send(player);
+            return;
+        }
+        if (this.storedEggs.isValid(id)) {
+            Lang.COMMAND_EGG_REVALIDATE_ALREADY.message().send(player);
+            return;
+        }
+
+        String name;
+        try {
+            PetData parsed = DataHandler.GSON.fromJson(json, PetData.class);
+            name = parsed == null ? "?" : parsed.getName();
+        }
+        catch (RuntimeException exception) {
+            name = "?";
+        }
+
+        this.storedEggs.add(id);
+        this.plugin.info(player.getName() + " revalidated stored pet egg " + id + " (" + name + ").");
+        String petName = name;
+        Lang.COMMAND_EGG_REVALIDATE_DONE.message().send(player, replacer -> replacer.replace(Placeholders.PET_NAME, petName));
+    }
+
     private void handleStoredEggUse(@NonNull Player player, @NonNull ItemStack itemStack) {
         String id = PDCUtil.getString(itemStack, Keys.storedEggId).orElse(null);
         String json = PDCUtil.getString(itemStack, Keys.storedPet).orElse(null);

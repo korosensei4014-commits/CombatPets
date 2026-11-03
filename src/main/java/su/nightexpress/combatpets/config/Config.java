@@ -97,6 +97,11 @@ public class Config {
         25D,
         "Extra cost for each level above 1. Example: level 20 = Base + 19 x Per_Level.");
 
+    public static final ConfigValue<Integer> PET_STORE_COOLDOWN = ConfigValue.create("Pets.Store_Egg.Cooldown",
+        30,
+        "Seconds a player must wait between storing pets in eggs. 0 = no cooldown.",
+        "Players with 'combatpets.bypass.store.cooldown' skip it.");
+
     public static final ConfigValue<String> PET_STORE_SOUND = ConfigValue.create("Pets.Store_Egg.Sounds.Store",
         "minecraft:block.sniffer_egg.plop",
         "Sound when a pet is stored in an egg. Leave empty to disable.");

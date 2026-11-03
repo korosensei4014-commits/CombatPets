@@ -234,6 +234,8 @@ By default the **Release** button (and the Q/Drop key in the collection) is repl
 - **Anti-duplication:** every egg has a unique id kept in `plugins/CombatPets/stored_eggs.txt` (written right away on a background thread, never half-written). An egg hatches only once; a duplicated copy (or one that already hatched) is refused and logged. Keep this file in your backups.
 - An egg can't hatch if the player already has that pet type in that tier, or reached their pet limit.
 - Sound and action-bar message when storing and hatching.
+- **Cooldown:** `Store_Egg.Cooldown` seconds between stores (default 30, `0` = off). `combatpets.bypass.store.cooldown` skips it.
+- **Lost `stored_eggs.txt`?** Hold the egg and run **`/pets admin egg revalidate`** (`combatpets.command.egg.revalidate`) to make it hatchable again. Only do this when you're sure no other copy of that egg exists.
 - `Pets.Release.Mode: DELETE` restores the original permanent release.
 
 ```yaml
@@ -242,6 +244,7 @@ Pets:
     Mode: STORE        # STORE = Store in Egg, DELETE = original release
   Store_Egg:
     Currency: vault
+    Cooldown: 30       # seconds between stores, 0 = off
     Cost:
       Base: 100.0      # level 1
       Per_Level: 25.0  # added per level above 1
@@ -380,7 +383,34 @@ All form texts are in the language file under the new **`Bedrock.*`** section (t
 
 ## Commands and permissions
 
-Unchanged. `/pets collection`, `/pets menu` and `/pets shop`, and right-clicking or sneak-right-clicking your pet, open forms for Bedrock players automatically.
+**Player commands** stay at `/pets`:
+
+| Command | Permission |
+|---|---|
+| `/pets` or `/pets collection [tier]` | `combatpets.command.collection` |
+| `/pets menu` | `combatpets.command.menu` |
+| `/pets shop` | `combatpets.command.shop` |
+| `/pets duel <player>`, `/pets surrender`, `/pets duels [on\|off]` | `combatpets.command.duel` |
+
+**Admin commands** are under `/pets admin`, which needs **`combatpets.command.admin`** (op by default) **plus** each command's own permission (unchanged from the original plugin):
+
+| Command | Permission |
+|---|---|
+| `/pets admin reload` | `combatpets.command.reload` |
+| `/pets admin add\|remove <tier> <pet> [player]` | `combatpets.command.add` / `.remove` |
+| `/pets admin addall\|removeall <tier> [player]` | `combatpets.command.addall` / `.removeall` |
+| `/pets admin egg give <tier> <pet> [player]` | `combatpets.command.egg` |
+| `/pets admin egg revalidate` | `combatpets.command.egg.revalidate` |
+| `/pets admin mysteryegg <pet> [player]` | `combatpets.command.mysteryegg` |
+| `/pets admin food <category> <item> [amount] [player]` | `combatpets.command.food` |
+| `/pets admin rename\|revive\|clearinventory <player> <tier> <pet> ...` | `combatpets.command.rename` / `.revive` / `.clearinventory` |
+| `/pets admin xp add\|set\|remove\|reward\|penalty ...` | `combatpets.command.xp(.*)` |
+| `/pets admin aspectpoints add\|set\|remove\|reward\|penalty ...` | `combatpets.command.aspectpoints(.*)` |
+| `/pets admin resetprogress <tier> <pet> [player]` | `combatpets.command.resetprogress` |
+| `/pets admin captureitem [amount] [player]` | `combatpets.command.captureitem` |
+| `/pets admin accessory <type> <name> [amount] [player]` | `combatpets.command.accessory` |
+
+Staff who were given only some admin permissions also need `combatpets.command.admin` now. `/pets collection`, `/pets menu` and `/pets shop`, and right-clicking or sneak-right-clicking your pet, open forms for Bedrock players automatically.
 
 ---
 
