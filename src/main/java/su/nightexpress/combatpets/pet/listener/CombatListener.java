@@ -60,9 +60,21 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
         LivingEntity damager = getAttacker(event);
         if (damager == null) return;
 
-        // Vexes summoned by an Evoker pet follow the Evoker's damage rules.
-        if (damager instanceof Vex vex && vex.getSummoner() instanceof LivingEntity summoner && this.petManager.getPetByMob(summoner) != null) {
-            damager = summoner;
+        // Vexes summoned by an Evoker pet follow the Evoker's damage rules, both when they hit something and when
+        // they are hit (so the owner and the owner's pets can't hurt them, and they can't hurt each other).
+        LivingEntity damagerSummoner = getPetSummoner(damager);
+        LivingEntity victimSummoner = getPetSummoner(victim);
+        if (damagerSummoner != null && damagerSummoner == victimSummoner) {
+            event.setCancelled(true);
+            return;
+        }
+        if (damagerSummoner != null) damager = damagerSummoner;
+        if (victimSummoner != null) {
+            if (damager == victimSummoner) {
+                event.setCancelled(true);
+                return;
+            }
+            victim = victimSummoner;
         }
 
         if (!this.petManager.canDamage(damager, victim)) {
@@ -116,6 +128,17 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
             .withCausingEntity(shooter)
             .withDirectEntity(projectile)
             .build());
+    }
+
+    /**
+     * @return The Evoker pet that summoned this Vex, or null if it's not a Vex summoned by a pet.
+     */
+    @Nullable
+    private LivingEntity getPetSummoner(@NonNull LivingEntity entity) {
+        if (entity instanceof Vex vex && vex.getSummoner() instanceof LivingEntity summoner && this.petManager.getPetByMob(summoner) != null) {
+            return summoner;
+        }
+        return null;
     }
 
     /**

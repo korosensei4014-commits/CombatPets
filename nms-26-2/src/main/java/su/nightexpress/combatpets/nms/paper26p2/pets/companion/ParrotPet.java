@@ -54,6 +54,13 @@ public class ParrotPet extends Parrot implements PetEntity {
         this.doHurtEquipment(source, amount, AIUtils.ARMOR_SLOTS);
     }
 
+    // Companion-only pet: never has a target. Frogs and Axolotls read their target from a brain memory that the
+    // companion brain doesn't have, which threw "Unregistered memory fetched: attack_target".
+    @Override
+    public @Nullable LivingEntity getTarget() {
+        return null;
+    }
+
     // Companion-only pet: never attacks anything.
     @Override
     public boolean canAttack(LivingEntity target) {

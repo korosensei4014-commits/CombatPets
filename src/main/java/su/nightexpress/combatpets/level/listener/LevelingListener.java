@@ -59,6 +59,9 @@ public class LevelingListener extends AbstractListener<PetsPlugin> {
         // Damage by Vexes summoned by an Evoker pet counts as the Evoker's, so their kills give the Evoker XP.
         LivingEntity damager = causing instanceof org.bukkit.entity.Vex vex && vex.getSummoner() != null ? vex.getSummoner() : causing;
         if (!this.manager.shouldDropXP(victim)) return;
+        // Vexes summoned by pets never give XP (otherwise an Evoker's Vexes could be farmed).
+        if (victim instanceof org.bukkit.entity.Vex summoned && summoned.getSummoner() != null
+            && this.plugin.getPetManager().getPetByMob(summoned.getSummoner()) != null) return;
         if (this.manager.isDisabledWorld(victim.getWorld())) return;
 
         double damage = event.getFinalDamage();

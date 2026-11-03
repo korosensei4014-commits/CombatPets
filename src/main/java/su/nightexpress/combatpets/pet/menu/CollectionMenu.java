@@ -62,6 +62,7 @@ public class CollectionMenu extends ConfigMenu<PetsPlugin> implements AutoFilled
             this.runNextTick(() -> plugin.getPetManager().openTierCollection(viewer.getPlayer()));
         }));
 
+        this.repairOldFiller(); // Must run before load(): nightcore reads the menu items during load().
         this.load();
 
         this.getItems().forEach(PetUtils::applyMenuPlaceholders);
@@ -200,15 +201,33 @@ public class CollectionMenu extends ConfigMenu<PetsPlugin> implements AutoFilled
             49, 50, 51, 52, 53);
     }
 
-    @Override
-    protected void loadAdditional() {
-        // Repair menu files written with the old nameless filler.
-        if (this.cfg.contains("Content.Priority") && !this.cfg.isConfigurationSection("Content.Priority")) {
-            for (String key : new String[]{"Priority", "Item", "Slots", "Type"}) {
-                this.cfg.set("Content." + key, null);
+    /**
+     * Repairs menu files written with the old nameless filler: its Priority / Item / Slots / Type ended up directly
+     * under 'Content', where nightcore reads them as four broken items.
+     */
+    private void repairOldFiller() {
+        boolean broken = false;
+        for (String key : new String[]{"Priority", "Slots", "Type"}) {
+            String path = "Content." + key;
+            if (this.cfg.contains(path) && !this.cfg.isConfigurationSection(path)) {
+                broken = true;
+                break;
             }
+        }
+        if (!broken) return;
+
+        for (String key : new String[]{"Priority", "Item", "Slots", "Type"}) {
+            this.cfg.set("Content." + key, null);
+        }
+        if (!this.cfg.contains("Content.filler")) {
             this.writeItem(createFiller(), "Content.filler");
         }
+        this.cfg.saveChanges();
+        this.plugin.info("Repaired the border (filler) item in menu/pet_collection.yml.");
+    }
+
+    @Override
+    protected void loadAdditional() {
 
         this.petName = ConfigValue.create("Pet.Name",
             LIGHT_YELLOW.enclose(BOLD.enclose(PET_NAME))

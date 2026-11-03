@@ -45,7 +45,12 @@ public class SummonedVex extends Vex {
     // Vanilla Mob.canAttack() rejects Ghasts; allow them like for pets.
     @Override
     public boolean canAttack(LivingEntity target) {
+        if (target == this.summoner || (target instanceof SummonedVex other && other.summoner == this.summoner)) return false;
         return super.canAttack(target) || (target instanceof net.minecraft.world.entity.monster.Ghast && target.canBeSeenAsEnemy());
+    }
+
+    public Mob getSummoner() {
+        return this.summoner;
     }
 
     @Override

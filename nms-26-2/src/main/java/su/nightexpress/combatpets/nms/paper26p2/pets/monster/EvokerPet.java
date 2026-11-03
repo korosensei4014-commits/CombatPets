@@ -74,6 +74,8 @@ public class EvokerPet extends Evoker implements PetEntity {
 
     @Override
     public boolean canAttack(LivingEntity entity) {
+        // Never its own Vexes (owners could make the Evoker attack them and farm XP).
+        if (entity instanceof SummonedVex vex && vex.getSummoner() == this) return false;
         return entity.canBeSeenAsEnemy();
     }
 

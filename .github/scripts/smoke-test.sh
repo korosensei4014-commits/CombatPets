@@ -41,6 +41,18 @@ PAPER_URL=$(curl -fsSL -A "$UA" "https://fill.papermc.io/v3/projects/paper/versi
 [ -n "$PAPER_URL" ] && [ "$PAPER_URL" != "null" ] || { echo "::error::No Paper build found for ${MC_VERSION}"; exit 1; }
 curl -fsSL -A "$UA" -o smoke/paper.jar "$PAPER_URL" || { echo "::error::Could not download Paper"; exit 1; }
 
+# Regression: a pet_collection.yml broken by the old nameless filler (flat Priority/Item/Slots/Type under
+# Content) must be repaired on startup without "Invalid material" errors.
+mkdir -p smoke/plugins/CombatPets/menu
+cat > smoke/plugins/CombatPets/menu/pet_collection.yml <<'YML'
+Content:
+  Priority: 0
+  Item:
+    Material: minecraft:black_stained_glass_pane
+  Slots: 0,1,2,3,4,5,6,7,8
+  Type: none
+YML
+
 cd smoke
 echo "eula=true" > eula.txt
 cat > server.properties <<PROPS
@@ -79,6 +91,9 @@ grep -n -i 'combatpets' server.log || true
 echo "----------------------------"
 
 FAIL=0
+if grep -q 'Priority:' plugins/CombatPets/menu/pet_collection.yml && grep -qE '^  Priority:' plugins/CombatPets/menu/pet_collection.yml; then
+  echo "::error::pet_collection.yml was not repaired"; FAIL=1
+fi
 [ $STARTED = 1 ] || { echo "::error::Server did not finish starting"; FAIL=1; }
 if grep -q 'Failed to run bootstrapper for plugins/nightcore.jar\|Could not load .plugins/nightcore' server.log; then
   echo "::error::The downloaded nightcore jar failed to load (test setup problem, not CombatPets)"; FAIL=1
