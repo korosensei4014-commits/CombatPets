@@ -231,7 +231,7 @@ By default the **Release** button (and the Q/Drop key in the collection) is repl
 - Needs the permission **`combatpets.capsule.pack`** (op by default; give it to the ranks that may store pets). Hatching needs no permission.
 - Costs money, scaling with level: `Base + (level - 1) x Per_Level`.
 - The pet must be in the collection (not summoned, so not in a duel) and alive. Its **inventory and equipment drop at the owner's feet**; they never go into the egg.
-- **Anti-duplication:** every egg has a unique id kept in `plugins/CombatPets/stored_eggs.txt`. An egg hatches only once; a duplicated copy (or one that already hatched) is refused and logged.
+- **Anti-duplication:** every egg has a unique id kept in `plugins/CombatPets/stored_eggs.txt` (written right away on a background thread, never half-written). An egg hatches only once; a duplicated copy (or one that already hatched) is refused and logged. Keep this file in your backups.
 - An egg can't hatch if the player already has that pet type in that tier, or reached their pet limit.
 - Sound and action-bar message when storing and hatching.
 - `Pets.Release.Mode: DELETE` restores the original permanent release.

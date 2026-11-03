@@ -129,7 +129,7 @@ public class ItemManager extends AbstractManager<PetsPlugin> {
 
     @Override
     protected void onShutdown() {
-
+        this.storedEggs.shutdown(); // Finish pending stored_eggs.txt writes.
     }
 
     private void setItemType(@NonNull ItemStack itemStack, @NonNull ItemType type) {
