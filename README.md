@@ -236,6 +236,7 @@ Besides horse-type pets (Horse, Donkey, Mule, Skeleton/Zombie Horse, Llama, Trad
 ```yaml
 Pets:
   Mounts:          # all on by default
+    Sync_Interval: 2   # ticks between movement updates while ridden: 1 smoothest, 2 = players' rate, 3 = vanilla
     Ravager: true
     Polar_Bear: true
     Hoglin: true

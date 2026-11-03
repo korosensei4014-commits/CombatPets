@@ -93,9 +93,11 @@ public class StriderPet extends Strider implements PetEntity {
         this.setXRot(rider.getXRot() * 0.5F);
         this.yBodyRot = this.getYRot();
         this.yHeadRot = this.getYRot();
-        // Send this mount's movement to players every tick while ridden (normally every 3 ticks), so steering
-        // feels smoother. Only while someone rides it.
-        this.needsSync = true;
+        // Send this mount's movement to players more often while ridden (normally every 3 ticks), so steering
+        // feels smoother. Only while someone rides it (Pets.Mounts.Sync_Interval).
+        if (this.tickCount % su.nightexpress.combatpets.api.pet.PetMountSettings.getSyncInterval() == 0) {
+            this.needsSync = true;
+        }
         if (rider instanceof net.minecraft.server.level.ServerPlayer player && player.getLastClientInput().jump() && this.onGround()) {
             this.jumpFromGround();
         }

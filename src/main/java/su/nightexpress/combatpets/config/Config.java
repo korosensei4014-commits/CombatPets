@@ -138,6 +138,12 @@ public class Config {
     );
 
     // ---- Mounts: right-click to ride, shift + right-click opens the menu (like horses). ----
+    public static final ConfigValue<Integer> PET_MOUNT_SYNC_INTERVAL = ConfigValue.create("Pets.Mounts.Sync_Interval",
+        2,
+        "Ticks between movement updates sent to players while a mount (Ravager, Pig, ...) is ridden.",
+        "1 = smoothest, 2 = same rate as players, 3 = vanilla mob rate (least network traffic).",
+        "Only affects mounts that are being ridden. Horses and Camels are not affected.");
+
     public static final ConfigValue<Boolean> PET_MOUNT_RAVAGER = ConfigValue.create("Pets.Mounts.Ravager",
         true,
         "When enabled, the owner can ride this pet (right-click) and steer it like a horse.");
