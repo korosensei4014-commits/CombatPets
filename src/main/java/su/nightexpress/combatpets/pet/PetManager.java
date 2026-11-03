@@ -193,7 +193,11 @@ public class PetManager extends AbstractManager<PetsPlugin> {
             Template petConfig = new PetTemplate(this.plugin, config);
             if (petConfig.load()) {
                 this.templateMap.put(petConfig.getId(), petConfig);
-                this.templateByType.putIfAbsent(petConfig.getEntityType(), petConfig);
+                // Several pet files can use the same mob (e.g. a custom 'bigwarden.yml' copied from 'warden.yml').
+                // Wild mobs of that type are matched to the best one: catchable first, then the file named
+                // after the mob, so a non-catchable custom pet doesn't make every wild Warden uncatchable.
+                this.templateByType.merge(petConfig.getEntityType(), petConfig,
+                    (current, added) -> wildMobRank(added) > wildMobRank(current) ? added : current);
             }
             else this.plugin.warn("Pet not loaded: '" + config.getName() + "' !");
         }
@@ -339,6 +343,12 @@ public class PetManager extends AbstractManager<PetsPlugin> {
     @Nullable
     public Template getTemplate(@NonNull String id) {
         return this.templateMap.get(id.toLowerCase());
+    }
+
+    private static int wildMobRank(@NonNull Template template) {
+        int rank = template.isCapturable() ? 2 : 0;
+        if (template.getId().equalsIgnoreCase(template.getEntityType().name())) rank += 1;
+        return rank;
     }
 
     @Nullable
