@@ -44,7 +44,7 @@ public class ItemManager extends AbstractManager<PetsPlugin> {
 
     /**
      * Creates an egg item holding this pet (name, level, XP, aspects, wardrobe, duel stats, ...) and registers its
-     * unique id. The pet's inventory and equipment must already be emptied.
+     * unique id. The pet's inventory and equipment must already be empty.
      */
     @NonNull
     public ItemStack createStoredEgg(@NonNull PetData petData) {

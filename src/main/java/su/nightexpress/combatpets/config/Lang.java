@@ -527,6 +527,9 @@ public class Lang implements LangContainer {
     public static final MessageLocale PET_STORE_ERROR_DEAD = LangEntry.builder("Pet.Store.Error.Dead").chatMessage(
         SOFT_RED.wrap("Revive " + SOFT_YELLOW.wrap(PET_NAME) + " before storing it in an egg."));
 
+    public static final MessageLocale PET_STORE_ERROR_NOT_EMPTY = LangEntry.builder("Pet.Store.Error.NotEmpty").chatMessage(
+        SOFT_RED.wrap("Take everything out of " + SOFT_YELLOW.wrap(PET_NAME) + "'s inventory and equipment before storing it in an egg."));
+
     public static final MessageLocale PET_STORED_EGG_HATCH = LangEntry.builder("Pet.StoredEgg.Hatch").actionBarMessage(
         SOFT_GREEN.wrap(SOFT_YELLOW.wrap(PET_NAME) + " hatched into your collection!"));
 

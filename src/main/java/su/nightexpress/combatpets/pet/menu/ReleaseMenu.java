@@ -96,7 +96,7 @@ public class ReleaseMenu extends ConfirmMenu {
             LIGHT_GRAY.enclose("Store this pet in an egg item."),
             LIGHT_GRAY.enclose("It keeps its name, level, aspects and stats,"),
             LIGHT_GRAY.enclose("and anyone can hatch it into their collection."),
-            LIGHT_GRAY.enclose("Its inventory and equipment drop at your feet."),
+            LIGHT_GRAY.enclose("Empty its inventory and equipment first."),
             "",
             LIGHT_YELLOW.enclose("▪ " + LIGHT_GRAY.enclose("Cost: ") + PET_STORE_COST)
         ), "Pet icon text when Pets.Release.Mode is STORE.").read(cfg);

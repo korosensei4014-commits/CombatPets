@@ -690,7 +690,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
     /**
      * 'Store in Egg': turns the pet into an egg item that keeps its name, level, XP, aspects, wardrobe and duel
-     * stats. Its inventory and equipment are dropped at the owner's feet. Costs Pets.Store_Egg.Cost.
+     * stats. The pet's inventory and equipment must be empty first. Costs Pets.Store_Egg.Cost.
      */
     public boolean storeInEgg(@NonNull Player player, @NonNull PetData petData) {
         if (!player.hasPermission(Perms.STORE_IN_EGG)) {
@@ -705,6 +705,14 @@ public class PetManager extends AbstractManager<PetsPlugin> {
 
         PetUser user = this.plugin.getUserManager().getOrFetch(player);
         if (!user.isLoaded() || !user.hasPet(petData.getTemplate(), petData.getTier())) return false;
+
+        // Items never go into the egg and are never dropped: the owner has to take them out first.
+        boolean hasItems = petData.getInventory().stream().anyMatch(item -> item != null && !item.getType().isAir())
+            || petData.getEquipment().values().stream().anyMatch(item -> item != null && !item.getType().isAir());
+        if (hasItems) {
+            Lang.PET_STORE_ERROR_NOT_EMPTY.message().send(player, replacer -> replacer.replace(Placeholders.PET_NAME, petData.getName()));
+            return false;
+        }
 
         double cost = Config.getStoreCost(petData.getLevel());
         Currency currency = EconomyBridge.api().getCurrency(Config.PET_STORE_CURRENCY.get());
@@ -721,13 +729,7 @@ public class PetManager extends AbstractManager<PetsPlugin> {
             }
         }
 
-        // Inventory and equipment never go into the egg (no item duplication through eggs): drop them.
-        Location location = player.getLocation();
-        List<ItemStack> drops = new ArrayList<>(petData.getInventory());
-        drops.addAll(petData.getEquipment().values());
-        drops.forEach(item -> {
-            if (item != null && !item.getType().isAir()) player.getWorld().dropItemNaturally(location, item);
-        });
+        // Already checked empty; clear anyway so no leftover (air) slots end up in the egg.
         petData.setInventory(new ArrayList<>());
         petData.setEquipment(new HashMap<>());
 

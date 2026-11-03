@@ -139,7 +139,7 @@ public class BedrockLang implements LangContainer {
     public static final TextLocale PET_BUTTON_STORE = LangEntry.builder("Bedrock.Pet.Button.Store").text(GOLD.wrap("Store in Egg"));
     public static final TextLocale STORE_TITLE      = LangEntry.builder("Bedrock.Store.Title").text("Store the pet in an egg?");
     public static final TextLocale STORE_CONTENT    = LangEntry.builder("Bedrock.Store.Content").text(
-        GRAY.wrap("Store " + WHITE.wrap(PET_NAME) + " (" + TIER_NAME + GRAY.wrap(") in an egg item? It keeps its name, level, aspects and stats, and anyone can hatch it. Its inventory and equipment drop at your feet.") + "\n\n" + GRAY.wrap("Cost: ") + WHITE.wrap(PET_STORE_COST)));
+        GRAY.wrap("Store " + WHITE.wrap(PET_NAME) + " (" + TIER_NAME + GRAY.wrap(") in an egg item? It keeps its name, level, aspects and stats, and anyone can hatch it. Empty its inventory and equipment first.") + "\n\n" + GRAY.wrap("Cost: ") + WHITE.wrap(PET_STORE_COST)));
     public static final TextLocale STORE_BUTTON     = LangEntry.builder("Bedrock.Store.Button").text("Store in Egg");
 
     // ------------------------------------------------------------------------------------------
