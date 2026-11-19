@@ -55,6 +55,8 @@ public abstract class AbstractPetAttackGoal extends Goal {
     }
 
     public int getAttackSpeedTicks() {
-        return (int) Math.max(1, 20D / this.getAttackSpeed());
+        double speed = this.getAttackSpeed();
+        if (speed <= 0D) speed = 0.5;
+        return (int) Math.max(1, Math.min(200, 20D / speed));
     }
 }

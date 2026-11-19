@@ -58,8 +58,11 @@ public final class FightActivities {
 
     private static int getAttackCooldownTicks(Mob pet) {
         AttributeInstance attribute = pet.getAttribute(Attributes.ATTACK_SPEED);
-        double atkSpeed = attribute == null ? 0.5 : attribute.getValue();
-        return (int) Math.max(1, 20D / atkSpeed);
+        // Base value = the pet's own attack speed (set by the plugin). getValue() would include the held weapon's
+        // speed penalty (sword -2.4, axe -3.0), which pushed it to 0 and made the cooldown endless.
+        double atkSpeed = attribute == null ? 0.5 : attribute.getBaseValue();
+        if (atkSpeed <= 0D) atkSpeed = 0.5;
+        return (int) Math.max(1, Math.min(200, 20D / atkSpeed));
     }
 
     private static boolean isHoldingUsableProjectileWeapon(Mob pet) {
