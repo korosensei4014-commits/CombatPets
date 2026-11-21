@@ -18,6 +18,7 @@ import org.bukkit.tag.DamageTypeTags;
 import org.jspecify.annotations.NonNull;
 import su.nightexpress.combatpets.PetsPlugin;
 import su.nightexpress.combatpets.api.pet.ActivePet;
+import su.nightexpress.combatpets.api.pet.type.CombatMode;
 import su.nightexpress.combatpets.config.Config;
 import su.nightexpress.combatpets.pet.PetManager;
 import su.nightexpress.combatpets.util.PetUtils;
@@ -144,6 +145,29 @@ public class CombatListener extends AbstractListener<PetsPlugin> {
         if (!this.petManager.canDamage(mount, victim)) return;
 
         this.plugin.getPetNMS().setAttackTarget(mount, victim);
+    }
+
+    /**
+     * Supportive pets switch to whatever their owner hits last (mobs, and players where PvP is allowed), even while
+     * chasing something else. Ridden pets are handled by onRiderHit; duels keep their opponent via canDamage.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onOwnerHit(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity victim)) return;
+        if (!(getAttacker(event) instanceof org.bukkit.entity.Player owner)) return;
+
+        ActivePet pet = this.petManager.getPlayerPet(owner);
+        if (pet == null) return;
+
+        CombatMode mode = pet.getCombatMode();
+        if (mode != CombatMode.SUPPORTIVE && mode != CombatMode.PROTECTIVE_AND_SUPPORTIVE) return;
+
+        LivingEntity petEntity = pet.getEntity();
+        if (!petEntity.isValid() || petEntity == victim || owner.getVehicle() == petEntity) return;
+        if (petEntity.getWorld() != victim.getWorld() || petEntity.getLocation().distanceSquared(victim.getLocation()) > 32D * 32D) return;
+        if (!this.petManager.canDamage(petEntity, victim)) return;
+
+        this.plugin.getPetNMS().setAttackTarget(petEntity, victim);
     }
 
     /**

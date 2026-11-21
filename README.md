@@ -381,6 +381,10 @@ All existing options still apply to Bedrock forms, including `Pets.Release.Allow
 
 All form texts are in the language file under the new **`Bedrock.*`** section (titles, contents, buttons, statuses and three chat messages). They use the usual nightcore tags. Bedrock only supports the 16 classic colors, so hex colors (for example in tier names) are converted to the closest classic color automatically. `<br>` makes a new line, and button labels may use two lines.
 
+## Supportive pets follow your attacks
+
+In **Supportive** or **Protective & Supportive** combat mode, your pet switches to whatever you hit last, even if it was already chasing something else. Players count too where pet PvP is allowed (`Pets.PvP_Allowed`, WorldGuard `pet-pvp`). It doesn't apply in duels, to targets more than 32 blocks from the pet, or while you ride the pet (it already attacks what you hit).
+
 ## Commands and permissions
 
 **Player commands** stay at `/pets`:
