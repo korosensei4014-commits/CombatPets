@@ -383,7 +383,7 @@ All form texts are in the language file under the new **`Bedrock.*`** section (t
 
 ## Supportive pets follow your attacks
 
-In **Supportive** or **Protective & Supportive** combat mode, your pet switches to whatever you hit last, even if it was already chasing something else. Players count too where pet PvP is allowed (`Pets.PvP_Allowed`, WorldGuard `pet-pvp`). It doesn't apply in duels, to targets more than 32 blocks from the pet, or while you ride the pet (it already attacks what you hit).
+In **Supportive** or **Protective & Supportive** combat mode, your pet switches to whatever you hit last, even if it was already chasing something else. Players count too where pet PvP is allowed (`Pets.PVP_Allowed`, WorldGuard `pet-pvp`). It doesn't apply in duels, to targets more than 32 blocks from the pet, or while you ride the pet (it already attacks what you hit).
 
 ## Commands and permissions
 
